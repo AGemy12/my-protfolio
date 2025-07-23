@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cairo } from "next/font/google";
 import "./globals.css";
+// import ModeToggler from "@/components/buttons/ModeToggler";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import SettingsAndToggleBtn from "@/components/global/SettingsAndToggleBtn";
+import Loading from "@/components/global/Loading";
+import Footer from "@/components/main/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const cairoSans = Cairo({
+  variable: "--font-cairo-sans",
   subsets: ["latin"],
 });
 
@@ -19,15 +19,35 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function () {
+                try {
+                  const theme = localStorage.getItem('theme');
+                  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  if (theme === 'dark' || (!theme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch (_) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className={` ${cairoSans.variable} antialiased bg-main-bg`}>
+        <ThemeProvider>
+          <Loading />
+          <SettingsAndToggleBtn />
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,26 +1,232 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-main-bg: #ffffff;
+  --color-light-model-bg: rgba(0, 0, 0, 0.5);
+
+  --color-text: #222f43;
+  --color-text-muted: #6b778c;
+  --color-border: #e8eaee;
+
+  --color-primary: #3399ff;
+
+  --color-light-hover: rgb(26 30 35 / 7%);
+
+  --color-primary-10: rgb(51 153 255 / 10%);
+  --color-primary-20: rgb(51 153 255 / 20%);
+  --color-primary-50: rgb(51 153 255 / 50%);
+
+  --shadow-shadow: 0 0 35px #3399ff;
+  --warning-shadow: 0 0 35px #fb2c36;
+  --light-shadow: 0 0 15px #3399ff;
+
+  --color-box-bg: #f9f9f9;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-main-bg: var(--color-main-bg);
+  --color-light-model-bg: var(--color-light-model-bg);
+
+  --color-muted: var(--color-text-muted);
+  --color-border: var(--color-border);
+  --color-primary-10: var(--color-primary-10);
+
+  --color-primary: var(--color-primary);
+
+  --color-shadow: var(--color-shadow);
+
+  --color-light-hover: var(--color-light-hover);
+  --color-primary-20: var(--color-primary-20);
+  --color-primary-50: var(--color-primary-50);
+
+  --color-text: var(--color-text);
+
+  --shadow-shadow: var(--shadow-shadow);
+  --shadow-warning-shadow: var(--warning-shadow);
+
+  --shadow-light-shadow: var(--light-shadow);
+
+  --animate-hand_motate: hand_motion 2s 0s ease infinite;
+  --animate-waveFill: waveFill 5s 0s ease infinite;
+  --animate-leftRight: leftRight 2s 0s linear infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer utilities {
+  @keyframes heroThumbAnimation {
+    0% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes heroRotate {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(1turn);
+    }
+  }
+
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: scale(1.2) rotate(7deg);
+    }
+
+    50% {
+      transform: scale(0.8) rotate(-7deg);
+    }
+  }
+
+  @keyframes animationFramesOne {
+    0% {
+      transform: translate(0) rotate(0deg);
+    }
+    20% {
+      transform: translate(73px, -1px) rotate(36deg);
+    }
+    40% {
+      transform: translate(141px, 72px) rotate(72deg);
+    }
+    60% {
+      transform: translate(83px, 122px) rotate(108deg);
+    }
+    80% {
+      transform: translate(-40px, 72px) rotate(144deg);
+    }
+    100% {
+      transform: translate(0) rotate(0deg);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes hand_motion {
+    0% {
+      transform: rotate(-10deg);
+    }
+    50% {
+      transform: rotate(10deg);
+    }
+    100% {
+      transform: rotate(-10deg);
+    }
+  }
+
+  @keyframes waveFill {
+    0%,
+    100% {
+      clip-path: polygon(
+        0% 20%,
+        16% 30%,
+        34% 40%,
+        51% 50%,
+        67% 60%,
+        84% 70%,
+        100% 80%,
+        100% 90%,
+        0% 100%
+      );
+    }
+    50% {
+      clip-path: polygon(
+        0% 80%,
+        16% 70%,
+        34% 60%,
+        51% 50%,
+        67% 40%,
+        84% 30%,
+        100% 20%,
+        100% 10%,
+        0% 0%
+      );
+    }
+  }
+
+  @keyframes leftRight {
+    0% {
+      transform: translateX(0px);
+    }
+
+    50% {
+      transform: translateX(20px);
+    }
+    100% {
+      transform: translateX(0px);
+    }
+  }
+
+  .hero-thumbs-animation {
+    animation: heroThumbAnimation 2s linear infinite alternate;
+  }
+
+  .hero-rotate {
+    animation: heroRotate 10s linear infinite alternate;
+  }
+
+  .animation-frames-one {
+    animation: animationFramesOne 20s linear infinite alternate;
+  }
+
+  .hero-weggle {
+    animation: wiggle 2s linear infinite alternate;
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.2s ease-out forwards;
   }
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
+  --color-main-bg: #0f1214;
+  --color-light-model-bg: rgba(0, 0, 0, 0.5);
+
+  --color-text-muted: #6b778c;
+  --color-border: #3d47514d;
+
+  --color-text: #f3f4f6;
+
+  --color-primary: #3399ff;
+
+  --color-light-hover: rgba(48, 56, 64, 0.2);
+
+  --color-shadow: 0 0 35px #3399ff;
+  --warning-shadow: 0 0 35px #fb2c36;
+
+  --light-shadow: 0 0 15px #3399ff;
+
+  --color-primary-10: rgb(51 153 255 / 10%);
+  --color-primary-20: rgb(51 153 255 / 20%);
+  --color-primary-50: rgb(51 153 255 / 50%);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+li {
+  list-style-type: none;
+}
+
+button {
+  cursor: pointer;
 }
