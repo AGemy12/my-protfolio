@@ -1,4 +1,5 @@
-import { motion, easeOut } from "framer-motion";
+"use client";
+import { motion, easeOut } from "motion/react";
 import Image from "next/image";
 
 interface SkillItemProps {
@@ -21,12 +22,24 @@ export default function SkillsItem({ title, imgSrc, define }: SkillItemProps) {
   };
   return (
     <motion.div
-      className="flex flex-col items-center gap-4"
+      className="flex flex-col items-center gap-4 p-6 rounded-xl bg-main-bg border-2 border-primary-20 hover:border-primary/40 hover:shadow-light-shadow transition-all duration-300 ease-out cursor-default"
       variants={itemVariants}
+      whileHover={{ y: -8, scale: 1.05 }}
     >
-      <Image alt={title} src={imgSrc} width={100} height={100} className="" />
-      <h4 className="text-text font-bold text-base text-start">{title}</h4>
-      <p className="p-2 capitalize text-muted font-bold rounded-sm [background:linear-gradient(#0B0B0B,#0B0B0B)padding-box,linear-gradient(to_bottom,#702123,#371114)border-box] dark:[background:linear-gradient(#0B0B0B,#0B0B0B)padding-box,linear-gradient(to_bottom,var(--color-primary-50),var(--color-primary-10))border-box] border-[1px] border-transparent">
+      <div className="relative w-20 h-20 md:w-24 md:h-24 flex items-center justify-center">
+        <Image
+          alt={title}
+          src={imgSrc}
+          width={96}
+          height={96}
+          sizes="(max-width: 768px) 80px, 96px"
+          className="object-contain transition-transform duration-300 group-hover:scale-110"
+        />
+      </div>
+      <h4 className="text-text font-bold text-base md:text-lg text-center">
+        {title}
+      </h4>
+      <p className="p-3 capitalize text-muted text-xs md:text-sm font-semibold rounded-lg bg-primary-10 border border-primary/20 text-center">
         {define}
       </p>
     </motion.div>

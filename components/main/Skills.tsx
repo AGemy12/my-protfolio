@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import SectionTitle from "../global/SectionTitle";
 import { mySkillsList } from "@/utility/static-data/FixedLists";
 import SkillsItem from "../sections/skills/SkillsItem";
@@ -9,21 +9,25 @@ const containerVariants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
+      staggerChildren: 0.1,
     },
   },
 };
 
 export default function SkillsSection() {
   return (
-    <div className="container mx-auto md:w-full w-11/12" id="skills">
+    <section
+      className="container mx-auto md:w-full w-11/12 py-16 md:py-24 lg:py-32"
+      id="skills"
+    >
       <SectionTitle title="my skills" />
 
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-8"
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-6"
         variants={containerVariants}
         initial="hidden"
-        animate="show"
+        whileInView="show"
+        viewport={{ once: true, margin: "-100px" }}
       >
         {mySkillsList.map((skill) => (
           <SkillsItem
@@ -34,6 +38,6 @@ export default function SkillsSection() {
           />
         ))}
       </motion.div>
-    </div>
+    </section>
   );
 }

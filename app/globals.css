@@ -230,3 +230,38 @@ li {
 button {
   cursor: pointer;
 }
+
+/* Enhanced focus states for accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for interactive elements */
+a,
+button {
+  transition: all 0.3s ease-out;
+}
+
+/* Improved spacing system (8px base) */
+.space-8 {
+  gap: 0.5rem;
+} /* 8px */
+.space-16 {
+  gap: 1rem;
+} /* 16px */
+.space-24 {
+  gap: 1.5rem;
+} /* 24px */
+.space-32 {
+  gap: 2rem;
+} /* 32px */
+.space-40 {
+  gap: 2.5rem;
+} /* 40px */
+.space-48 {
+  gap: 3rem;
+} /* 48px */

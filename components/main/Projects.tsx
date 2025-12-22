@@ -4,9 +4,12 @@ import ProjectsItem from "../sections/projects/ProjectsItem";
 
 export default function Projects() {
   return (
-    <div className="container mx-auto md:w-full w-11/12 py-12" id="projects">
+    <section
+      className="container mx-auto md:w-full w-11/12 py-16 md:py-24 lg:py-32"
+      id="projects"
+    >
       <SectionTitle title="My Projects" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 mt-12 md:mt-16">
         {projects.map((project) => (
           <ProjectsItem
             key={project.id}
@@ -15,6 +18,6 @@ export default function Projects() {
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 }

@@ -21,12 +21,12 @@ export default function MyPhoto() {
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1 }}
-      className=""
+      transition={{ duration: 1, ease: [0.25, 0.8, 0.25, 1] }}
+      className="relative"
     >
       <div className="relative">
         <div
-          className="p-1 w-11/12 mx-auto md:w-full rounded-lg"
+          className="p-1 w-full rounded-2xl transition-all duration-500"
           ref={cardRef}
           onMouseMove={handleMouseMove}
           style={{
@@ -39,50 +39,62 @@ export default function MyPhoto() {
             `,
           }}
         >
-          <div className="bg-main-bg">
+          <div className="bg-main-bg rounded-xl overflow-hidden">
             <Image
               src="/assets/media/my-photo.png"
-              alt="Hero Image"
-              width={400}
-              height={400}
-              className="w-full"
+              alt="Ahmad Marzouk - Frontend Developer"
+              width={600}
+              height={600}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="w-full h-auto object-cover"
+              priority
             />
           </div>
         </div>
-        <div className="absolute top-2/6 left-0">
+
+        {/* Decorative Patterns */}
+        <div className="absolute top-1/4 left-0 w-32 md:w-40 opacity-60 pointer-events-none">
           <Image
             src="/assets/media/hero/pattern-1.svg"
-            alt="Hero Image"
-            width={500}
-            height={500}
+            alt=""
+            width={160}
+            height={160}
+            sizes="160px"
             className="w-full animation-frames-one"
+            aria-hidden="true"
           />
         </div>
-        <div className="absolute top-[18%] right-[15%] hero-thumbs-animation">
+        <div className="absolute top-[18%] right-[15%] w-24 md:w-32 hero-thumbs-animation opacity-60 pointer-events-none">
           <Image
             src="/assets/media/hero/pattern-2.svg"
-            alt="Hero Image"
-            width={500}
-            height={500}
+            alt=""
+            width={128}
+            height={128}
+            sizes="128px"
             className="w-full hero-rotate"
+            aria-hidden="true"
           />
         </div>
-        <div className="absolute bottom-[4%] left-[9%] hero-thumbs-animation">
+        <div className="absolute bottom-[4%] left-[9%] w-24 md:w-32 hero-thumbs-animation opacity-60 pointer-events-none">
           <Image
             src="/assets/media/hero/pattern-3.svg"
-            alt="Hero Image"
-            width={500}
-            height={500}
+            alt=""
+            width={128}
+            height={128}
+            sizes="128px"
             className="w-full hero-rotate"
+            aria-hidden="true"
           />
         </div>
-        <div className="absolute bottom-[37%] right-[4%] hero-weggle">
+        <div className="absolute bottom-[37%] right-[4%] w-20 md:w-28 hero-weggle opacity-60 pointer-events-none">
           <Image
             src="/assets/media/hero/pattern-4.svg"
-            alt="Hero Image"
-            width={500}
-            height={500}
+            alt=""
+            width={112}
+            height={112}
+            sizes="112px"
             className="w-full hero-rotate"
+            aria-hidden="true"
           />
         </div>
       </div>

@@ -2,52 +2,38 @@
 import React, { useEffect, useState } from "react";
 
 export default function Loading() {
-  const [progress, setProgress] = useState(0);
   const [loadingDone, setLoadingDone] = useState<boolean>(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        return prev + 1;
-      });
-    }, 30);
+    // Simulate loading completion
+    const timer = setTimeout(() => {
+      setLoadingDone(true);
+    }, 1500);
 
-    return () => clearInterval(interval);
+    return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    if (progress === 100) {
-      const timeout = setTimeout(() => setLoadingDone(true), 1000);
-      return () => clearTimeout(timeout);
-    }
-  }, [progress]);
 
   return (
     <>
       {!loadingDone && (
-        <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-main-bg z-50">
-          <div
-            className="w-[200px] h-[200px] rounded-full flex items-center justify-center relative"
-            style={{
-              background: `conic-gradient(var(--color-primary) ${
-                progress * 3.6
-              }deg, #2a2a2a ${progress * 3.6}deg)`,
-            }}
-          >
-            <div className="absolute w-[160px] h-[160px] bg-main-bg  rounded-full z-0" />
-            <span
-              className="text-6xl text-text font-bold relative z-10"
-              style={{
-                opacity: `${progress * 0.01}`,
-                filter: `blur(${(100 - progress) / 10}px)`,
-              }}
-            >
-              {progress}
-            </span>
+        <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-main-bg z-50 transition-opacity duration-500 ease-out">
+          <div className="relative">
+            {/* Animated gradient circle - premium design */}
+            <div className="w-24 h-24 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+            
+            {/* Pulse effect rings */}
+            <div className="absolute inset-0 w-24 h-24 rounded-full bg-primary/10 animate-ping" />
+            <div className="absolute inset-0 w-24 h-24 rounded-full bg-primary/5 animate-ping" style={{ animationDelay: '0.5s' }} />
+            
+            {/* Shimmer gradient overlay */}
+            <div className="absolute inset-0 w-24 h-24 rounded-full bg-gradient-to-r from-transparent via-primary/20 to-transparent animate-pulse" />
+            
+            {/* Center content */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                <div className="w-6 h-6 rounded-full bg-primary animate-pulse" />
+              </div>
+            </div>
           </div>
         </div>
       )}

@@ -1,18 +1,20 @@
-"use client";
 import HeroSection from "@/components/main/HeroSection";
 import Skills from "@/components/main/Skills";
 import About from "@/components/main/About";
 import Projects from "@/components/main/Projects";
 import Contact from "@/components/main/Contact";
 
-export default function page() {
+// Static Site Generation - This page is pre-rendered at build time
+export const dynamic = "force-static";
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col sm:gap-20 md:gap-40">
+    <main className="flex flex-col">
       <HeroSection />
       <About />
       <Skills />
       <Projects />
       <Contact />
-    </div>
+    </main>
   );
 }

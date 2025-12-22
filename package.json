@@ -24,11 +24,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-<<<<<<< HEAD
-    "eslint-config-next": "15.3.5",
-=======
     "eslint-config-next": "^15.3.8",
->>>>>>> 4597db7 (Initial commit)
     "tailwindcss": "^4",
     "typescript": "^5"
   }

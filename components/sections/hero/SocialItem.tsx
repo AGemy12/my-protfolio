@@ -15,9 +15,12 @@ export default function SocialItem({ title, path, Icon }: SocialItemProps) {
         <Link
           href={path && path}
           target="_blank"
-          className="flex items-center justify-center w-8 h-8 rounded-md border-primary-20 border-[1px] bg-primary-20 duration-300 hover:bg-primary hover:border-primary"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center w-10 h-10 rounded-lg border-2 border-primary-20 bg-primary-10 hover:bg-primary hover:border-primary hover:shadow-light-shadow transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
-          {Icon && <Icon className="text-text text-xl" />}{" "}
+          {Icon && (
+            <Icon className="text-text text-lg md:text-xl transition-colors duration-300" />
+          )}
         </Link>
       </li>
     </Tooltip>
