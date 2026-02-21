@@ -29,7 +29,7 @@ export const mySkillsList = [
   {
     id: 1,
     title: "JavaScript",
-    imgSrc: "/assets/media/skills/javaScript.png",
+    imgSrc: "/assets/media/skills/js.png",
     define: "Programming Language",
   },
   {
@@ -103,55 +103,57 @@ export const mySkillsList = [
 export const projects = [
   {
     id: 1,
-    title: "Nemmra",
+    title: "Best Clean",
     description:
-      "Nemmra is a leading platform that connects you with hundreds of companies and service providers with just one click — send WhatsApp messages (text, images, documents) and advertise your offers",
-    image: "/assets/media/projects/nemmra.png",
-    githubLink: "https://github.com/AGemy12/nemmra",
-    link: "https://www.nemmra.com/ar",
-    techList: [
-      { id: 1, title: "Vue.js" },
-      { id: 2, title: "Nuxt.js" },
-      { id: 3, title: "Sass" },
-      { id: 4, title: "Node.js" },
-      { id: 5, title: "PHP Laravel" },
-    ],
-  },
-  {
-    id: 2,
-    title: "Anaqatty",
-    description:
-      "Anaqatyy is a modern lifestyle platform empowering Arab women with tips on fashion, wellness, beauty, and self-growth — all in one place.",
-    image: "/assets/media/projects/anaqatyy.png",
-    githubLink: "https://github.com/AGemy12/anaqaty-site",
-    link: "https://www.anaqatyy.com/",
-    techList: [
-      { id: 1, title: "Vue.js" },
-      { id: 2, title: "Nuxt.js" },
-      { id: 3, title: "Vuetify" },
-      { id: 4, title: "Sass" },
-      { id: 5, title: "Node.js" },
-      { id: 6, title: "PHP Laravel" },
-    ],
-  },
-  {
-    id: 3,
-    title: "Code Master Technology Site (CMT)",
-    description:
-      "A tech services platform offering web design, development, and digital marketing solutions",
-    image: "/assets/media/projects/cmt.png",
-    githubLink: "https://github.com/AGemy12/code-master-technology",
-    link: "https://cmt-saudi.com/",
+      "Best Clean is a full-stack Next.js cleaning services platform in Hafar Al Batin. It includes a powerful admin dashboard to manage users, services, categories, hero slider content, and the site logo — offering an easy booking and contact experience for customers.",
+    image: "/assets/media/projects/best-clean.png",
+    githubLink: "https://github.com/AGemy12/sho3a3",
+    link: "https://www.best-cleanteam.com/",
     techList: [
       { id: 1, title: "React.js" },
       { id: 2, title: "Next.js" },
-      { id: 3, title: "Node.js" },
+      { id: 3, title: "TypeScript" },
       { id: 4, title: "Tailwind CSS" },
-      { id: 5, title: "Swiper JS" },
+      { id: 5, title: "Node.js" },
+      { id: 6, title: "Dashboard (Admin Panel)" },
     ],
   },
+
   {
-    id: 4,
+    id: 2,
+    title: "Rowad4u",
+    description:
+      "Rowad4u is a digital services and design platform built with a full admin dashboard to manage dashboard users, services, categories, and hero slider content (image, description) — providing a smooth browsing and request experience for clients.",
+    image: "/assets/media/projects/rowad.png",
+    githubLink: "https://github.com/AGemy12/rowad",
+    link: "https://www.rowad4u.com/",
+    techList: [
+      { id: 1, title: "React.js" },
+      { id: 2, title: "Next.js" },
+      { id: 3, title: "TypeScript" },
+      { id: 4, title: "Tailwind CSS" },
+      { id: 5, title: "Node.js" },
+      { id: 6, title: "Admin Dashboard" },
+    ],
+  },
+
+  {
+    id: 3,
+    title: "Diyarsco",
+    description:
+      "Diyarsco is a real estate showcase website built on Zoho Sites with extensive customizations across multiple sections — including a custom image slider/gallery to present projects and listed properties in a modern, interactive way.",
+    image: "/assets/media/projects/diyarsco.png",
+    link: "https://www.diyarsco.com/",
+    techList: [
+      { id: 1, title: "Zoho Sites" },
+      { id: 2, title: "HTML" },
+      { id: 3, title: "CSS" },
+      { id: 4, title: "JavaScript" },
+    ],
+  },
+
+  {
+    id: 3,
     title: "2 Stars",
     description:
       "A tech agency website offering web design, development, and digital marketing services",
@@ -165,6 +167,23 @@ export const projects = [
       { id: 4, title: "Swiper JS" },
     ],
   },
+
+  {
+    id: 4,
+    title: "Code Master Technology Site (CMT)",
+    description:
+      "A tech services platform offering web design, development, and digital marketing solutions",
+    image: "/assets/media/projects/cmt.png",
+    githubLink: "https://github.com/AGemy12/code-master-technology",
+    link: "https://cmt-azure.vercel.app/",
+    techList: [
+      { id: 1, title: "React.js" },
+      { id: 2, title: "Next.js" },
+      { id: 3, title: "Node.js" },
+      { id: 4, title: "Tailwind CSS" },
+      { id: 5, title: "Swiper JS" },
+    ],
+  },
   {
     id: 5,
     title: "Jazan Map",
@@ -172,7 +191,6 @@ export const projects = [
       "Discover Jazan through an interactive, detailed map—explore its governorates, Red Sea coastline, terrain, and strategic landmarks, all in one place.",
     image: "/assets/media/projects/jazan.png",
     githubLink: "https://github.com/AGemy12/jazan",
-    link: "https://torathmasr.com/MapofJazan/",
     techList: [
       { id: 1, title: "HTML" },
       { id: 2, title: "JavaScript" },

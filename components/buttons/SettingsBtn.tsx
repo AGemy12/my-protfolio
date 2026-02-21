@@ -8,10 +8,10 @@ interface SettingsBtnProps {
 
 export default function SettingsBtn({ onClick }: SettingsBtnProps) {
   return (
-    <div className="fixed top-4 right-4 z-10">
+    <div className="fixed top-4 right-4 z-999">
       <Tooltip content="Settings">
         <button
-          className="w-9 h-9 bg-white dark:bg-primary-10 dark:hover:bg-primary-20 border-[1px] border-primary-20  rounded-md flex items-center justify-center"
+          className="w-9 h-9 bg-white dark:bg-primary-50 dark:hover:bg-primary-20 border-[1px] border-primary-20  rounded-md flex items-center justify-center"
           onClick={onClick}
         >
           <IoMdSettings className="text-xl text-text" />

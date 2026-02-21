@@ -8,8 +8,9 @@ interface ProjectsItemProps {
   title: string;
   description: string;
   image: string;
-  link: string;
-  githubLink: string;
+
+  link?: string;
+  githubLink?: string;
   techList: {
     id: number;
     title: string;
@@ -48,26 +49,30 @@ export default function ProjectsItem({
 
         {/* Hover Action Buttons */}
         <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out transform translate-y-4 group-hover:translate-y-0">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => window.open(link, "_blank")}
-            className="px-6 py-3 bg-primary text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
-            aria-label={`View ${title} live demo`}
-          >
-            <FiExternalLink className="w-5 h-5" />
-            Live Demo
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => window.open(githubLink, "_blank")}
-            className="px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-lg font-semibold border-2 border-white/30 hover:bg-white/20 transition-all duration-300 flex items-center gap-2"
-            aria-label={`View ${title} on GitHub`}
-          >
-            <FiGithub className="w-5 h-5" />
-            Code
-          </motion.button>
+          {link && (
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => window.open(link, "_blank")}
+              className="px-6 py-3 bg-primary text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+              aria-label={`View ${title} live demo`}
+            >
+              <FiExternalLink className="w-5 h-5" />
+              Live Demo
+            </motion.button>
+          )}
+          {githubLink && (
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => window.open(githubLink, "_blank")}
+              className="px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-lg font-semibold border-2 border-white/30 hover:bg-white/20 transition-all duration-300 flex items-center gap-2"
+              aria-label={`View ${title} on GitHub`}
+            >
+              <FiGithub className="w-5 h-5" />
+              Code
+            </motion.button>
+          )}
         </div>
       </div>
 

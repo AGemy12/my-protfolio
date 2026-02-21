@@ -74,7 +74,7 @@ export default function Settings({ openSettings, onClose }: SettingsProps) {
 
   return (
     <div
-      className={`fixed top-0 right-0 w-full h-screen bg-black/40 z-[49] transition-opacity duration-300 ${
+      className={`fixed top-0 right-0 w-full h-screen bg-black/70 z-999 transition-opacity duration-300 ${
         openSettings
           ? "opacity-100 pointer-events-auto"
           : "opacity-0 pointer-events-none"
