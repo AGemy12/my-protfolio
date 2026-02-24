@@ -1,4 +1,5 @@
 "use client";
+
 import SimpleBtn from "@/components/buttons/SimpleBtn";
 import { motion } from "motion/react";
 import Image from "next/image";
@@ -8,13 +9,9 @@ interface ProjectsItemProps {
   title: string;
   description: string;
   image: string;
-
   link?: string;
   githubLink?: string;
-  techList: {
-    id: number;
-    title: string;
-  }[];
+  techList: { id: number; title: string }[];
 }
 
 export default function ProjectsItem({
@@ -25,94 +22,123 @@ export default function ProjectsItem({
   githubLink,
   techList,
 }: ProjectsItemProps) {
+  const hasActions = Boolean(link || githubLink);
+
   return (
     <motion.article
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.8, 0.25, 1] }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       viewport={{ once: true, margin: "-100px" }}
-      className="group relative overflow-hidden rounded-2xl border-2 border-primary-20 bg-main-bg hover:border-primary/40 hover:shadow-light-shadow transition-all duration-500 ease-out"
+      className="group relative overflow-hidden rounded-2xl border border-white/10 bg-main-bg/60 backdrop-blur-sm
+                 shadow-[0_10px_35px_-25px_rgba(0,0,0,0.65)]
+                 hover:border-primary/35 hover:shadow-[0_18px_55px_-30px_rgba(0,0,0,0.8)]
+                 transition-all duration-500"
     >
-      {/* Image Container with Overlay */}
-      <div className="relative overflow-hidden aspect-video bg-gradient-to-br from-primary/5 to-primary/10">
+      {/* subtle glow */}
+      <div
+        className="pointer-events-none absolute -inset-24 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background:
+            "radial-gradient(closest-side, rgba(34,197,94,0.15), transparent 60%)",
+        }}
+      />
+
+      {/* Media */}
+      <div className="relative aspect-video overflow-hidden">
         <Image
           src={image}
           alt={title}
-          width={800}
-          height={600}
+          width={1200}
+          height={675}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:brightness-110"
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
           priority={false}
         />
-        {/* Hover Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
 
-        {/* Hover Action Buttons */}
-        <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out transform translate-y-4 group-hover:translate-y-0">
-          {link && (
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => window.open(link, "_blank")}
-              className="px-6 py-3 bg-primary text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
-              aria-label={`View ${title} live demo`}
-            >
-              <FiExternalLink className="w-5 h-5" />
-              Live Demo
-            </motion.button>
-          )}
-          {githubLink && (
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => window.open(githubLink, "_blank")}
-              className="px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-lg font-semibold border-2 border-white/30 hover:bg-white/20 transition-all duration-300 flex items-center gap-2"
-              aria-label={`View ${title} on GitHub`}
-            >
-              <FiGithub className="w-5 h-5" />
-              Code
-            </motion.button>
-          )}
+        {/* overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+
+        {/* top actions */}
+        {hasActions && (
+          <div className="absolute top-4 right-4 flex gap-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-400">
+            {link && (
+              <motion.button
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => window.open(link, "_blank")}
+                className="h-10 w-10 rounded-xl bg-primary/70 border border-primary/80 backdrop-blur-md
+                           hover:bg-primary hover:border-primary transition flex items-center justify-center"
+                aria-label={`Open ${title} live demo`}
+                title="Live Demo"
+              >
+                <FiExternalLink className="text-white" />
+              </motion.button>
+            )}
+            {githubLink && (
+              <motion.button
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => window.open(githubLink, "_blank")}
+                className="h-10 w-10 rounded-xl bg-primary/70 border border-primary/80 backdrop-blur-md
+                           hover:bg-primary hover:border-primary transition flex items-center justify-center"
+                aria-label={`Open ${title} on GitHub`}
+                title="GitHub"
+              >
+                <FiGithub className="text-white" />
+              </motion.button>
+            )}
+          </div>
+        )}
+
+        {/* bottom label */}
+        <div className="absolute bottom-4 left-4 right-4">
+          <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight drop-shadow">
+            {title}
+          </h3>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {techList.slice(0, 4).map((t) => (
+              <span
+                key={t.id}
+                className="text-[11px] md:text-xs px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-white/90 backdrop-blur"
+              >
+                {t.title}
+              </span>
+            ))}
+            {techList.length > 4 && (
+              <span className="text-[11px] md:text-xs px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-white/80 backdrop-blur">
+                +{techList.length - 4}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-6 space-y-4">
-        <h3 className="text-xl md:text-2xl font-bold text-text group-hover:text-primary transition-colors duration-300">
-          {title}
-        </h3>
+      <div className="p-6">
         <p className="text-sm md:text-base text-muted leading-relaxed line-clamp-3">
           {description}
         </p>
 
-        {/* Tech Stack Badges */}
-        <div className="flex flex-wrap items-center gap-2 pt-2">
-          {techList.map((tech) => (
-            <motion.span
-              key={tech.id}
-              whileHover={{ scale: 1.05 }}
-              className="px-3 py-1.5 bg-primary-10 text-primary text-xs md:text-sm font-semibold rounded-full border border-primary/20 hover:bg-primary-20 hover:border-primary/40 transition-all duration-300"
-            >
-              {tech.title}
-            </motion.span>
-          ))}
-        </div>
-
-        {/* Action Buttons (Visible on mobile, hidden on hover for desktop) */}
-        <div className="flex items-center gap-4 pt-2 md:hidden group-hover:hidden">
-          <SimpleBtn
-            title="live demo"
-            hasIcon
-            Icon={FiExternalLink}
-            handleClickEvent={() => window.open(link, "_blank")}
-          />
-          <SimpleBtn
-            title="github"
-            hasIcon
-            Icon={FiGithub}
-            handleClickEvent={() => window.open(githubLink, "_blank")}
-            customStyle="bg-transparent hover:bg-primary-10"
-          />
+        {/* Mobile actions */}
+        <div className="mt-5 flex items-center gap-3 md:hidden">
+          {link && (
+            <SimpleBtn
+              title="live demo"
+              hasIcon
+              Icon={FiExternalLink}
+              handleClickEvent={() => window.open(link, "_blank")}
+            />
+          )}
+          {githubLink && (
+            <SimpleBtn
+              title="github"
+              hasIcon
+              Icon={FiGithub}
+              handleClickEvent={() => window.open(githubLink, "_blank")}
+              customStyle="bg-transparent hover:bg-primary-10"
+            />
+          )}
         </div>
       </div>
     </motion.article>

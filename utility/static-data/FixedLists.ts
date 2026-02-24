@@ -102,6 +102,26 @@ export const mySkillsList = [
 
 export const projects = [
   {
+    id: 0,
+    title: "Alarabify Academy",
+    description:
+      "Alarabify Academy is a full-featured online learning platform with dedicated dashboards for Admins, Teachers, and Students. The system supports structured course management where each course contains levels, each level includes units, and each unit contains lessons with images and detailed explanations. The platform enables creating and managing live sessions between teachers and students with full Zoom integration — users are redirected directly to Zoom meetings from the session link. After session completion, payments are automatically calculated based on session duration (per minute) without payment gateways. The system also includes real-time notifications to enhance user interaction and live updates across the platform.",
+    image: "/assets/media/projects/arabify.png",
+    githubLink: "https://github.com/AGemy12/alarabify",
+    link: "https://www.alarabify.com",
+    techList: [
+      { id: 1, title: "React.js" },
+      { id: 2, title: "Next.js" },
+      { id: 3, title: "TypeScript" },
+      { id: 4, title: "Tailwind CSS" },
+      { id: 5, title: "PHP Laravel" },
+      { id: 6, title: "Zoom Integration" },
+      { id: 7, title: "Real-time Notifications" },
+      { id: 8, title: "Role-based Dashboard System" },
+    ],
+  },
+
+  {
     id: 1,
     title: "Best Clean",
     description:

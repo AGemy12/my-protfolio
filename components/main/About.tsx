@@ -14,7 +14,7 @@ import {
 
 const aboutCards = [
   {
-    title: "Frontend Web Developer",
+    title: "Fullstack JavaScript Developer",
     date: "2021 – Present",
     icon: <FiCode size={32} />,
     description:
@@ -66,7 +66,7 @@ export default function About() {
         <p className="text-base md:text-lg lg:text-xl leading-relaxed text-muted mb-6">
           I am a{" "}
           <span className="text-text font-semibold">
-            Frontend Web Developer
+            Fullstack JavaScript Developer
           </span>{" "}
           with a passion for creating visually stunning and user-friendly
           interfaces. I have a strong foundation in modern web technologies and
@@ -108,7 +108,7 @@ export default function About() {
           { label: "Age", value: "27", icon: <FiCalendar size={20} /> },
           {
             label: "Job Title",
-            value: "Frontend Web Developer",
+            value: "Fullstack JavaScript Developer",
             icon: <FiCode size={20} />,
           },
           {
@@ -118,7 +118,7 @@ export default function About() {
           },
           {
             label: "University",
-            value: "Faculty of Computer Engineering",
+            value: "Faculty of Engineering – Mechanical Power Engineering",
             icon: <FiAward size={20} />,
           },
           {

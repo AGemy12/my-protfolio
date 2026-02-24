@@ -10,7 +10,8 @@ interface AltBtnProps {
   handleClickEvent?: () => void;
 }
 
-const buttonClasses = "flex items-center justify-center py-3 px-6 md:py-3.5 md:px-8 bg-primary-10 text-text text-sm md:text-base font-bold capitalize transition-all duration-300 ease-out hover:text-primary hover:bg-primary-20 hover:shadow-light-shadow border-2 border-primary-20 hover:border-primary/40 rounded-lg";
+const buttonClasses =
+  "flex items-center justify-center py-3 px-6 md:py-3.5 md:px-8 bg-primary-10  h-[40px] text-text text-sm md:text-base font-bold capitalize transition-all duration-300 ease-out hover:text-primary hover:bg-primary-20 hover:shadow-light-shadow border-2 border-primary-20 hover:border-primary/40 rounded-md";
 
 export default function AltBtn({
   title,
@@ -31,7 +32,10 @@ export default function AltBtn({
   return (
     <>
       {isBtn ? (
-        <button onClick={handleClickEvent} className="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg">
+        <button
+          onClick={handleClickEvent}
+          className="focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg"
+        >
           {buttonContent}
         </button>
       ) : (

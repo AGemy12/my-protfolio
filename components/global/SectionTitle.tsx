@@ -2,21 +2,60 @@ import React from "react";
 
 interface SectionTitleProps {
   title: string;
+  subtitle?: string;
+  align?: "center" | "left";
 }
 
-export default function SectionTitle({ title }: SectionTitleProps) {
+export default function SectionTitle({
+  title,
+  subtitle,
+  align = "center",
+}: SectionTitleProps) {
+  const isCenter = align === "center";
+
   return (
-    <div className="relative z-[1] mb-28 lg:mb-52">
-      <h3 className="text-4xl sm:text-7xl  2xl:text-9xl text-primary font-bold uppercase tracking-widest">
+    <div
+      className={`relative mb-16 lg:mb-24 ${isCenter ? "text-center" : "text-left"}`}
+    >
+      {/* Soft glow behind title */}
+      <div
+        className={`pointer-events-none absolute -top-10 ${isCenter ? "left-1/2 -translate-x-1/2" : "left-0"} 
+        h-24 w-72 rounded-full bg-primary/20 blur-3xl`}
+      />
+
+      {/* Big background word */}
+      <h1
+        aria-hidden
+        className={`pointer-events-none absolute inset-x-0 -top-6 sm:-top-10 select-none 
+        ${isCenter ? "text-center" : "text-left"}
+        text-[56px] sm:text-[110px] md:text-[150px] lg:text-[190px] xl:text-[230px]
+        font-extrabold uppercase tracking-[0.25em]
+        text-transparent opacity-10
+        [-webkit-text-stroke:1px_rgba(148,163,184,0.35)]`}
+      >
         {title}
-      </h3>
-      <div className="relative ">
-        <h1 className="absolute top-1/2 left-1/2 -translate-1/2 opacity-10 text-[55px] sm:text-[100px] md:text-[150px] lg:text-[200px] xl:text-[250px] 2xl:text-[220px] font-bold uppercase  2xl:leading-[250px] z-[-1] whitespace-nowrap text-5xl md:text-6xl lg:text-9xl text-transparent [-webkit-text-stroke:2px_var(--color-text)] dark:[-webkit-text-stroke:2px_var(--color-primary)] ">
+      </h1>
+
+      {/* Main title */}
+      <div
+        className={`relative inline-flex flex-col ${isCenter ? "items-center" : "items-start"}`}
+      >
+        <h3
+          className="text-3xl sm:text-5xl md:text-6xl font-extrabold uppercase tracking-[0.18em]
+          bg-gradient-to-r from-primary via-primary/70 to-primary-20 bg-clip-text text-transparent"
+        >
           {title}
-        </h1>
-        <h1 className="absolute top-1/2 left-1/2 -translate-1/2 text-primary dark:text-primary-20 opacity-10 text-[55px] sm:text-[100px] md:text-[150px] lg:text-[200px] xl:text-[250px] 2xl:text-[220px] font-bold uppercase 2xl:leading-[250px] z-[-1] whitespace-nowrap  text-5xl md:text-6xl lg:text-9xl  animate-waveFill">
-          {title}
-        </h1>
+        </h3>
+
+        {/* underline */}
+        <div className="mt-4 h-[3px] w-16 rounded-full bg-gradient-to-r from-primary/20 via-primary to-primary/20" />
+
+        {/* subtitle */}
+        {subtitle && (
+          <p className="mt-4 max-w-xl text-sm sm:text-base text-muted-foreground/80 tracking-wide">
+            {subtitle}
+          </p>
+        )}
       </div>
     </div>
   );
