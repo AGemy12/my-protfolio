@@ -194,7 +194,7 @@ export const projects = [
     description:
       "A tech services platform offering web design, development, and digital marketing solutions",
     image: "/assets/media/projects/cmt.png",
-    githubLink: "https://github.com/AGemy12/code-master-technology",
+    githubLink: "https://github.com/AGemy12/cmt",
     link: "https://cmt-azure.vercel.app/",
     techList: [
       { id: 1, title: "React.js" },
