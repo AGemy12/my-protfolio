@@ -102,7 +102,7 @@ export const mySkillsList = [
 
 export const projects = [
   {
-    id: 0,
+    id: 1,
     title: "Alarabify Academy",
     description:
       "Alarabify Academy is a full-featured online learning platform with dedicated dashboards for Admins, Teachers, and Students. The system supports structured course management where each course contains levels, each level includes units, and each unit contains lessons with images and detailed explanations. The platform enables creating and managing live sessions between teachers and students with full Zoom integration — users are redirected directly to Zoom meetings from the session link. After session completion, payments are automatically calculated based on session duration (per minute) without payment gateways. The system also includes real-time notifications to enhance user interaction and live updates across the platform.",
@@ -120,9 +120,26 @@ export const projects = [
       { id: 8, title: "Role-based Dashboard System" },
     ],
   },
+  {
+    id: 2,
+    title: "Itqan Academy",
+    description:
+      "Itqan Academy is an online academy specialized in teaching the Holy Quran, Tajweed, and proper recitation. We offer Quran memorization programs, Ijazah with connected Sanad, and Arabic language foundation courses. Our lessons are designed for children and adults with qualified teachers and flexible online learning. We also provide Islamic studies to help students build strong knowledge and a deeper connection with Islam.",
+    image: "/assets/media/projects/itqan.png",
+    githubLink: "https://github.com/AGemy12/itqan-academy",
+    link: "https://www.itqanforquran.com/ar",
+    techList: [
+      { id: 1, title: "React.js" },
+      { id: 2, title: "Next.js" },
+      { id: 3, title: "TypeScript" },
+      { id: 4, title: "Tailwind CSS" },
+      { id: 4, title: "Swiper js" },
+      { id: 4, title: "Framer Motion" },
+    ],
+  },
 
   {
-    id: 1,
+    id: 3,
     title: "Best Clean",
     description:
       "Best Clean is a full-stack Next.js cleaning services platform in Hafar Al Batin. It includes a powerful admin dashboard to manage users, services, categories, hero slider content, and the site logo — offering an easy booking and contact experience for customers.",
@@ -140,7 +157,7 @@ export const projects = [
   },
 
   {
-    id: 2,
+    id: 4,
     title: "Rowad4u",
     description:
       "Rowad4u is a digital services and design platform built with a full admin dashboard to manage dashboard users, services, categories, and hero slider content (image, description) — providing a smooth browsing and request experience for clients.",
@@ -158,7 +175,7 @@ export const projects = [
   },
 
   {
-    id: 3,
+    id: 5,
     title: "Diyarsco",
     description:
       "Diyarsco is a real estate showcase website built on Zoho Sites with extensive customizations across multiple sections — including a custom image slider/gallery to present projects and listed properties in a modern, interactive way.",
@@ -173,7 +190,7 @@ export const projects = [
   },
 
   {
-    id: 3,
+    id: 6,
     title: "2 Stars",
     description:
       "A tech agency website offering web design, development, and digital marketing services",
@@ -189,7 +206,7 @@ export const projects = [
   },
 
   {
-    id: 4,
+    id: 7,
     title: "Code Master Technology Site (CMT)",
     description:
       "A tech services platform offering web design, development, and digital marketing solutions",
@@ -205,7 +222,7 @@ export const projects = [
     ],
   },
   {
-    id: 5,
+    id: 8,
     title: "Jazan Map",
     description:
       "Discover Jazan through an interactive, detailed map—explore its governorates, Red Sea coastline, terrain, and strategic landmarks, all in one place.",
