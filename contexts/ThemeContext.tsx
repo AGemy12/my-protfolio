@@ -1,78 +1,99 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { defaultPalette, palettes, type PaletteId } from "@/data/portfolio";
 
 type Theme = "light" | "dark" | "system";
 
-interface ThemeContextType {
+type AppearanceContextType = {
   theme: Theme;
-  toggleTheme: (theme: Theme) => void;
-}
-
-const ThemeContext = createContext<ThemeContextType>({
-  theme: "light",
-  toggleTheme: () => {},
-});
-
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>("light");
-
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("theme") as Theme | null;
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const applyTheme = (t: Theme) => {
-      document.documentElement.classList.remove("dark");
-      if (t === "dark") document.documentElement.classList.add("dark");
-    };
-
-    const handleSystemChange = (e: MediaQueryListEvent) => {
-      if (localStorage.getItem("theme") === "system") {
-        const newSystemTheme = e.matches ? "dark" : "light";
-        applyTheme(newSystemTheme);
-        setTheme("system");
-      }
-    };
-
-    const initialTheme: Theme =
-      storedTheme ?? (prefersDark.matches ? "dark" : "light");
-
-    setTheme(initialTheme);
-    applyTheme(
-      initialTheme === "system"
-        ? prefersDark.matches
-          ? "dark"
-          : "light"
-        : initialTheme
-    );
-
-    prefersDark.addEventListener("change", handleSystemChange);
-    return () => prefersDark.removeEventListener("change", handleSystemChange);
-  }, []);
-
-  const toggleTheme = (newTheme: Theme) => {
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-    const targetTheme =
-      newTheme === "system"
-        ? prefersDark.matches
-          ? "dark"
-          : "light"
-        : newTheme;
-
-    document.documentElement.classList.remove("dark");
-    if (targetTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    }
-  };
-
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  isDark: boolean;
+  palette: PaletteId;
+  setTheme: (theme: Theme) => void;
+  setPalette: (palette: PaletteId) => void;
 };
 
-export const useTheme = () => useContext(ThemeContext);
+const AppearanceContext = createContext<AppearanceContextType>({
+  theme: "system",
+  isDark: false,
+  palette: defaultPalette,
+  setTheme: () => {},
+  setPalette: () => {},
+});
+
+const isPalette = (value: string | null): value is PaletteId =>
+  palettes.some((p) => p.id === value);
+
+const read = (key: string) => {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+
+const write = (key: string, value: string) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    /* storage unavailable: the choice lasts for this visit only */
+  }
+};
+
+// The saved theme and palette are applied before the first paint by
+// appearanceScript (contexts/appearanceScript.ts).
+
+export function AppearanceProvider({
+  children,
+  fallbackPalette = defaultPalette,
+}: {
+  children: React.ReactNode;
+  fallbackPalette?: PaletteId;
+}) {
+  const [theme, setThemeState] = useState<Theme>("system");
+  const [isDark, setIsDark] = useState(false);
+  const [palette, setPaletteState] = useState<PaletteId>(fallbackPalette);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const stored = read("theme");
+    const storedPalette = read("palette");
+    if (stored === "light" || stored === "dark" || stored === "system") setThemeState(stored);
+    if (isPalette(storedPalette)) setPaletteState(storedPalette);
+    setIsDark(document.documentElement.classList.contains("dark"));
+    setLoaded(true);
+  }, []);
+
+  // Follow the operating system while the choice is "system".
+  useEffect(() => {
+    if (!loaded) return;
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const apply = () => {
+      const dark = theme === "dark" || (theme === "system" && media.matches);
+      document.documentElement.classList.toggle("dark", dark);
+      setIsDark(dark);
+    };
+    apply();
+    media.addEventListener("change", apply);
+    return () => media.removeEventListener("change", apply);
+  }, [theme, loaded]);
+
+  const setTheme = useCallback((next: Theme) => {
+    setThemeState(next);
+    write("theme", next);
+  }, []);
+
+  const setPalette = useCallback((next: PaletteId) => {
+    setPaletteState(next);
+    write("palette", next);
+    document.documentElement.setAttribute("data-palette", next);
+  }, []);
+
+  return (
+    <AppearanceContext.Provider value={{ theme, isDark, palette, setTheme, setPalette }}>
+      {children}
+    </AppearanceContext.Provider>
+  );
+}
+
+export const useAppearance = () => useContext(AppearanceContext);
