@@ -1,44 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useTheme } from "@/contexts/ThemeContext";
+import { useTranslations } from "next-intl";
+import { useAppearance } from "@/contexts/ThemeContext";
+import { MoonIcon, SunIcon } from "@/components/ui/Icons";
+
+export const iconButton =
+  "grid h-9 w-9 flex-none place-items-center rounded-full border border-line bg-surface text-fg transition-colors duration-300 hover:border-fg";
 
 export default function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
-  const [isDark, setIsDark] = useState(false);
-
-  // Read the applied class after mount so "system" resolves correctly.
-  useEffect(() => {
-    setIsDark(document.documentElement.classList.contains("dark"));
-  }, [theme]);
+  const t = useTranslations("nav");
+  const { isDark, setTheme } = useAppearance();
 
   return (
     <button
       type="button"
-      onClick={() => toggleTheme(isDark ? "light" : "dark")}
-      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
-      className="grid h-9 w-9 place-items-center rounded-full border border-line text-muted transition-colors duration-300 hover:border-fg hover:text-fg"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      aria-label={isDark ? t("toLight") : t("toDark")}
+      title={isDark ? t("toLight") : t("toDark")}
+      className={iconButton}
     >
-      <svg
-        viewBox="0 0 24 24"
-        width="16"
-        height="16"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        {isDark ? (
-          <>
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
-          </>
-        ) : (
-          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
-        )}
-      </svg>
+      {isDark ? <SunIcon className="h-[17px] w-[17px]" /> : <MoonIcon className="h-[17px] w-[17px]" />}
     </button>
   );
 }

@@ -1,10 +1,11 @@
-import Link from "next/link";
+import { ArrowIcon, DownloadIcon } from "@/components/ui/Icons";
 
 type ButtonProps = {
   href?: string;
-  variant?: "main" | "quiet";
+  variant?: "primary" | "secondary";
   size?: "md" | "sm";
-  arrow?: boolean;
+  icon?: "arrow" | "download";
+  download?: boolean;
   type?: "button" | "submit";
   disabled?: boolean;
   className?: string;
@@ -12,23 +13,24 @@ type ButtonProps = {
 };
 
 const base =
-  "group inline-flex items-center gap-2.5 rounded-full border font-medium transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-60";
+  "group inline-flex items-center gap-2.5 whitespace-nowrap rounded-full border font-medium transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-60";
 
 const variants = {
-  main: "border-transparent bg-accent text-on-accent hover:bg-[color-mix(in_srgb,var(--accent)_86%,var(--fg))]",
-  quiet: "border-line bg-transparent text-fg hover:border-fg",
+  primary: "border-transparent bg-fg text-bg hover:bg-accent hover:text-on-accent",
+  secondary: "border-line bg-surface text-fg hover:border-fg",
 };
 
 const sizes = {
-  md: "px-6 py-[13px] text-[15.5px]",
-  sm: "px-[18px] py-[9px] text-[14.5px]",
+  md: "px-[22px] py-3 text-[15px]",
+  sm: "px-[18px] py-[9px] text-[14px]",
 };
 
 export default function Button({
   href,
-  variant = "main",
+  variant = "primary",
   size = "md",
-  arrow = false,
+  icon,
+  download,
   type = "button",
   disabled,
   className = "",
@@ -37,23 +39,19 @@ export default function Button({
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
   const content = (
     <>
-      {children}
-      {arrow && (
-        <span
-          aria-hidden="true"
-          className="transition-transform duration-300 ease-calm group-hover:translate-x-[3px]"
-        >
-          →
-        </span>
+      {icon === "download" && <DownloadIcon />}
+      <span>{children}</span>
+      {icon === "arrow" && (
+        <ArrowIcon className="transition-[translate] duration-300 ease-calm group-hover:translate-x-[3px] rtl:group-hover:-translate-x-[3px]" />
       )}
     </>
   );
 
   if (href) {
     return (
-      <Link href={href} className={classes}>
+      <a href={href} download={download || undefined} className={classes}>
         {content}
-      </Link>
+      </a>
     );
   }
 

@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ahmad Marzouk · Portfolio
 
-## Getting Started
+Bilingual (English / Arabic) portfolio built with Next.js, next-intl and Tailwind CSS, with an admin dashboard at `/admin` for editing every section.
 
-First, run the development server:
+## Development
 
 ```bash
+npm install
+cp .env.example .env.local   # then fill in the values
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Site: http://localhost:3000 (redirects to `/en` or `/ar`)
+- Dashboard: http://localhost:3000/admin
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The site works without any environment variables: it shows the built-in content from `messages/*.json` and `data/portfolio.ts`. The dashboard needs the variables below.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Admin dashboard
 
-## Learn More
+Edits text in both languages, contact details and links, project images, the profile photo, the CV, and the default color palette. Saving updates the live site immediately (no redeploy).
 
-To learn more about Next.js, take a look at the following resources:
+How it works:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- All content is one document in MongoDB (`content` collection, `_id: "site"`). Before the first save, the dashboard starts from the built-in files.
+- Uploads go straight from the browser to Vercel Blob (`app/api/admin/upload`).
+- Pages stay static; a save calls `revalidateTag` / `revalidatePath` to rebuild them.
+- If the database can't be reached, the site falls back to the built-in content and the dashboard refuses to save, so nothing is overwritten.
+- Saving checks links, image sources and `{placeholders}`, and rejects a save that was made on an older copy (two tabs or devices).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Setup
 
-## Deploy on Vercel
+1. **MongoDB Atlas**: create a free cluster, a database user, and allow access from anywhere (`0.0.0.0/0`) under *Network Access*, since Vercel has no fixed IP. Copy the connection string into `MONGODB_URI`.
+2. **Vercel Blob**: in the Vercel project, go to *Storage → Create → Blob* and connect it to the project. This adds `BLOB_READ_WRITE_TOKEN`; copy it into `.env.local` for local uploads.
+3. **Login**: set `ADMIN_PASSWORD` (8+ characters) and `ADMIN_SECRET` (32+ random characters):
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
+   ```
+   Changing either value signs out every session.
+4. Add the same variables in *Vercel → Settings → Environment Variables* and redeploy.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Where things live
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Path | Purpose |
+| --- | --- |
+| `lib/content/types.ts` | Shape of the editable content |
+| `lib/content/normalize.ts` | Defaults, clean-up and validation |
+| `lib/content/store.ts` | Cached read for the site, versioned write |
+| `lib/auth.ts` | Password check and signed session cookie |
+| `app/admin/` | Login page, dashboard page, server actions |
+| `components/admin/` | Dashboard UI (`tabs.tsx` lists every field) |
+
+To add a new editable text, add it to `messages/en.json` and `messages/ar.json`, add the key to `lib/content/types.ts`, and add a `LocalizedText` field in `components/admin/tabs.tsx`.

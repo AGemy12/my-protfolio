@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import emailjs from "emailjs-com";
 import Button from "@/components/ui/Button";
 
@@ -12,10 +13,13 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type Status = { type: "idle" | "sending" | "success" | "error"; message: string };
 
+const labelClass = "grid gap-[7px] text-[13.5px] font-medium text-fg";
+
 const fieldClass =
-  "w-full rounded-[10px] border border-line bg-surface px-[15px] py-[13px] text-base text-fg transition-[border-color,box-shadow] duration-200 focus:border-accent focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--accent)_12%,transparent)] focus:outline-none";
+  "w-full rounded-xl border border-line bg-bg px-[15px] py-3 text-base font-normal text-fg placeholder:text-faint transition-[border-color,box-shadow] duration-200 focus:border-accent focus:shadow-[0_0_0_3px_var(--accent-soft)] focus:outline-none";
 
 export default function ContactForm() {
+  const t = useTranslations("contact.form");
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<Status>({ type: "idle", message: "" });
 
@@ -26,69 +30,64 @@ export default function ContactForm() {
     e.preventDefault();
 
     if (!form.name.trim() || !EMAIL_PATTERN.test(form.email.trim())) {
-      setStatus({
-        type: "error",
-        message: "Please add your name and a valid email address.",
-      });
+      setStatus({ type: "error", message: t("invalid") });
       return;
     }
 
     setStatus({ type: "sending", message: "" });
     try {
       await emailjs.send(SERVICE_ID, TEMPLATE_ID, form, PUBLIC_KEY);
-      setStatus({
-        type: "success",
-        message: `Thanks, ${form.name.trim()}. Your message is on its way.`,
-      });
+      setStatus({ type: "success", message: t("success", { name: form.name.trim() }) });
       setForm({ name: "", email: "", message: "" });
     } catch {
-      setStatus({
-        type: "error",
-        message: "Your message couldn't be sent. Please try again or email me directly.",
-      });
+      setStatus({ type: "error", message: t("error") });
     }
   };
 
   return (
-    <form onSubmit={submit} noValidate className="grid gap-[18px]">
+    <form onSubmit={submit} noValidate className="grid content-start gap-[18px]">
       <div className="grid gap-[18px] sm:grid-cols-2">
-        <label htmlFor="contact-name" className="grid gap-[7px] text-sm text-muted">
-          Name
+        <label htmlFor="contact-name" className={labelClass}>
+          {t("name")}
           <input
             id="contact-name"
             name="name"
             autoComplete="name"
+            placeholder={t("namePlaceholder")}
             value={form.name}
             onChange={update}
             className={fieldClass}
           />
         </label>
-        <label htmlFor="contact-email" className="grid gap-[7px] text-sm text-muted">
-          Email
+        <label htmlFor="contact-email" className={labelClass}>
+          {t("email")}
           <input
             id="contact-email"
             name="email"
             type="email"
+            dir="ltr"
             autoComplete="email"
+            placeholder="you@company.com"
             value={form.email}
             onChange={update}
-            className={fieldClass}
+            className={`${fieldClass} rtl:text-right`}
           />
         </label>
       </div>
-      <label htmlFor="contact-message" className="grid gap-[7px] text-sm text-muted">
-        Message
+      <label htmlFor="contact-message" className={labelClass}>
+        {t("message")}
         <textarea
           id="contact-message"
           name="message"
+          placeholder={t("messagePlaceholder")}
           value={form.message}
           onChange={update}
-          className={`${fieldClass} min-h-[130px] resize-y`}
+          className={`${fieldClass} min-h-[150px] resize-y`}
         />
       </label>
       <div>
-        <Button type="submit" arrow disabled={status.type === "sending"}>
-          {status.type === "sending" ? "Sending…" : "Send message"}
+        <Button type="submit" icon="arrow" disabled={status.type === "sending"}>
+          {status.type === "sending" ? t("sending") : t("send")}
         </Button>
       </div>
       <p

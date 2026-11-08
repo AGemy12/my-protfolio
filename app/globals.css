@@ -2,32 +2,122 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Calm palette: neutral surfaces, one muted teal accent. */
+/*
+ * Color palettes. Each one is a set of soft neutrals plus a single quiet
+ * accent, with a matching dark version. The active palette is chosen with
+ * data-palette on <html>; "ink" is the default.
+ */
 :root {
-  --bg: #f8f9f9;
+  --bg: #f7f7f5;
   --surface: #ffffff;
-  --panel: #eef1f2;
-  --line: #e3e6e8;
-  --fg: #16191d;
-  --muted: #5f666f;
-  --faint: #959ca5;
-  --accent: #1f5663;
+  --panel: #eeeeea;
+  --line: #e2e2dc;
+  --fg: #1a1d24;
+  --muted: #5e636e;
+  --faint: #8e939c;
+  --accent: #2b3f63;
   --on-accent: #ffffff;
-  --success: #3a9e74;
-  --danger: #c2553f;
+  --success: #3a8f6a;
+  --danger: #b4513d;
+  --accent-soft: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+:root.dark {
+  --bg: #121418;
+  --surface: #181b20;
+  --panel: #1e2228;
+  --line: #2a2f37;
+  --fg: #ecedef;
+  --muted: #a3a8b2;
+  --faint: #6f7580;
+  --accent: #9db2d8;
+  --on-accent: #121418;
+  --success: #7cc3a0;
+  --danger: #e08a76;
+  color-scheme: dark;
 }
 
-.dark {
-  --bg: #111315;
-  --surface: #171a1d;
-  --panel: #1c2024;
-  --line: #272b30;
-  --fg: #eceeef;
-  --muted: #a2a8af;
-  --faint: #6b7179;
+:root[data-palette="sage"] {
+  --bg: #f5f6f2;
+  --surface: #ffffff;
+  --panel: #e9ece3;
+  --line: #dfe2d7;
+  --fg: #1b1f1b;
+  --muted: #5c655c;
+  --faint: #8c948b;
+  --accent: #4a6a55;
+}
+:root.dark[data-palette="sage"] {
+  --bg: #121512;
+  --surface: #181c18;
+  --panel: #1e231e;
+  --line: #2a302a;
+  --fg: #eceeea;
+  --muted: #a3aba2;
+  --faint: #6f776e;
+  --accent: #a6c3ae;
+  --on-accent: #121512;
+}
+
+:root[data-palette="harbor"] {
+  --bg: #f5f7f7;
+  --surface: #ffffff;
+  --panel: #e8eeef;
+  --line: #dce3e4;
+  --fg: #161b1d;
+  --muted: #5a666a;
+  --faint: #8a9599;
+  --accent: #1f5663;
+}
+:root.dark[data-palette="harbor"] {
+  --bg: #101415;
+  --surface: #161b1d;
+  --panel: #1b2224;
+  --line: #263033;
+  --fg: #eaefef;
+  --muted: #a0abae;
+  --faint: #6a7679;
   --accent: #8fc2cb;
-  --on-accent: #0f1214;
-  color-scheme: dark;
+  --on-accent: #101415;
+}
+
+:root[data-palette="mulberry"] {
+  --bg: #f8f6f5;
+  --surface: #ffffff;
+  --panel: #efeae9;
+  --line: #e5dedc;
+  --fg: #1f1a1c;
+  --muted: #675e61;
+  --faint: #978d90;
+  --accent: #6b3b4e;
+}
+:root.dark[data-palette="mulberry"] {
+  --bg: #151213;
+  --surface: #1c1819;
+  --panel: #231e20;
+  --line: #31292c;
+  --fg: #efebec;
+  --muted: #ada3a6;
+  --faint: #7a7073;
+  --accent: #d5a6b8;
+  --on-accent: #151213;
+}
+
+/* Typography per language: each Latin face has an Arabic partner. */
+:root {
+  --app-sans: var(--font-onest), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --app-head: var(--font-newsreader), "Iowan Old Style", Georgia, serif;
+  --head-weight: 400;
+  --head-tracking: -0.015em;
+  --head-leading: 1.12;
+  --body-leading: 1.65;
+}
+:root:lang(ar) {
+  --app-sans: var(--font-plex-arabic), var(--font-onest), system-ui, "Segoe UI", sans-serif;
+  --app-head: var(--font-naskh), var(--font-newsreader), Georgia, serif;
+  --head-weight: 500;
+  --head-tracking: 0;
+  --head-leading: 1.4;
+  --body-leading: 1.85;
 }
 
 @theme inline {
@@ -39,12 +129,13 @@
   --color-muted: var(--muted);
   --color-faint: var(--faint);
   --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
   --color-on-accent: var(--on-accent);
   --color-success: var(--success);
   --color-danger: var(--danger);
 
-  --font-sans: var(--font-onest), system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-head: var(--font-newsreader), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--app-sans);
+  --font-head: var(--app-head);
 
   --ease-calm: cubic-bezier(0.25, 0.6, 0.25, 1);
 
@@ -68,7 +159,7 @@ body {
   color: var(--fg);
   font-family: var(--font-sans);
   font-size: 17px;
-  line-height: 1.65;
+  line-height: var(--body-leading);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   transition:
@@ -80,16 +171,16 @@ h1,
 h2,
 h3 {
   font-family: var(--font-head);
-  font-weight: 400;
-  letter-spacing: -0.015em;
-  line-height: 1.12;
+  font-weight: var(--head-weight);
+  letter-spacing: var(--head-tracking);
+  line-height: var(--head-leading);
   text-wrap: balance;
 }
 
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 @media (prefers-reduced-motion: reduce) {

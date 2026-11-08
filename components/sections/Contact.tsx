@@ -1,55 +1,63 @@
-import Section from "@/components/ui/Section";
+import { useTranslations } from "next-intl";
+import { container, SectionHeading } from "@/components/ui/Section";
 import CopyButton from "@/components/ui/CopyButton";
 import ContactForm from "@/components/sections/ContactForm";
-import { profile } from "@/data/portfolio";
+import { ExternalIcon } from "@/components/ui/Icons";
+import type { Profile } from "@/lib/content/types";
 
 const linkClass =
-  "relative font-medium text-fg after:absolute after:inset-x-0 after:-bottom-[3px] after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:ease-calm hover:after:scale-x-100";
+  "inline-flex items-center gap-1.5 font-medium text-fg transition-colors duration-200 hover:text-accent";
 
-export default function Contact() {
+export default function Contact({ profile }: { profile: Profile }) {
+  const t = useTranslations("contact");
+
   const channels = [
-    { label: "Email", value: profile.email, copy: true },
-    { label: "Phone and WhatsApp", value: profile.phone, copy: true, href: profile.whatsapp },
-    { label: "LinkedIn", value: profile.name, href: profile.linkedin },
-    { label: "GitHub", value: "AGemy12", href: profile.github },
+    { label: t("email"), value: profile.email, copy: true },
+    { label: t("phone"), value: profile.phone, copy: true, href: profile.whatsapp },
+    { label: "LinkedIn", value: profile.linkedinName, href: profile.linkedin },
+    { label: "GitHub", value: profile.githubUser, href: profile.github },
   ];
 
   return (
-    <Section
-      id="contact"
-      label="Contact"
-      title="Have a project in mind? Let's talk."
-      intro="Send me a short message about what you're building. I usually reply within a day."
-    >
-      <div className="mt-10 grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-14">
-        <div className="self-start border-b border-line">
-          {channels.map((channel) => (
-            <div
-              key={channel.label}
-              className="flex items-center justify-between gap-3.5 border-t border-line py-[18px]"
-            >
-              <div className="min-w-0">
-                <small className="block text-[13.5px] text-faint">{channel.label}</small>
-                {channel.href ? (
-                  <a
-                    href={channel.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={linkClass}
-                  >
-                    {channel.value}
-                  </a>
-                ) : (
-                  <span className="break-words">{channel.value}</span>
-                )}
-              </div>
-              {channel.copy && <CopyButton text={channel.value} />}
+    <section id="contact" className="border-t border-line py-[clamp(64px,9vw,108px)]">
+      <div className={container}>
+        <div className="grid gap-[clamp(36px,6vw,72px)] rounded-[26px] border border-line bg-surface p-[clamp(22px,5vw,56px)] md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+          <div className="min-w-0">
+            <SectionHeading label={t("eyebrow")} title={t("title")} intro={t("intro")} />
+            <div className="mt-8 border-t border-line">
+              {channels.map((channel) => (
+                <div
+                  key={channel.label}
+                  className="flex items-center justify-between gap-3.5 border-b border-line py-4"
+                >
+                  <div className="min-w-0">
+                    <small className="block text-[13.5px] text-faint">{channel.label}</small>
+                    {channel.href ? (
+                      <a
+                        href={channel.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        dir="ltr"
+                        className={linkClass}
+                      >
+                        {channel.value}
+                        <ExternalIcon className="h-3.5 w-3.5 text-faint" />
+                      </a>
+                    ) : (
+                      <span dir="ltr" className="block break-words">
+                        {channel.value}
+                      </span>
+                    )}
+                  </div>
+                  {channel.copy && <CopyButton text={channel.value} />}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
 
-        <ContactForm />
+          <ContactForm />
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }

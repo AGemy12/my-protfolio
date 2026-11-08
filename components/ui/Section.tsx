@@ -1,37 +1,47 @@
-type SectionProps = {
-  id: string;
+export const container = "mx-auto w-full max-w-[1160px] px-5 sm:px-8";
+
+export const eyebrow =
+  "text-[12.5px] font-medium uppercase tracking-[0.1em] text-accent rtl:text-[14px] rtl:normal-case rtl:tracking-normal";
+
+type SectionHeadingProps = {
   label: string;
   title: string;
   intro?: string;
+  className?: string;
+};
+
+export function SectionHeading({ label, title, intro, className = "" }: SectionHeadingProps) {
+  return (
+    <div className={`grid max-w-[36em] gap-2.5 ${className}`}>
+      <span className={eyebrow}>{label}</span>
+      <h2 className="text-[clamp(1.85rem,3.4vw,2.6rem)]">{title}</h2>
+      {intro && <p className="text-muted">{intro}</p>}
+    </div>
+  );
+}
+
+type SectionProps = SectionHeadingProps & {
+  id: string;
+  /** Tinted band, used on alternating sections. */
+  band?: boolean;
+  /** Optional link or control shown beside the heading. */
+  action?: React.ReactNode;
   children: React.ReactNode;
 };
 
-/**
- * Shared section layout: a small sticky label on the left and the
- * content on the right, so every section keeps the same rhythm.
- */
-export default function Section({
-  id,
-  label,
-  title,
-  intro,
-  children,
-}: SectionProps) {
+/** Shared section layout: heading block on top, content below. */
+export default function Section({ id, band, action, children, ...heading }: SectionProps) {
   return (
-    <section id={id} className="border-t border-line py-[72px] md:py-24">
-      <div className="mx-auto grid max-w-[1120px] gap-4 px-[18px] sm:px-6 md:grid-cols-[220px_minmax(0,1fr)] md:gap-12">
-        <div className="md:pt-2.5">
-          <span className="block text-[13px] font-medium uppercase tracking-[0.08em] text-faint md:sticky md:top-[100px]">
-            {label}
-          </span>
+    <section
+      id={id}
+      className={`border-t border-line py-[clamp(64px,9vw,108px)] ${band ? "bg-surface" : ""}`}
+    >
+      <div className={container}>
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-5 md:mb-14">
+          <SectionHeading {...heading} />
+          {action}
         </div>
-        <div className="min-w-0">
-          <h2 className="max-w-[20em] text-[clamp(1.95rem,3.4vw,2.7rem)]">
-            {title}
-          </h2>
-          {intro && <p className="mt-3.5 max-w-[36em] text-muted">{intro}</p>}
-          {children}
-        </div>
+        {children}
       </div>
     </section>
   );

@@ -1,0 +1,187 @@
+{
+  "meta": {
+    "title": "Ahmad Marzouk · Full Stack Developer",
+    "description": "Ahmad Marzouk is a full stack developer who builds clear, reliable web products with Next.js and NestJS, from idea to launch.",
+    "ogDescription": "Clear, reliable web products with Next.js and NestJS, from idea to launch."
+  },
+  "nav": {
+    "label": "Main",
+    "name": "Ahmad Marzouk",
+    "work": "Work",
+    "services": "Services",
+    "about": "About",
+    "experience": "Experience",
+    "contact": "Contact",
+    "cta": "Let's talk",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language",
+    "toDark": "Switch to dark theme",
+    "toLight": "Switch to light theme",
+    "palette": "Color palette"
+  },
+  "palettes": {
+    "ink": "Ink & Paper",
+    "sage": "Sage",
+    "harbor": "Harbor",
+    "mulberry": "Mulberry"
+  },
+  "hero": {
+    "available": "Available for new projects",
+    "role": "Full Stack Developer",
+    "location": "Egypt, remote",
+    "titleStart": "I build clear, reliable web products",
+    "titleEnd": "from idea to launch.",
+    "intro": "I'm Ahmad, a full stack developer with more than three years of experience. I design the data, build secure APIs with NestJS, and create fast, easy-to-use interfaces with Next.js.",
+    "viewWork": "View my work",
+    "downloadCv": "Download CV",
+    "portraitAlt": "Portrait of Ahmad Marzouk",
+    "facts": [
+      { "value": "3+ years", "label": "building production web apps" },
+      { "value": "10+ projects", "label": "platforms and websites delivered" },
+      { "value": "End to end", "label": "from requirements to deployment" }
+    ]
+  },
+  "work": {
+    "eyebrow": "Selected work",
+    "title": "Products built for real clients",
+    "intro": "Recent platforms and websites I planned, built and launched.",
+    "github": "More on GitHub",
+    "visit": "Visit site",
+    "privateLabel": "Private work:",
+    "private": "a property management platform and the Nemmra platform at DeyarTech.",
+    "privateNote": "Walkthrough available on request",
+    "projects": {
+      "alarabify": {
+        "title": "Alarabify Academy",
+        "description": "Online learning platform with dashboards for admins, teachers and students, and live sessions.",
+        "tags": ["Next.js", "TypeScript", "Laravel API"]
+      },
+      "bestClean": {
+        "title": "Best Clean",
+        "description": "Cleaning services platform with online booking and an admin panel for services and content.",
+        "tags": ["Next.js", "Node.js", "Admin panel"]
+      },
+      "itqan": {
+        "title": "Itqan Academy",
+        "description": "A search-friendly website for an online Quran and Arabic academy.",
+        "tags": ["Next.js", "TypeScript", "SEO"]
+      },
+      "rowad": {
+        "title": "Rowad4u",
+        "description": "Digital services platform with a full dashboard for services, categories and users.",
+        "tags": ["Next.js", "Node.js", "Dashboard"]
+      },
+      "cmt": {
+        "title": "CMT Digital",
+        "description": "Corporate website for a technology services company, from layout to deployment.",
+        "tags": ["Next.js", "Tailwind CSS"]
+      },
+      "stars": {
+        "title": "2 Stars",
+        "description": "Agency website for web design, development and digital marketing services.",
+        "tags": ["Next.js", "Tailwind CSS"]
+      }
+    }
+  },
+  "services": {
+    "eyebrow": "Services",
+    "title": "What I can build for you",
+    "intro": "Clear scope, regular updates, and code your team can keep working on.",
+    "items": [
+      {
+        "title": "Web applications",
+        "description": "Complete products with accounts, user roles and dashboards, built to grow with your business."
+      },
+      {
+        "title": "Backend and APIs",
+        "description": "Secure, well-structured APIs and databases using NestJS, PostgreSQL and MongoDB."
+      },
+      {
+        "title": "Admin dashboards",
+        "description": "Simple control panels so your team can manage content, users and data without help."
+      },
+      {
+        "title": "Websites and SEO",
+        "description": "Fast, responsive company websites that are easy to find on search engines."
+      }
+    ]
+  },
+  "about": {
+    "eyebrow": "About",
+    "title": "I care about the details that make software feel simple.",
+    "lead": "I work across the whole product: the database, the API behind it, and the interface people use every day. Owning each layer keeps the product consistent and easier to change.",
+    "body": "Most of my work is with companies and founders who need someone to turn their requirements into a finished, dependable product. I write clean, reusable code, and I pay close attention to performance and search visibility.",
+    "details": [
+      { "term": "Location", "value": "Beni Suef, Egypt" },
+      { "term": "Education", "value": "B.Eng, Al-Azhar University" },
+      { "term": "Languages", "value": "Arabic, English" }
+    ],
+    "toolkit": "Toolkit",
+    "groups": [
+      { "name": "Frontend", "items": ["Next.js", "React", "Vue.js / Nuxt.js", "Tailwind CSS", "SASS"] },
+      { "name": "Backend", "items": ["NestJS", "Node.js", "TypeScript", "REST APIs", "Auth and roles"] },
+      { "name": "Databases", "items": ["PostgreSQL", "MongoDB", "Redis", "Prisma", "Mongoose"] },
+      { "name": "Workflow", "items": ["Docker", "Git / GitHub", "Postman", "Vercel", "Claude / Codex"] }
+    ]
+  },
+  "experience": {
+    "eyebrow": "Experience",
+    "title": "Where I've worked",
+    "projectsLabel": "Projects:",
+    "roles": [
+      {
+        "period": "2022 – Present",
+        "title": "Full Stack Developer",
+        "org": "DeyarTech · Remote",
+        "points": [
+          "Build and maintain company products end to end, from data models and APIs to the apps on top.",
+          "Work with design and business teams to turn requirements into shipped features."
+        ],
+        "projects": "Property management platform, Nemmra, CMT Digital, Diyarsco"
+      },
+      {
+        "period": "2021 – Present",
+        "title": "Freelance Full Stack Developer",
+        "org": "Self-employed · Remote",
+        "points": [
+          "Deliver complete web solutions for clients, including databases, APIs and interfaces.",
+          "Manage projects from the first requirements through launch and ongoing support."
+        ],
+        "projects": "Alarabify, Itqan for Quran, Best Clean, Rowad4u"
+      },
+      {
+        "period": "2022",
+        "title": "B.Eng, Mechanical Power Engineering",
+        "org": "Al-Azhar University"
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Have a project in mind?",
+    "intro": "Send me a short message about what you're building. I usually reply within a day.",
+    "email": "Email",
+    "phone": "Phone and WhatsApp",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyLabel": "Copy {value}",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "message": "Message",
+      "messagePlaceholder": "What are you planning?",
+      "send": "Send message",
+      "sending": "Sending…",
+      "invalid": "Please add your name and a valid email address.",
+      "success": "Thanks, {name}. Your message is on its way.",
+      "error": "Your message couldn't be sent. Please try again or email me directly."
+    }
+  },
+  "footer": {
+    "label": "Footer",
+    "rights": "© {year} Ahmad Marzouk",
+    "top": "Back to top"
+  }
+}
