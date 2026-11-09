@@ -5,15 +5,13 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const nextConfig: NextConfig = {
   images: {
-    formats: ["image/avif", "image/webp"],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60,
-    // Images uploaded from the admin dashboard live in Vercel Blob.
     remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }],
   },
-  serverExternalPackages: ["mongodb"],
-  output: "standalone",
+  serverExternalPackages: ["mongoose"],
+  experimental: {
+    // CV PDFs and images go straight to Blob from the browser, so actions only carry JSON.
+    serverActions: { bodySizeLimit: "2mb" },
+  },
 };
 
 export default withNextIntl(nextConfig);

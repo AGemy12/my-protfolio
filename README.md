@@ -1,52 +1,53 @@
-# Ahmad Marzouk · Portfolio
+# Ahmad Marzouk — Portfolio
 
-Bilingual (English / Arabic) portfolio built with Next.js, next-intl and Tailwind CSS, with an admin dashboard at `/admin` for editing every section.
+Full-stack Next.js 16 portfolio with a built-in admin dashboard.
 
-## Development
+- **Site**: bilingual (English / Arabic with RTL), dark / light theme, SEO (metadata, hreflang, sitemap, JSON-LD), static pages regenerated on every edit.
+- **Dashboard** (`/en/admin`): profile and site settings, projects, experience, skills, services, contact messages inbox, media library (Vercel Blob), password change, show/hide home sections, reorder and publish items.
+- **Stack**: Next.js App Router · Server Actions · MongoDB (Mongoose) · Vercel Blob · next-intl · next-themes · Tailwind CSS v4 · Motion · Zod · jose (JWT) · bcryptjs.
+
+## Run locally
 
 ```bash
 npm install
 cp .env.example .env.local   # then fill in the values
-npm run dev
+npm run dev                  # http://localhost:3000
 ```
 
-- Site: http://localhost:3000 (redirects to `/en` or `/ar`)
-- Dashboard: http://localhost:3000/admin
+Without `MONGODB_URI` the site still renders using the starter content in `lib/defaults.ts`, but the dashboard can't save anything.
 
-The site works without any environment variables: it shows the built-in content from `messages/*.json` and `data/portfolio.ts`. The dashboard needs the variables below.
+## Deploy on Vercel
 
-## Admin dashboard
+1. Push the repo to GitHub and import it in Vercel.
+2. **Storage → Create → Blob**, connect it to the project (this sets `BLOB_READ_WRITE_TOKEN`).
+3. Add a MongoDB database: either the **MongoDB Atlas** integration from the Vercel marketplace, or create a free Atlas cluster and set `MONGODB_URI` yourself. In Atlas, allow access from anywhere (`0.0.0.0/0`), because Vercel IPs are dynamic.
+4. Set the remaining env vars: `AUTH_SECRET` (32+ random chars), `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and optionally `NEXT_PUBLIC_SITE_URL` (your domain).
+5. Deploy, open `/en/admin/login` and sign in with `ADMIN_EMAIL` / `ADMIN_PASSWORD`. The first login creates the admin account with a hashed password; after that you can change the password from **Account** and remove `ADMIN_PASSWORD` from Vercel.
+6. On **Overview**, click **Import starter content** to copy the CV content into MongoDB. Everything is now editable.
 
-Edits text in both languages, contact details and links, project images, the profile photo, the CV, and the default color palette. Saving updates the live site immediately (no redeploy).
+## Project layout
 
-How it works:
+```
+app/[locale]/(site)/        public pages: home, /projects, /projects/[slug]
+app/[locale]/admin/         login + dashboard (protected by proxy.ts and checked again in every action)
+app/api/upload/route.ts     issues Vercel Blob upload tokens (admin only); files go browser → Blob directly
+lib/models.ts               Mongoose models
+lib/schemas.ts              Zod validation for every write
+lib/resources.ts            field definitions that generate the dashboard forms and lists
+lib/actions/                server actions (auth, content CRUD, contact form)
+lib/data.ts                 public reads, with fallback to lib/defaults.ts
+messages/en.json, ar.json   all UI text
+```
 
-- All content is one document in MongoDB (`content` collection, `_id: "site"`). Before the first save, the dashboard starts from the built-in files.
-- Uploads go straight from the browser to Vercel Blob (`app/api/admin/upload`).
-- Pages stay static; a save calls `revalidateTag` / `revalidatePath` to rebuild them.
-- If the database can't be reached, the site falls back to the built-in content and the dashboard refuses to save, so nothing is overwritten.
-- Saving checks links, image sources and `{placeholders}`, and rejects a save that was made on an older copy (two tabs or devices).
+### Adding a field to a collection
 
-### Setup
+1. Add it to the model in `lib/models.ts` and the type in `lib/types.ts`.
+2. Add it to the Zod schema in `lib/schemas.ts`.
+3. Add one line to `fields` in `lib/resources.ts`, plus a label under `admin.fields` in both message files.
 
-1. **MongoDB Atlas**: create a free cluster, a database user, and allow access from anywhere (`0.0.0.0/0`) under *Network Access*, since Vercel has no fixed IP. Copy the connection string into `MONGODB_URI`.
-2. **Vercel Blob**: in the Vercel project, go to *Storage → Create → Blob* and connect it to the project. This adds `BLOB_READ_WRITE_TOKEN`; copy it into `.env.local` for local uploads.
-3. **Login**: set `ADMIN_PASSWORD` (8+ characters) and `ADMIN_SECRET` (32+ random characters):
-   ```bash
-   node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
-   ```
-   Changing either value signs out every session.
-4. Add the same variables in *Vercel → Settings → Environment Variables* and redeploy.
+The dashboard form picks it up automatically.
 
-### Where things live
+## Notes
 
-| Path | Purpose |
-| --- | --- |
-| `lib/content/types.ts` | Shape of the editable content |
-| `lib/content/normalize.ts` | Defaults, clean-up and validation |
-| `lib/content/store.ts` | Cached read for the site, versioned write |
-| `lib/auth.ts` | Password check and signed session cookie |
-| `app/admin/` | Login page, dashboard page, server actions |
-| `components/admin/` | Dashboard UI (`tabs.tsx` lists every field) |
-
-To add a new editable text, add it to `messages/en.json` and `messages/ar.json`, add the key to `lib/content/types.ts`, and add a `LocalizedText` field in `components/admin/tabs.tsx`.
+- Mongoose models are deliberately untyped (`Model<any>`): Mongoose 9's schema type inference makes `tsc` run out of memory. Writes are validated with Zod and reads are typed through `lib/types.ts`.
+- Every save calls `revalidatePath("/", "layout")`, so the static pages rebuild with the new content on the next request.

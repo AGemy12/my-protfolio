@@ -1,38 +1,31 @@
-import { MongoClient, type Collection } from "mongodb";
-import type { SiteContent } from "@/lib/content/types";
+import "server-only";
+import mongoose from "mongoose";
 
-export type ContentDoc = {
-  _id: "site";
-  data: SiteContent;
-  version: number;
-  updatedAt: Date;
-};
+type Cache = { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null };
 
-export const isDbConfigured = () => Boolean(process.env.MONGODB_URI);
+const globalForMongoose = globalThis as unknown as { __mongoose?: Cache };
+const cache: Cache = globalForMongoose.__mongoose ?? { conn: null, promise: null };
+globalForMongoose.__mongoose = cache;
 
-// One client per server process. In development the module is reloaded on
-// every change, so the promise is kept on globalThis to avoid piling up
-// connections.
-const globalForMongo = globalThis as unknown as { mongoClient?: Promise<MongoClient> };
-
-function client(): Promise<MongoClient> {
-  const uri = process.env.MONGODB_URI;
-  if (!uri) throw new Error("MONGODB_URI is not set");
-  if (!globalForMongo.mongoClient) {
-    globalForMongo.mongoClient = new MongoClient(uri, {
-      serverSelectionTimeoutMS: 8000,
-      maxPoolSize: 5,
-    })
-      .connect()
-      .catch((error) => {
-        globalForMongo.mongoClient = undefined; // retry on the next request
-        throw error;
-      });
-  }
-  return globalForMongo.mongoClient;
+export function hasDatabase() {
+  return Boolean(process.env.MONGODB_URI);
 }
 
-export async function contentCollection(): Promise<Collection<ContentDoc>> {
-  const db = (await client()).db(process.env.MONGODB_DB || "portfolio");
-  return db.collection<ContentDoc>("content");
+/** Reuses one connection per serverless instance (and across hot reloads in dev). */
+export async function connectDB() {
+  if (cache.conn) return cache.conn;
+  const uri = process.env.MONGODB_URI;
+  if (!uri) throw new Error("MONGODB_URI is not set");
+  cache.promise ??= mongoose.connect(uri, {
+    bufferCommands: false,
+    serverSelectionTimeoutMS: 8000,
+    dbName: process.env.MONGODB_DB || undefined,
+  });
+  try {
+    cache.conn = await cache.promise;
+  } catch (error) {
+    cache.promise = null;
+    throw error;
+  }
+  return cache.conn;
 }

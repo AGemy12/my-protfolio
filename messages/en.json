@@ -1,187 +1,285 @@
 {
-  "meta": {
-    "title": "Ahmad Marzouk · Full Stack Developer",
-    "description": "Ahmad Marzouk is a full stack developer who builds clear, reliable web products with Next.js and NestJS, from idea to launch.",
-    "ogDescription": "Clear, reliable web products with Next.js and NestJS, from idea to launch."
-  },
   "nav": {
-    "label": "Main",
-    "name": "Ahmad Marzouk",
-    "work": "Work",
-    "services": "Services",
+    "home": "Home",
     "about": "About",
+    "skills": "Skills",
     "experience": "Experience",
+    "projects": "Projects",
+    "services": "Services",
     "contact": "Contact",
-    "cta": "Let's talk",
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu",
-    "language": "Language",
-    "toDark": "Switch to dark theme",
-    "toLight": "Switch to light theme",
-    "palette": "Color palette"
-  },
-  "palettes": {
-    "ink": "Ink & Paper",
-    "sage": "Sage",
-    "harbor": "Harbor",
-    "mulberry": "Mulberry"
+    "menu": "Menu",
+    "toggleTheme": "Toggle theme",
+    "switchLanguage": "العربية",
+    "skip": "Skip to content"
   },
   "hero": {
-    "available": "Available for new projects",
-    "role": "Full Stack Developer",
-    "location": "Egypt, remote",
-    "titleStart": "I build clear, reliable web products",
-    "titleEnd": "from idea to launch.",
-    "intro": "I'm Ahmad, a full stack developer with more than three years of experience. I design the data, build secure APIs with NestJS, and create fast, easy-to-use interfaces with Next.js.",
-    "viewWork": "View my work",
+    "available": "Taking on new projects",
+    "busy": "Fully booked right now",
+    "startProject": "Start a project",
     "downloadCv": "Download CV",
-    "portraitAlt": "Portrait of Ahmad Marzouk",
-    "facts": [
-      { "value": "3+ years", "label": "building production web apps" },
-      { "value": "10+ projects", "label": "platforms and websites delivered" },
-      { "value": "End to end", "label": "from requirements to deployment" }
-    ]
+    "yearsExp": "years shipping production code",
+    "projectsDone": "projects delivered",
+    "shipped": "Recently shipped",
+    "allProjects": "All {count} projects"
   },
-  "work": {
+  "about": {
+    "eyebrow": "About me",
+    "title": "Owning the whole product, from data to interface",
+    "location": "Location",
+    "email": "Email",
+    "phone": "Phone"
+  },
+  "skills": {
+    "eyebrow": "Tech stack",
+    "title": "Tools I use to ship production apps",
+    "lead": "The stack I reach for every day on real client work — from the interface down to the database and deployment.",
+    "countLabel": "{count, plural, one {technology} other {technologies}}",
+    "groupsLabel": "{count, plural, one {area} other {areas}}",
+    "categories": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "database": "Databases & ORMs",
+      "devops": "DevOps & Cloud",
+      "tools": "Tools",
+      "ai": "AI-assisted"
+    }
+  },
+  "experience": {
+    "eyebrow": "Journey",
+    "title": "Experience & education",
+    "present": "Present",
+    "types": { "work": "Full-time", "freelance": "Freelance", "education": "Education" }
+  },
+  "projects": {
     "eyebrow": "Selected work",
-    "title": "Products built for real clients",
-    "intro": "Recent platforms and websites I planned, built and launched.",
-    "github": "More on GitHub",
-    "visit": "Visit site",
-    "privateLabel": "Private work:",
-    "private": "a property management platform and the Nemmra platform at DeyarTech.",
-    "privateNote": "Walkthrough available on request",
-    "projects": {
-      "alarabify": {
-        "title": "Alarabify Academy",
-        "description": "Online learning platform with dashboards for admins, teachers and students, and live sessions.",
-        "tags": ["Next.js", "TypeScript", "Laravel API"]
-      },
-      "bestClean": {
-        "title": "Best Clean",
-        "description": "Cleaning services platform with online booking and an admin panel for services and content.",
-        "tags": ["Next.js", "Node.js", "Admin panel"]
-      },
-      "itqan": {
-        "title": "Itqan Academy",
-        "description": "A search-friendly website for an online Quran and Arabic academy.",
-        "tags": ["Next.js", "TypeScript", "SEO"]
-      },
-      "rowad": {
-        "title": "Rowad4u",
-        "description": "Digital services platform with a full dashboard for services, categories and users.",
-        "tags": ["Next.js", "Node.js", "Dashboard"]
-      },
-      "cmt": {
-        "title": "CMT Digital",
-        "description": "Corporate website for a technology services company, from layout to deployment.",
-        "tags": ["Next.js", "Tailwind CSS"]
-      },
-      "stars": {
-        "title": "2 Stars",
-        "description": "Agency website for web design, development and digital marketing services.",
-        "tags": ["Next.js", "Tailwind CSS"]
-      }
+    "title": "Projects I've built and shipped",
+    "pageTitle": "All projects",
+    "pageLead": "Platforms, dashboards and websites built for companies and clients.",
+    "viewAll": "View all projects",
+    "all": "All",
+    "live": "Live site",
+    "code": "Source code",
+    "details": "Details",
+    "back": "Back to projects",
+    "role": "Role",
+    "year": "Year",
+    "category": "Category",
+    "stack": "Tech stack",
+    "gallery": "Gallery",
+    "overview": "Overview",
+    "empty": "No projects in this category yet.",
+    "private": "Private project",
+    "viewImages": "{count, plural, =1 {View image} other {View # images}}",
+    "imageOf": "Image {current} of {total}",
+    "previous": "Previous",
+    "next": "Next",
+    "close": "Close",
+    "openOriginal": "Open original image",
+    "categories": {
+      "platform": "Platforms",
+      "dashboard": "Dashboards",
+      "education": "Education",
+      "ecommerce": "E-commerce",
+      "corporate": "Corporate",
+      "other": "Other"
     }
   },
   "services": {
-    "eyebrow": "Services",
-    "title": "What I can build for you",
-    "intro": "Clear scope, regular updates, and code your team can keep working on.",
-    "items": [
-      {
-        "title": "Web applications",
-        "description": "Complete products with accounts, user roles and dashboards, built to grow with your business."
-      },
-      {
-        "title": "Backend and APIs",
-        "description": "Secure, well-structured APIs and databases using NestJS, PostgreSQL and MongoDB."
-      },
-      {
-        "title": "Admin dashboards",
-        "description": "Simple control panels so your team can manage content, users and data without help."
-      },
-      {
-        "title": "Websites and SEO",
-        "description": "Fast, responsive company websites that are easy to find on search engines."
-      }
-    ]
-  },
-  "about": {
-    "eyebrow": "About",
-    "title": "I care about the details that make software feel simple.",
-    "lead": "I work across the whole product: the database, the API behind it, and the interface people use every day. Owning each layer keeps the product consistent and easier to change.",
-    "body": "Most of my work is with companies and founders who need someone to turn their requirements into a finished, dependable product. I write clean, reusable code, and I pay close attention to performance and search visibility.",
-    "details": [
-      { "term": "Location", "value": "Beni Suef, Egypt" },
-      { "term": "Education", "value": "B.Eng, Al-Azhar University" },
-      { "term": "Languages", "value": "Arabic, English" }
-    ],
-    "toolkit": "Toolkit",
-    "groups": [
-      { "name": "Frontend", "items": ["Next.js", "React", "Vue.js / Nuxt.js", "Tailwind CSS", "SASS"] },
-      { "name": "Backend", "items": ["NestJS", "Node.js", "TypeScript", "REST APIs", "Auth and roles"] },
-      { "name": "Databases", "items": ["PostgreSQL", "MongoDB", "Redis", "Prisma", "Mongoose"] },
-      { "name": "Workflow", "items": ["Docker", "Git / GitHub", "Postman", "Vercel", "Claude / Codex"] }
-    ]
-  },
-  "experience": {
-    "eyebrow": "Experience",
-    "title": "Where I've worked",
-    "projectsLabel": "Projects:",
-    "roles": [
-      {
-        "period": "2022 – Present",
-        "title": "Full Stack Developer",
-        "org": "DeyarTech · Remote",
-        "points": [
-          "Build and maintain company products end to end, from data models and APIs to the apps on top.",
-          "Work with design and business teams to turn requirements into shipped features."
-        ],
-        "projects": "Property management platform, Nemmra, CMT Digital, Diyarsco"
-      },
-      {
-        "period": "2021 – Present",
-        "title": "Freelance Full Stack Developer",
-        "org": "Self-employed · Remote",
-        "points": [
-          "Deliver complete web solutions for clients, including databases, APIs and interfaces.",
-          "Manage projects from the first requirements through launch and ongoing support."
-        ],
-        "projects": "Alarabify, Itqan for Quran, Best Clean, Rowad4u"
-      },
-      {
-        "period": "2022",
-        "title": "B.Eng, Mechanical Power Engineering",
-        "org": "Al-Azhar University"
-      }
-    ]
+    "eyebrow": "What I do",
+    "title": "How I can help your product"
   },
   "contact": {
     "eyebrow": "Contact",
     "title": "Have a project in mind?",
-    "intro": "Send me a short message about what you're building. I usually reply within a day.",
-    "email": "Email",
-    "phone": "Phone and WhatsApp",
-    "copy": "Copy",
-    "copied": "Copied",
-    "copyLabel": "Copy {value}",
-    "form": {
-      "name": "Name",
-      "namePlaceholder": "Your name",
-      "email": "Email",
-      "message": "Message",
-      "messagePlaceholder": "What are you planning?",
-      "send": "Send message",
-      "sending": "Sending…",
-      "invalid": "Please add your name and a valid email address.",
-      "success": "Thanks, {name}. Your message is on its way.",
-      "error": "Your message couldn't be sent. Please try again or email me directly."
-    }
+    "lead": "Tell me about it — I usually reply within 24 hours.",
+    "name": "Your name",
+    "email": "Your email",
+    "whatsapp": "WhatsApp number",
+    "whatsappHint": "Include your country code, e.g. +20 114 956 0988",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send message",
+    "sending": "Sending…",
+    "success": "Thanks! Your message has been sent.",
+    "errors": {
+      "validation": "Please check the fields: name, a valid email, a WhatsApp number with country code and a message of at least 10 characters.",
+      "rate": "Too many messages. Please try again in a few minutes.",
+      "server": "Something went wrong. Please email me directly."
+    },
+    "orReach": "Or reach me directly"
   },
   "footer": {
-    "label": "Footer",
-    "rights": "© {year} Ahmad Marzouk",
-    "top": "Back to top"
+    "rights": "All rights reserved.",
+    "built": "Built with Next.js, MongoDB & Vercel."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "The page you're looking for doesn't exist or was moved.",
+    "home": "Back home"
+  },
+  "admin": {
+    "brand": "Dashboard",
+    "nav": {
+      "overview": "Overview",
+      "profile": "Profile & site",
+      "projects": "Projects",
+      "experience": "Experience",
+      "skills": "Skills",
+      "services": "Services",
+      "messages": "Messages",
+      "media": "Media",
+      "account": "Account",
+      "viewSite": "View site",
+      "logout": "Log out"
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to manage your portfolio.",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "invalid": "Wrong email or password.",
+      "server": "Could not reach the database. Check MONGODB_URI and AUTH_SECRET."
+    },
+    "common": {
+      "save": "Save changes",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "confirmDelete": "Delete this item? This cannot be undone.",
+      "edit": "Edit",
+      "new": "Add new",
+      "back": "Back",
+      "english": "English",
+      "arabic": "Arabic",
+      "published": "Published",
+      "hidden": "Hidden",
+      "featured": "Featured",
+      "empty": "Nothing here yet.",
+      "upload": "Upload",
+      "uploading": "Uploading…",
+      "uploadFailed": "Upload failed",
+      "remove": "Remove",
+      "search": "Search…",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "orderSaved": "Order saved",
+      "copy": "Copy URL",
+      "copied": "Copied",
+      "pasteUrl": "or paste a URL",
+      "addTag": "Type and press Enter",
+      "onePerLine": "One item per line",
+      "items": "items",
+      "none": "None",
+      "open": "Open"
+    },
+    "errors": {
+      "validation": "Some fields are invalid",
+      "slugTaken": "This slug is already used by another project",
+      "unauthorized": "Your session expired. Please log in again.",
+      "server": "Server error. Please try again.",
+      "notFound": "Item not found",
+      "notBlob": "Only Vercel Blob files can be deleted here"
+    },
+    "overview": {
+      "title": "Overview",
+      "welcome": "Everything on your portfolio is managed from here.",
+      "unread": "Unread messages",
+      "recent": "Recent messages",
+      "noMessages": "No messages yet.",
+      "importTitle": "Your database is empty",
+      "importText": "The site is currently showing the starter content from your CV. Import it to MongoDB to make every section editable.",
+      "importButton": "Import starter content",
+      "imported": "Starter content imported",
+      "noDb": "MONGODB_URI is not set — the dashboard can't save anything until it is.",
+      "quick": "Quick actions"
+    },
+    "profile": {
+      "title": "Profile & site settings",
+      "identity": "Identity",
+      "hero": "Hero section",
+      "about": "About section",
+      "contact": "Contact details",
+      "social": "Social links",
+      "files": "Photo & CV",
+      "seo": "SEO",
+      "visibility": "Visible sections",
+      "visibilityHint": "Turn sections of the home page on or off."
+    },
+    "fields": {
+      "name": "Name",
+      "role": "Role / title",
+      "headline": "Headline — wrap words in *stars* to highlight them",
+      "bio": "Short bio",
+      "about": "About text",
+      "location": "Location",
+      "heroRoles": "Rotating roles",
+      "email": "Email",
+      "phone": "Phone",
+      "whatsapp": "WhatsApp link",
+      "avatar": "Profile photo",
+      "cvEn": "CV (English)",
+      "cvAr": "CV (Arabic)",
+      "github": "GitHub",
+      "linkedin": "LinkedIn",
+      "x": "X / Twitter",
+      "available": "Available for work",
+      "yearsExperience": "Years of experience",
+      "projectsDone": "Projects delivered",
+      "seoTitle": "SEO title",
+      "seoDescription": "SEO description",
+      "ogImage": "Social share image",
+      "title": "Title",
+      "slug": "Slug (URL)",
+      "summary": "Summary",
+      "description": "Description",
+      "cover": "Cover image",
+      "gallery": "Gallery",
+      "tech": "Tech stack",
+      "category": "Category",
+      "year": "Year",
+      "liveUrl": "Live URL",
+      "repoUrl": "Repository URL",
+      "featured": "Featured on home page",
+      "published": "Published",
+      "order": "Order",
+      "company": "Company / school",
+      "companyUrl": "Company website",
+      "type": "Type",
+      "start": "Start (e.g. 2022)",
+      "end": "End",
+      "current": "Currently here",
+      "highlights": "Highlights",
+      "icon": "Icon"
+    },
+    "messages": {
+      "title": "Messages",
+      "empty": "No messages yet. They will appear here when someone uses the contact form.",
+      "markRead": "Mark as read",
+      "markUnread": "Mark as unread",
+      "reply": "Reply by email",
+      "replyWhatsapp": "Reply on WhatsApp",
+      "all": "All",
+      "unread": "Unread"
+    },
+    "media": {
+      "title": "Media library",
+      "text": "Files uploaded to Vercel Blob. Deleting a file breaks any page still using it.",
+      "empty": "No uploaded files yet.",
+      "noBlob": "BLOB_READ_WRITE_TOKEN is not set. Connect a Blob store to the project in Vercel."
+    },
+    "account": {
+      "title": "Account",
+      "signedInAs": "Signed in as",
+      "change": "Change password",
+      "current": "Current password",
+      "next": "New password (min. 8 characters)",
+      "confirm": "Confirm new password",
+      "submit": "Update password",
+      "changed": "Password updated",
+      "passwordRules": "Passwords must match and be at least 8 characters.",
+      "wrongPassword": "Current password is incorrect."
+    }
   }
 }

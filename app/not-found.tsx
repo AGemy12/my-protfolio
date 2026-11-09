@@ -1,23 +1,14 @@
-import Link from "next/link";
-import "./globals.css";
-
-// Shown for paths outside a known language, such as /fr.
-export default function NotFound() {
+// Fallback for URLs outside any locale (the proxy normally redirects these).
+export default function GlobalNotFound() {
   return (
     <html lang="en">
-      <body>
-        <main className="mx-auto grid min-h-svh max-w-[560px] content-center gap-4 px-6">
-          <h1 className="text-4xl">Page not found</h1>
-          <p className="text-muted">
-            <Link href="/en" className="text-accent underline underline-offset-4">
-              Go to the English site
-            </Link>{" "}
-            ·{" "}
-            <Link href="/ar" lang="ar" className="text-accent underline underline-offset-4">
-              الموقع العربي
-            </Link>
+      <body style={{ fontFamily: "system-ui", display: "grid", placeItems: "center", minHeight: "100vh", margin: 0 }}>
+        <div style={{ textAlign: "center" }}>
+          <h1 style={{ fontSize: 48, margin: 0 }}>404</h1>
+          <p>
+            <a href="/">Go home</a>
           </p>
-        </main>
+        </div>
       </body>
     </html>
   );

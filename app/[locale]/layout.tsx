@@ -1,50 +1,57 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Cairo, Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { isRtl, routing } from "@/i18n/routing";
-import { AppearanceProvider } from "@/contexts/ThemeContext";
-import { appearanceScript } from "@/contexts/appearanceScript";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import { getContent } from "@/lib/content/store";
-import { fontVariables } from "@/lib/fonts";
+import { setRequestLocale } from "next-intl/server";
+import { dirOf, routing } from "@/i18n/routing";
+import { Providers } from "@/components/providers";
+import { getSettings } from "@/lib/data";
+import { tr } from "@/lib/types";
+import { siteUrl } from "@/lib/utils";
 import "../globals.css";
 
-// Pages are static and refreshed right after each dashboard save. The daily
-// refresh is a safety net, e.g. if the database was down during a build.
-export const revalidate = 86400;
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
+// Cairo is a variable font (200–1000), so every weight is available.
+const arabic = Cairo({
+  subsets: ["arabic", "latin"],
+  variable: "--font-arabic",
+  display: "swap",
+});
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) return {};
-  const t = await getTranslations({ locale, namespace: "meta" });
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f8fa" },
+    { media: "(prefers-color-scheme: dark)", color: "#090c14" },
+  ],
+};
 
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const s = await getSettings();
+  const title = tr(s.seoTitle, locale) || tr(s.name, locale);
+  const description = tr(s.seoDescription, locale) || tr(s.bio, locale);
+  const image = s.ogImage || s.avatar;
   return {
-    metadataBase: siteUrl ? new URL(siteUrl) : undefined,
-    title: t("title"),
-    description: t("description"),
+    metadataBase: new URL(siteUrl()),
+    title: { default: title, template: `%s — ${tr(s.name, locale)}` },
+    description,
     alternates: {
       canonical: `/${locale}`,
       languages: { en: "/en", ar: "/ar", "x-default": "/en" },
     },
     openGraph: {
-      title: t("title"),
-      description: t("ogDescription"),
       type: "website",
+      title,
+      description,
       locale: locale === "ar" ? "ar_EG" : "en_US",
-      alternateLocale: locale === "ar" ? "en_US" : "ar_EG",
+      images: image ? [{ url: image }] : undefined,
     },
+    twitter: { card: "summary_large_image", title, description, images: image ? [image] : undefined },
   };
 }
 
@@ -58,27 +65,18 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
-  const { profile, defaultPalette } = await getContent();
+  const dir = dirOf(locale);
 
   return (
-    // Font variables sit on <html> because the typography tokens in
-    // globals.css are defined on :root and reference them.
     <html
       lang={locale}
-      dir={isRtl(locale) ? "rtl" : "ltr"}
-      className={fontVariables}
+      dir={dir}
       suppressHydrationWarning
+      className={`${geist.variable} ${geistMono.variable} ${arabic.variable}`}
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: appearanceScript(defaultPalette) }} />
-      </head>
-      <body className="antialiased">
+      <body className="min-h-dvh font-sans">
         <NextIntlClientProvider>
-          <AppearanceProvider fallbackPalette={defaultPalette}>
-            <Header />
-            {children}
-            <Footer profile={profile} />
-          </AppearanceProvider>
+          <Providers dir={dir}>{children}</Providers>
         </NextIntlClientProvider>
       </body>
     </html>
