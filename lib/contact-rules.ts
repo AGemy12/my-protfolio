@@ -1,73 +1,83 @@
 /**
  * Contact-form rules shared by the browser (instant, per-field feedback) and
  * the server action (the real gate), so both report the same specific problem.
- * Each failure is a code; the message for it lives in messages/*.json under
- * `contact.errors.fields.<field>.<code>`.
+ * Fields come from the dashboard, so the rules follow each field's type and
+ * limits. Each failure is a code; its message lives in messages/*.json under
+ * `contact.errors.field.<code>`.
  */
+import { isValidPhoneNumber, validatePhoneNumberLength } from "libphonenumber-js";
+import { asList, isChoice, type ContactFieldDef, type ContactValues } from "./contact-form";
 
-export const CONTACT_FIELDS = ["name", "email", "whatsapp", "subject", "message"] as const;
-export type ContactField = (typeof CONTACT_FIELDS)[number];
-export type FieldError = { code: string; count?: number };
-export type FieldErrors = Partial<Record<ContactField, FieldError>>;
+export type FieldError = { code: string; count?: number; min?: number; max?: number };
+export type FieldErrors = Record<string, FieldError>;
 
-export const MESSAGE_MIN = 10;
-export const MESSAGE_MAX = 5000;
-
-/** "+20 114 956 0988", "0020-114…" → "+201149560988" */
+/** "+20 100 123 4567", "0020-100…" → "+201001234567" */
 export function normalizeWhatsApp(value: string) {
   return value.trim().replace(/^00/, "+").replace(/(?!^\+)\D/g, "");
 }
 
-export function checkField(field: ContactField, raw: string): FieldError | null {
-  const v = raw.trim();
-  switch (field) {
-    case "name":
-      if (!v) return { code: "required" };
-      if (v.length < 2) return { code: "tooShort" };
-      if (v.length > 100) return { code: "tooLong" };
-      return null;
+function checkEmail(v: string): FieldError | null {
+  if (/\s/.test(v)) return { code: "emailSpaces" };
+  const at = v.lastIndexOf("@");
+  if (at === -1) return { code: "emailNoAt" };
+  if (at === 0) return { code: "emailNoName" };
+  const domain = v.slice(at + 1);
+  if (!/^[^\s@.]+(\.[^\s@.]+)*\.[a-z]{2,}$/i.test(domain)) return { code: "emailNoDomain" };
+  if (v.length > 200) return { code: "emailTooLong" };
+  if (!/^[^\s@]+@[^\s@]+$/.test(v)) return { code: "emailInvalid" };
+  return null;
+}
 
-    case "email": {
-      if (!v) return { code: "required" };
-      if (/\s/.test(v)) return { code: "spaces" };
-      const at = v.lastIndexOf("@");
-      if (at === -1) return { code: "noAt" };
-      if (at === 0) return { code: "noName" };
-      const domain = v.slice(at + 1);
-      if (!/^[^\s@.]+(\.[^\s@.]+)*\.[a-z]{2,}$/i.test(domain)) return { code: "noDomain" };
-      if (v.length > 200) return { code: "tooLong" };
-      if (!/^[^\s@]+@[^\s@]+$/.test(v)) return { code: "invalid" };
-      return null;
-    }
+/** Checked against each country's numbering plan (lengths and prefixes), via libphonenumber. */
+function checkPhone(v: string): FieldError | null {
+  if (/[^\d\s+\-().]/.test(v)) return { code: "phoneChars" };
+  const n = normalizeWhatsApp(v);
+  if (!n.startsWith("+")) return { code: "phoneCountryCode" };
+  switch (validatePhoneNumberLength(n)) {
+    case "INVALID_COUNTRY":
+      return { code: "phoneCountryCode" };
+    case "TOO_SHORT":
+      return { code: "phoneTooShort" };
+    case "TOO_LONG":
+      return { code: "phoneTooLong" };
+    case "NOT_A_NUMBER":
+    case "INVALID_LENGTH":
+      return { code: "phoneInvalid" };
+  }
+  return isValidPhoneNumber(n) ? null : { code: "phoneInvalid" };
+}
 
-    case "whatsapp": {
-      if (!v) return { code: "required" };
-      if (/[^\d\s+\-().]/.test(v)) return { code: "chars" };
-      const n = normalizeWhatsApp(v);
-      if (!n.startsWith("+")) return { code: "countryCode" };
-      const digits = n.length - 1;
-      if (digits < 8) return { code: "tooShort", count: digits };
-      if (digits > 15) return { code: "tooLong", count: digits };
-      return null;
-    }
+export function checkField(f: ContactFieldDef, raw: unknown): FieldError | null {
+  const list = asList(raw);
 
-    case "subject":
-      return v.length > 200 ? { code: "tooLong" } : null;
+  if (isChoice(f.type)) {
+    if (!list.length) return f.required ? { code: "requiredChoice" } : null;
+    const known = list.every((v) => f.options.some((o) => o.value === v));
+    if (!known || (list.length > 1 && !(f.type === "chips" && f.multiple))) return { code: "invalidChoice" };
+    return null;
+  }
 
-    case "message":
-      if (!v) return { code: "required" };
-      if (v.length < MESSAGE_MIN) return { code: "tooShort", count: v.length };
-      if (v.length > MESSAGE_MAX) return { code: "tooLong", count: v.length };
+  const v = list[0] ?? "";
+  if (!v) return f.required ? { code: "required" } : null;
+  switch (f.type) {
+    case "email":
+      return checkEmail(v);
+    case "phone":
+      return checkPhone(v);
+    default:
+      if (f.min && v.length < f.min) return { code: "tooShort", count: v.length, min: f.min };
+      if (f.max && v.length > f.max) return { code: "tooLong", count: v.length, max: f.max };
       return null;
   }
 }
 
-export function checkContact(values: Partial<Record<ContactField, unknown>>): FieldErrors {
+/** One error per invalid field, checking only the fields that are switched on. */
+export function checkContact(fields: ContactFieldDef[], values: Partial<ContactValues>): FieldErrors {
   const errors: FieldErrors = {};
-  for (const field of CONTACT_FIELDS) {
-    const raw = values[field];
-    const error = checkField(field, typeof raw === "string" ? raw : "");
-    if (error) errors[field] = error;
+  for (const f of fields) {
+    if (!f.enabled) continue;
+    const error = checkField(f, values[f.key]);
+    if (error) errors[f.key] = error;
   }
   return errors;
 }

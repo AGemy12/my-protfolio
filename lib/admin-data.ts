@@ -2,9 +2,18 @@
 import "server-only";
 import { isValidObjectId } from "mongoose";
 import { connectDB } from "./db";
-import { ExperienceModel, MessageModel, ProjectModel, ServiceModel, SettingsModel, SkillModel } from "./models";
-import { serialize } from "./data";
+import {
+  ContactFormModel,
+  ExperienceModel,
+  MessageModel,
+  ProjectModel,
+  ServiceModel,
+  SettingsModel,
+  SkillModel,
+} from "./models";
+import { parseContactForm, serialize } from "./data";
 import { defaultSettings } from "./defaults";
+import { defaultContactForm } from "./contact-form";
 import type { ResourceKey } from "./resources";
 import type { Message, Settings } from "./types";
 
@@ -43,6 +52,12 @@ export async function adminSettings(): Promise<{ settings: Settings; saved: bool
     },
     saved: true,
   };
+}
+
+export async function adminContactForm() {
+  await connectDB();
+  const doc = await ContactFormModel.findOne({ key: "main" }).lean();
+  return doc ? parseContactForm(serialize(doc)) : defaultContactForm;
 }
 
 export async function adminMessages(limit = 200) {

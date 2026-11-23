@@ -5,8 +5,23 @@ import { after } from "next/server";
 import { del } from "@vercel/blob";
 import { connectDB } from "../db";
 import { requireAdmin } from "../auth";
-import { ExperienceModel, MessageModel, ProjectModel, ServiceModel, SettingsModel, SkillModel } from "../models";
-import { experienceSchema, projectSchema, serviceSchema, settingsSchema, skillSchema } from "../schemas";
+import {
+  ContactFormModel,
+  ExperienceModel,
+  MessageModel,
+  ProjectModel,
+  ServiceModel,
+  SettingsModel,
+  SkillModel,
+} from "../models";
+import {
+  contactFormSchema,
+  experienceSchema,
+  projectSchema,
+  serviceSchema,
+  settingsSchema,
+  skillSchema,
+} from "../schemas";
 import { defaultExperience, defaultProjects, defaultServices, defaultSettings, defaultSkills } from "../defaults";
 import type { ResourceKey } from "../resources";
 
@@ -163,6 +178,26 @@ export async function importStarterContent(): Promise<ActionResult> {
     if (!(await SettingsModel.exists({ key: "main" }))) {
       await SettingsModel.create({ ...defaultSettings, key: "main" });
     }
+    refresh();
+    return { ok: true };
+  } catch (error) {
+    return fail(error);
+  }
+}
+
+export async function saveContactForm(data: unknown): Promise<ActionResult> {
+  try {
+    await requireAdmin();
+    const parsed = contactFormSchema.safeParse(data);
+    if (!parsed.success) {
+      return {
+        ok: false,
+        error: "validation",
+        issues: parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`),
+      };
+    }
+    await connectDB();
+    await ContactFormModel.findOneAndUpdate({ key: "main" }, { ...parsed.data, key: "main" }, { upsert: true });
     refresh();
     return { ok: true };
   } catch (error) {

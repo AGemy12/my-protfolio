@@ -110,7 +110,24 @@ const MessageSchema = define(  {
     whatsapp: String,
     subject: String,
     message: String,
+    // Everything the visitor filled in, as [{ key, label: {en, ar}, value }], in form order.
+    fields: { type: Schema.Types.Mixed, default: [] },
+    // How the visitor sent it: whatsapp | gmail | email | site.
+    channel: String,
+    locale: String,
     read: { type: Boolean, default: false },
+  },
+  opts,
+);
+
+// The contact form built in the dashboard (one document). Validated with
+// contactFormSchema on the way in and on the way out.
+const ContactFormSchema = define(  {
+    key: { type: String, default: "main", unique: true },
+    fields: { type: Schema.Types.Mixed, default: [] },
+    channels: { type: Schema.Types.Mixed, default: {} },
+    template: L,
+    emailSubject: L,
   },
   opts,
 );
@@ -141,5 +158,6 @@ export const ExperienceModel = model("Experience", ExperienceSchema);
 export const SkillModel = model("Skill", SkillSchema);
 export const ServiceModel = model("Service", ServiceSchema);
 export const MessageModel = model("Message", MessageSchema);
+export const ContactFormModel = model("ContactForm", ContactFormSchema);
 export const AdminModel = model("Admin", AdminSchema);
 export const RateLimitModel = model("RateLimit", RateLimitSchema);

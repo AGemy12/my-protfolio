@@ -17,6 +17,9 @@ import { Eyebrow, Section, SectionLink } from "./section";
 import { ShowcaseCard } from "./project-showcase";
 import { ContactForm } from "./contact-form";
 import { Socials } from "./socials";
+import { getContactForm } from "@/lib/data";
+import { hasMailer } from "@/lib/mailer";
+import { CONTACT_CHANNELS, waDigits, type ContactChannel } from "@/lib/contact-form";
 
 
 /* ── About ──────────────────────────────────────────────────────────────── */
@@ -214,8 +217,17 @@ export async function ServicesSection({ services, texts }: { services: Service[]
 /* ── Contact ────────────────────────────────────────────────────────────── */
 
 export async function ContactSection({ settings: s }: { settings: Settings }) {
-  const locale = await getLocale();
-  const t = await getTranslations("contact");
+  const [locale, t, form] = await Promise.all([getLocale(), getTranslations("contact"), getContactForm()]);
+  const targets = { whatsapp: waDigits(s.whatsapp) || waDigits(s.phone), email: s.email };
+  // Only the ways to send that have somewhere to go; sending from the site always works as a fallback.
+  const ready: Record<ContactChannel, boolean> = {
+    whatsapp: Boolean(targets.whatsapp),
+    gmail: hasMailer(),
+    email: Boolean(targets.email),
+    site: true,
+  };
+  const on = CONTACT_CHANNELS.filter((c) => form.channels[c] && ready[c]);
+  const channels: ContactChannel[] = on.length ? on : ["site"];
   return (
     <section id="contact" aria-labelledby="contact-title" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 md:py-24">
       <div className="grid gap-12 border-t border-foreground/20 pt-14 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-16">
@@ -255,7 +267,11 @@ export async function ContactSection({ settings: s }: { settings: Settings }) {
           <Socials settings={s} className="mt-8" />
         </Reveal>
         <Reveal delay={0.1}>
-          <ContactForm />
+          <ContactForm
+            config={{ ...form, fields: form.fields.filter((f) => f.enabled) }}
+            channels={channels}
+            targets={targets}
+          />
         </Reveal>
       </div>
     </section>

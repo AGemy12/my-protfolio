@@ -1,7 +1,5 @@
 import "server-only";
 
-type Notice = { name: string; email: string; whatsapp: string; subject?: string; message: string };
-
 /** wa.me chat link for a stored WhatsApp number. */
 export const waLink = (number: string) => `https://wa.me/${number.replace(/\D/g, "")}`;
 
@@ -9,28 +7,23 @@ export const waLink = (number: string) => `https://wa.me/${number.replace(/\D/g,
  * Sends a WhatsApp message to the site owner via CallMeBot (free).
  * No-op unless CALLMEBOT_PHONE and CALLMEBOT_APIKEY are set. Never throws.
  */
-export async function notifyWhatsApp({ name, email, whatsapp, subject, message }: Notice) {
+export async function notifyWhatsApp({ text, replyTo }: { text: string; replyTo?: string }) {
   const phone = process.env.CALLMEBOT_PHONE;
   const apikey = process.env.CALLMEBOT_APIKEY;
   if (!phone || !apikey) return;
 
-  const text = [
+  const body = [
     "📩 *رسالة جديدة من البورتفوليو*",
-    `👤 ${name}`,
-    `📱 ${whatsapp}`,
-    `✉️ ${email}`,
-    subject ? `📌 ${subject}` : null,
     "",
-    message.length > 1200 ? `${message.slice(0, 1200)}…` : message,
-    "",
-    `💬 للرد: ${waLink(whatsapp)}`,
+    text.length > 1500 ? `${text.slice(0, 1500)}…` : text,
+    replyTo ? `\n💬 للرد: ${waLink(replyTo)}` : null,
   ]
     .filter((line) => line !== null)
     .join("\n");
 
   const url = new URL("https://api.callmebot.com/whatsapp.php");
   url.searchParams.set("phone", phone);
-  url.searchParams.set("text", text);
+  url.searchParams.set("text", body);
   url.searchParams.set("apikey", apikey);
 
   try {

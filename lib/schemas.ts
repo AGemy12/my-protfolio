@@ -1,7 +1,14 @@
 // Zod schemas that validate everything the dashboard sends to the server.
 import { z } from "zod";
 import { EXPERIENCE_TYPES, PROJECT_CATEGORIES, SECTION_KEYS, SKILL_CATEGORIES, TEXT_KEYS } from "./types";
-import { normalizeWhatsApp } from "./contact-rules";
+import {
+  CONTACT_CHANNELS,
+  CONTACT_FIELD_TYPES,
+  FIELD_KEY,
+  RESERVED_KEYS,
+  isChoice,
+  type ContactChannel,
+} from "./contact-form";
 
 const str = (max = 300) => z.string().trim().max(max).default("");
 const L = (max = 300) => z.object({ en: str(max), ar: str(max) });
@@ -104,16 +111,78 @@ export const serviceSchema = z.object({
   order,
 });
 
-export const contactSchema = z.object({
-  name: z.string().trim().min(2).max(100),
-  email: z.email().max(200),
-  // International WhatsApp number with country code: "+20 114 956 0988", "0020-114…" → "+201149560988"
-  whatsapp: z
-    .string()
-    .trim()
-    .transform(normalizeWhatsApp)
-    .pipe(z.string().regex(/^\+\d{8,15}$/)),
-  subject: z.string().trim().max(200).default(""),
-  message: z.string().trim().min(10).max(5000),
+/* ---------------- contact form (built in the dashboard) ---------------- */
+
+const contactOptionSchema = z.object({
+  value: z.string().trim().regex(/^[a-zA-Z0-9_-]{1,40}$/),
+  label: L(120),
+});
+
+const contactFieldSchema = z
+  .object({
+    key: z
+      .string()
+      .trim()
+      .regex(FIELD_KEY, "Start with a letter; use letters, numbers and _ only")
+      .refine((k) => !(RESERVED_KEYS as readonly string[]).includes(k), "This key is reserved"),
+    type: z.enum(CONTACT_FIELD_TYPES),
+    label: L(120),
+    placeholder: L(200),
+    hint: L(300),
+    required: z.boolean().default(false),
+    enabled: z.boolean().default(true),
+    half: z.boolean().default(false),
+    min: z.coerce.number().int().min(0).max(5000).default(0),
+    max: z.coerce.number().int().min(1).max(5000).default(500),
+    multiple: z.boolean().default(false),
+    options: z.array(contactOptionSchema).max(30).default([]),
+  })
+  .superRefine((f, ctx) => {
+    if (!f.label.en && !f.label.ar) ctx.addIssue({ code: "custom", path: ["label"], message: "Add a label" });
+    if (f.min > f.max) ctx.addIssue({ code: "custom", path: ["min"], message: "Minimum is above the maximum" });
+    if (isChoice(f.type) && !f.options.length) {
+      ctx.addIssue({ code: "custom", path: ["options"], message: "Add at least one option" });
+    }
+    if (new Set(f.options.map((o) => o.value)).size !== f.options.length) {
+      ctx.addIssue({ code: "custom", path: ["options"], message: "Options must be unique" });
+    }
+    f.options.forEach((o, i) => {
+      if (!o.label.en && !o.label.ar) ctx.addIssue({ code: "custom", path: ["options", i], message: "Add a label" });
+    });
+  });
+
+export const contactFormSchema = z.object({
+  fields: z
+    .array(contactFieldSchema)
+    .min(1)
+    .max(30)
+    .superRefine((fields, ctx) => {
+      const seen = new Set<string>();
+      fields.forEach((f, i) => {
+        if (seen.has(f.key)) ctx.addIssue({ code: "custom", path: [i, "key"], message: `"${f.key}" is used twice` });
+        seen.add(f.key);
+      });
+      if (!fields.some((f) => f.enabled)) ctx.addIssue({ code: "custom", message: "Keep at least one field on" });
+    }),
+  channels: z
+    .object(
+      Object.fromEntries(CONTACT_CHANNELS.map((c) => [c, z.boolean().default(false)])) as Record<
+        ContactChannel,
+        z.ZodDefault<z.ZodBoolean>
+      >,
+    )
+    .refine((c) => Object.values(c).some(Boolean), "Turn on at least one way to send"),
+  template: L(4000),
+  emailSubject: L(200),
+});
+
+/** What the public form posts. Field values are checked against the saved form with contact-rules. */
+export const contactSubmitSchema = z.object({
+  channel: z.enum(CONTACT_CHANNELS),
+  locale: z.enum(["en", "ar"]).catch("en"),
+  values: z.record(
+    z.string().max(40),
+    z.union([z.string().max(10_000), z.array(z.string().max(200)).max(30)]),
+  ),
   website: z.string().max(0).optional(), // honeypot: must stay empty
 });

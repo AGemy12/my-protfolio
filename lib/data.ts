@@ -4,8 +4,10 @@
 import "server-only";
 import { cache } from "react";
 import { connectDB, hasDatabase } from "./db";
-import { ExperienceModel, ProjectModel, ServiceModel, SettingsModel, SkillModel } from "./models";
+import { ContactFormModel, ExperienceModel, ProjectModel, ServiceModel, SettingsModel, SkillModel } from "./models";
 import { defaultExperience, defaultProjects, defaultServices, defaultSettings, defaultSkills } from "./defaults";
+import { defaultContactForm, type ContactFormConfig } from "./contact-form";
+import { contactFormSchema } from "./schemas";
 import type { Experience, Project, Service, Settings, Skill } from "./types";
 
 /** Converts Mongo documents to plain JSON-safe objects (ObjectId/Date → string). */
@@ -63,6 +65,23 @@ export const getExperience = cache(() =>
 );
 export const getSkills = cache(() => list<Skill>(SkillModel, { published: true }, defaultSkills, "skill"));
 export const getServices = cache(() => list<Service>(ServiceModel, { published: true }, defaultServices, "service"));
+
+/** A stored contact form, checked again on the way out; anything unreadable falls back to the default form. */
+export function parseContactForm(doc: unknown): ContactFormConfig {
+  const parsed = contactFormSchema.safeParse(doc);
+  return parsed.success ? parsed.data : defaultContactForm;
+}
+
+export const getContactForm = cache(() =>
+  safely<ContactFormConfig>(
+    async () => {
+      await connectDB();
+      const doc = await ContactFormModel.findOne({ key: "main" }).lean();
+      return doc ? parseContactForm(serialize(doc)) : null;
+    },
+    () => defaultContactForm,
+  ),
+);
 
 export const getProject = cache(async (slug: string) => {
   const projects = await getProjects();

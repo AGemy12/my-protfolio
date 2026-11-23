@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Mail, MailOpen, MessageCircle, Reply, Trash } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { deleteMessage, setMessageRead } from "@/lib/actions/content";
-import type { Message } from "@/lib/types";
+import { tr, type Message } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useConfirmDelete } from "@/components/confirm-dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -103,6 +103,26 @@ export function MessagesInbox({ messages: initial }: { messages: Message[] }) {
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="px-4 ps-9">
+                  {m.channel && (
+                    <Badge variant="outline" className="mb-3">
+                      {t("messages.via", { channel: t(`contactForm.channels.${m.channel}`) })}
+                    </Badge>
+                  )}
+                  {/* Short answers as a list; the long text (the message itself) in the box below. */}
+                  {m.fields && m.fields.some((f) => f.value !== m.message) && (
+                    <dl className="mb-3 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-[max-content_1fr]">
+                      {m.fields
+                        .filter((f) => f.value !== m.message)
+                        .map((f) => (
+                          <div key={f.key} className="contents">
+                            <dt className="text-muted-foreground">{tr(f.label, locale) || f.key}</dt>
+                            <dd dir="auto" className="wrap-break-word">
+                              {f.value}
+                            </dd>
+                          </div>
+                        ))}
+                    </dl>
+                  )}
                   <p className="rounded-md border bg-background p-4 text-sm leading-relaxed whitespace-pre-wrap" dir="auto">
                     {m.message}
                   </p>

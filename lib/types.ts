@@ -69,6 +69,8 @@ export type Project = {
   featured: boolean;
   published: boolean;
   order: number;
+  /** Set by Mongo timestamps; missing for the built-in starter content. */
+  updatedAt?: string;
 };
 
 export const EXPERIENCE_TYPES = ["work", "freelance", "education"] as const;
@@ -115,6 +117,9 @@ export type Message = {
   whatsapp?: string;
   subject: string;
   message: string;
+  /** Every filled field, in form order (messages from before the form builder have none). */
+  fields?: { key: string; label: L; value: string }[];
+  channel?: "whatsapp" | "gmail" | "email" | "site";
   read: boolean;
   createdAt: string;
 };

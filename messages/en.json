@@ -61,7 +61,11 @@
     "eyebrow": "Experience",
     "title": "Where I've worked",
     "present": "Present",
-    "types": { "work": "Full-time", "freelance": "Freelance", "education": "Education" }
+    "types": {
+      "work": "Full-time",
+      "freelance": "Freelance",
+      "education": "Education"
+    }
   },
   "projects": {
     "eyebrow": "My work",
@@ -75,6 +79,7 @@
     "code": "Source code",
     "details": "View details",
     "back": "Back to projects",
+    "more": "More projects",
     "role": "Role",
     "year": "Year",
     "category": "Category",
@@ -106,55 +111,72 @@
     "eyebrow": "Contact",
     "title": "Have a project? Let's talk",
     "lead": "Send me a message and I'll reply within 24 hours.",
-    "name": "Your name",
-    "email": "Your email",
-    "whatsapp": "WhatsApp number",
-    "whatsappHint": "Include your country code, e.g. +20 114 956 0988",
-    "subject": "Subject",
-    "message": "Message",
     "optional": "optional",
-    "messageHint": "What you need, and roughly when. At least 10 characters.",
+    "choose": "Choose an option",
+    "phone": {
+      "country": "Country code",
+      "search": "Search country or code",
+      "empty": "No country found."
+    },
     "send": "Send message",
+    "sendWith": "Send it with",
+    "sendVia": {
+      "whatsapp": "WhatsApp",
+      "gmail": "Email",
+      "email": "Your email app",
+      "site": "Send from here"
+    },
+    "channelNote": {
+      "whatsapp": "Opens a chat with your message ready",
+      "gmail": "Sent right away to my inbox, nothing opens",
+      "email": "Opens your email app with the message ready",
+      "site": "Sent right away to my inbox"
+    },
     "sending": "Sending…",
     "success": "Thanks! Your message has been sent.",
+    "emailSent": "Sent! Your message is in my inbox and I'll reply by email soon.",
+    "opened": {
+      "whatsapp": "WhatsApp opened with your message ready. Just press Send there.",
+      "email": "Your email app opened with the message ready. Just press Send there."
+    },
+    "openAgain": "Didn't open? Open it again",
     "fixSummary": "{count, plural, one {Fix the highlighted field to send your message.} other {Fix the # highlighted fields to send your message.}}",
     "errors": {
       "validation": "Some fields need another look. Check them and send again.",
       "rate": "Too many messages. Please try again in a few minutes.",
       "server": "Something went wrong. Please email me directly.",
-      "fields": {
-        "name": {
-          "required": "Please enter your name.",
-          "tooShort": "Your name needs at least 2 characters.",
-          "tooLong": "Please keep your name under 100 characters."
-        },
-        "email": {
-          "required": "Please enter your email so I can reply.",
-          "spaces": "An email address can't contain spaces.",
-          "noAt": "The email is missing the @ sign, e.g. name@gmail.com.",
-          "noName": "Add your account name before the @, e.g. name@gmail.com.",
-          "noDomain": "Finish the part after the @, e.g. name@gmail.com.",
-          "tooLong": "This email is too long.",
-          "invalid": "This email doesn't look right. It should look like name@gmail.com."
-        },
-        "whatsapp": {
-          "required": "Please enter your WhatsApp number so I can reach you.",
-          "chars": "Use digits only, with + at the start for the country code.",
-          "countryCode": "Start with your country code, e.g. +20 for Egypt or +966 for Saudi Arabia.",
-          "tooShort": "This number has only {count} digits. A full number with country code has 8 to 15.",
-          "tooLong": "This number has {count} digits. A full number with country code has at most 15."
-        },
-        "subject": {
-          "tooLong": "Please keep the subject under 200 characters."
-        },
-        "message": {
-          "required": "Please write your message.",
-          "tooShort": "Tell me a little more: at least 10 characters (you've written {count}).",
-          "tooLong": "Your message is {count} characters. Please keep it under 5,000."
-        }
+      "mail": "The email couldn't be sent right now. Please try WhatsApp instead.",
+      "field": {
+        "required": "Please fill in this field.",
+        "requiredChoice": "Please choose an option.",
+        "invalidChoice": "Please pick from the options shown.",
+        "tooShort": "Please write at least {min} characters (you've written {count}).",
+        "tooLong": "Please keep it under {max} characters (you've written {count}).",
+        "emailSpaces": "An email address can't contain spaces.",
+        "emailNoAt": "The email is missing the @ sign, e.g. name@gmail.com.",
+        "emailNoName": "Add your account name before the @, e.g. name@gmail.com.",
+        "emailNoDomain": "Finish the part after the @, e.g. name@gmail.com.",
+        "emailTooLong": "This email is too long.",
+        "emailInvalid": "This email doesn't look right. It should look like name@gmail.com.",
+        "phoneChars": "Use digits only, with + at the start for the country code.",
+        "phoneCountryCode": "Choose your country, or start the number with + and the country code.",
+        "phoneTooShort": "This number is too short. Check the digits you entered.",
+        "phoneTooLong": "This number is too long for the selected country.",
+        "phoneInvalid": "This doesn't look like a valid number for the selected country."
       }
     },
     "orReach": "Or reach me directly"
+  },
+  "email": {
+    "eyebrow": "New project inquiry",
+    "intro": "Sent you a message from the contact form on your site.",
+    "details": "Details",
+    "message": "Message",
+    "replyEmail": "Reply by email",
+    "replyWhatsapp": "Reply on WhatsApp",
+    "footer": "Sent from the contact form on {site}. Hit reply to answer {name} directly.",
+    "dashboard": "Open in dashboard",
+    "visitor": "A visitor"
   },
   "footer": {
     "rights": "All rights reserved.",
@@ -181,6 +203,7 @@
       "experience": "Experience",
       "skills": "Skills",
       "services": "Services",
+      "contactForm": "Contact form",
       "messages": "Messages",
       "media": "Media",
       "account": "Account",
@@ -335,7 +358,73 @@
       "reply": "Reply by email",
       "replyWhatsapp": "Reply on WhatsApp",
       "all": "All",
-      "unread": "Unread"
+      "unread": "Unread",
+      "via": "via {channel}"
+    },
+    "contactForm": {
+      "title": "Contact form",
+      "description": "Choose the fields visitors fill in, the message they send, and how they can send it.",
+      "reset": "Reset to default",
+      "resetConfirm": "Replace the form with the default fields and message? Nothing changes on the site until you save.",
+      "resetAction": "Reset",
+      "fields": "Fields",
+      "fieldsHint": "Reorder with the arrows. Switch a field off to hide it without deleting it.",
+      "addField": "Add field",
+      "untitled": "Untitled field",
+      "visible": "Show on the form",
+      "hidden": "Hidden",
+      "requiredBadge": "Required",
+      "label": "Label",
+      "key": "Variable name",
+      "keyHint": "Write {token} in the message to insert this field",
+      "keyInvalid": "Start with a letter, then use letters, numbers or _ only.",
+      "keyTaken": "Another field already uses this name.",
+      "keyReserved": "This name is reserved. Choose another.",
+      "type": "Type",
+      "types": {
+        "text": "Short text",
+        "textarea": "Long text",
+        "email": "Email",
+        "phone": "Phone / WhatsApp",
+        "select": "Dropdown list",
+        "chips": "Choice buttons"
+      },
+      "required": "Required",
+      "half": "Half width (two fields per row)",
+      "multiple": "Allow choosing more than one",
+      "placeholder": "Placeholder inside the field",
+      "hint": "Help text under the field",
+      "min": "Minimum characters",
+      "max": "Maximum characters",
+      "options": "Options",
+      "addOption": "Add option",
+      "noOptions": "Add at least one option.",
+      "deleteField": "Delete this field? Messages you already received keep their answers.",
+      "sending": "Sending",
+      "sendingHint": "Each way you turn on becomes a button under the form. Every message is also saved in Messages.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "gmail": "Gmail (sent from the site)",
+        "email": "Email app",
+        "site": "Send from the site"
+      },
+      "channelHints": {
+        "whatsapp": "Opens a WhatsApp chat with {target}, with the message ready to send.",
+        "gmail": "Sent from the site to {target} through your Gmail App Password. Nothing opens for the visitor.",
+        "email": "Opens the visitor's email app with the message addressed to {target}.",
+        "site": "Sends without leaving the page. It arrives in Messages (and on WhatsApp if CallMeBot is set up)."
+      },
+      "missingWhatsapp": "Add your WhatsApp number in Profile & site first.",
+      "missingGmail": "Set GMAIL_USER and GMAIL_APP_PASSWORD in the environment first.",
+      "missingEmail": "Add your email in Profile & site first.",
+      "template": "Message template",
+      "templateHint": "Click a field to insert it where the cursor is. A line is dropped when its fields are left empty. *Stars* make text bold on WhatsApp.",
+      "allFields": "All fields",
+      "unused": "Not in the message yet: {fields}",
+      "emailSubject": "Email subject",
+      "emailSubjectHint": "Used by Gmail and email",
+      "preview": "Preview",
+      "previewHint": "With sample answers"
     },
     "media": {
       "title": "Media library",
