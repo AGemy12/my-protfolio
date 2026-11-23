@@ -17,7 +17,8 @@
     "themeDark": "Dark",
     "themeSystem": "System",
     "language": "Language",
-    "skip": "Skip to content"
+    "skip": "Skip to content",
+    "top": "Back to top"
   },
   "hero": {
     "available": "Available for new projects",
