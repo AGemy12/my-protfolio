@@ -14,7 +14,8 @@
     "skip": "Skip to content"
   },
   "hero": {
-    "available": "Taking on new projects",
+    "available": "Available for new projects",
+    "viewWork": "See my work",
     "busy": "Fully booked right now",
     "startProject": "Start a project",
     "downloadCv": "Download CV",
@@ -23,79 +24,39 @@
     "shipped": "Recently shipped",
     "allProjects": "All {count} projects",
     "stack": "The stack I work with",
-    "shippedCount":"{count, plural, one {# shipped project} other {# shipped projects}}",
-    "spec": {
+    "facts": {
       "experience": "Experience",
       "years": "{count}+ years",
-      "projects": "Shipped",
+      "projects": "Projects",
       "projectsValue": "{count, plural, one {# project} other {# projects}}",
       "current": "Currently at",
-      "status": "Status"
-    },
-    "trace": {
-      "title": "One request through every layer I build",
-      "page": "Page",
-      "routing": "Locale & routing",
-      "api": "API",
-      "auth": "Access check",
-      "cache": "Cache",
-      "db": "Database",
-      "render": "Render",
-      "ui": "Interface",
-      "server": "Server",
-      "data": "Data",
-      "note": "Illustrative timings"
+      "location": "Location"
     }
   },
   "about": {
     "eyebrow": "About me",
-    "title": "Owning the whole product, from data to interface",
+    "title": "Who I am",
     "location": "Location",
     "email": "Email",
     "phone": "Phone"
   },
-  "skills": {
-    "eyebrow": "The layers",
-    "title": "From the pixel down to the disk",
-    "lead": "Ordered the way a request travels: what people see at the top, where the data lives further down.",
-    "depth": {
-      "frontend": "what people see",
-      "backend": "business logic",
-      "database": "where data persists",
-      "devops": "how it ships",
-      "tools": "day-to-day tooling",
-      "ai": "assisted workflow"
-    },
-    "countLabel": "{count, plural, one {technology} other {technologies}}",
-    "groupsLabel": "{count, plural, one {area} other {areas}}",
-    "categories": {
-      "frontend": "Frontend",
-      "backend": "Backend",
-      "database": "Databases & ORMs",
-      "devops": "DevOps & Cloud",
-      "tools": "Tools",
-      "ai": "AI-assisted"
-    }
-  },
   "experience": {
-    "eyebrow": "Journey",
-    "title": "Experience & education",
+    "eyebrow": "Experience",
+    "title": "Where I've worked",
     "present": "Present",
-    "lead": "Each bar is one role on a shared year axis, so overlapping work shows as parallel tracks.",
     "types": { "work": "Full-time", "freelance": "Freelance", "education": "Education" }
   },
   "projects": {
-    "eyebrow": "Selected work",
-    "title": "Projects I've built and shipped",
+    "eyebrow": "My work",
+    "title": "Selected projects",
     "pageTitle": "All projects",
     "pageLead": "Platforms, dashboards and websites built for companies and clients.",
-    "lead": "One featured build, then an index of the rest, newest first.",
-    "featured": "Featured",
+    "featured": "Featured project",
     "viewAll": "View all projects",
     "all": "All",
     "live": "Live site",
     "code": "Source code",
-    "details": "Details",
+    "details": "View details",
     "back": "Back to projects",
     "role": "Role",
     "year": "Year",
@@ -121,15 +82,13 @@
     }
   },
   "services": {
-    "eyebrow": "What I do",
-    "title": "How I can help your product",
-    "lead": "Next to each service: the layers of the stack it touches.",
-    "layers": "Layers covered"
+    "eyebrow": "Services",
+    "title": "How I can help"
   },
   "contact": {
     "eyebrow": "Contact",
-    "title": "Have a project in mind?",
-    "lead": "Tell me about it — I usually reply within 24 hours.",
+    "title": "Have a project? Let's talk",
+    "lead": "Send me a message and I'll reply within 24 hours.",
     "name": "Your name",
     "email": "Your email",
     "whatsapp": "WhatsApp number",

@@ -24,12 +24,7 @@ export async function Footer({ settings }: { settings: Settings }) {
           <p>
             © {new Date().getFullYear()} {name}. {t("rights")}
           </p>
-          <p className="ltr:font-mono">
-            <span dir="ltr" className="font-mono text-emerald-500">
-              200 OK
-            </span>{" "}
-            · {t("built")}
-          </p>
+          <p>{t("built")}</p>
         </div>
       </div>
     </footer>

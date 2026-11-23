@@ -14,7 +14,8 @@ export default async function SiteLayout({
   const { locale } = await params;
   setRequestLocale(locale);
   const settings = await getSettings();
-  const sections = SECTION_KEYS.filter((k) => settings.sections[k]);
+  // Skills live in the hero marquee now, so they get no nav entry of their own.
+  const sections = SECTION_KEYS.filter((k) => settings.sections[k] && k !== "skills");
 
   return (
     <>

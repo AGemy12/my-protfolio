@@ -1,7 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 import { Hero } from "@/components/site/hero";
 import {
-  About, ContactSection, ExperienceSection, ProjectsSection, ServicesSection, Skills,
+  About, ContactSection, ExperienceSection, ProjectsSection, ServicesSection,
 } from "@/components/site/sections";
 import { getExperience, getProjects, getServices, getSettings, getSkills } from "@/lib/data";
 import { tr } from "@/lib/types";
@@ -34,9 +34,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <Hero settings={settings} projects={projects} experience={experience} skills={show.skills ? skills : []} />
+      <Hero settings={settings} experience={experience} skills={show.skills ? skills : []} />
       {show.about && <About settings={settings} />}
-      {show.skills && skills.length > 0 && <Skills skills={skills} />}
       {show.experience && experience.length > 0 && <ExperienceSection items={experience} />}
       {show.projects && projects.length > 0 && <ProjectsSection projects={projects} />}
       {show.services && services.length > 0 && <ServicesSection services={services} />}

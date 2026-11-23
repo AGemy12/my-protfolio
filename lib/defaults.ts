@@ -251,7 +251,7 @@ export const defaultExperience: Seed<Experience>[] = [
   {
     company: "Freelance",
     companyUrl: "",
-    role: { en: "Full Stack Developer", ar: "مطوّر Full Stack (عمل حر)" },
+    role: { en: "Full Stack Developer", ar: "مطوّر Full Stack" },
     location: { en: "Remote", ar: "عن بُعد" },
     type: "freelance",
     start: "2021",

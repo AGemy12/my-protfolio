@@ -1,20 +1,10 @@
 import { cn } from "@/lib/utils";
 import { Reveal } from "./reveal";
 
-/**
- * Small label above section titles: a short ember rule and the label.
- * Letter-spacing / uppercase / mono only apply to LTR text — tracking breaks
- * Arabic letter joining.
- */
+/** Small label above section titles: a short ember rule and the label. */
 export function Eyebrow({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <p
-      className={cn(
-        "inline-flex items-center gap-2.5 text-sm font-medium text-brand",
-        "ltr:font-mono ltr:text-[11px] ltr:tracking-[0.2em] ltr:uppercase",
-        className,
-      )}
-    >
+    <p className={cn("inline-flex items-center gap-2.5 text-sm font-medium text-brand", className)}>
       <span aria-hidden className="h-0.5 w-5 bg-brand" />
       {children}
     </p>

@@ -1,18 +1,9 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRight, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import { ServiceIcon, SkillIcon } from "@/components/icons";
+import { ServiceIcon } from "@/components/icons";
 import { SmartImage } from "@/components/smart-image";
-import {
-  SKILL_CATEGORIES,
-  tr,
-  trList,
-  type Experience,
-  type Project,
-  type Service,
-  type Settings,
-  type Skill,
-} from "@/lib/types";
+import { tr, trList, type Experience, type Project, type Service, type Settings } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./reveal";
 import { Eyebrow, Section } from "./section";
@@ -30,7 +21,6 @@ export async function About({ settings: s }: { settings: Settings }) {
   const locale = await getLocale();
   const t = await getTranslations("about");
   const [lead, ...rest] = tr(s.about, locale).split(/\n\s*\n/).filter(Boolean);
-  const name = tr(s.name, locale);
   const details = [
     { icon: MapPin, label: t("location"), value: tr(s.location, locale) },
     { icon: Mail, label: t("email"), value: s.email, href: `mailto:${s.email}` },
@@ -54,22 +44,7 @@ export async function About({ settings: s }: { settings: Settings }) {
         </Reveal>
 
         <Reveal delay={0.1} className="self-start">
-          <div className="flex items-center gap-4 border-b pb-5">
-            <div className="bg-metal relative size-16 shrink-0 overflow-hidden rounded-xl">
-              {s.avatar ? (
-                <SmartImage src={s.avatar} alt={name} fill sizes="64px" className="object-cover object-top" />
-              ) : (
-                <span className="absolute inset-0 grid place-items-center font-semibold text-(--metal-heading)">
-                  {name.slice(0, 2)}
-                </span>
-              )}
-            </div>
-            <div>
-              <p className="font-semibold text-heading">{name}</p>
-              <p className="text-sm text-muted-foreground">{tr(s.role, locale)}</p>
-            </div>
-          </div>
-          <dl className="divide-y">
+          <dl className="divide-y border-y">
             {details.map(({ icon: Icon, label, value, href }) => (
               <div key={label} className="flex items-center gap-4 py-4">
                 <Icon className="size-4 shrink-0 text-brand" aria-hidden />
@@ -92,100 +67,23 @@ export async function About({ settings: s }: { settings: Settings }) {
   );
 }
 
-/* ── Skills: the stack as strata, from the pixel down to the disk ───────── */
-
-export async function Skills({ skills }: { skills: Skill[] }) {
-  const t = await getTranslations("skills");
-  const groups = SKILL_CATEGORIES.map((c) => ({ c, items: skills.filter((s) => s.category === c) })).filter(
-    (g) => g.items.length,
-  );
-  const last = Math.max(1, groups.length - 1);
-
-  return (
-    <Section id="skills" eyebrow={t("eyebrow")} title={t("title")} description={t("lead")}>
-      <Reveal>
-        <ol className="overflow-hidden rounded-2xl border">
-          {groups.map(({ c, items }, i) => (
-            <li
-              key={c}
-              className="grid gap-x-8 gap-y-3 border-t px-5 py-5 first:border-t-0 sm:px-6 md:grid-cols-[13rem_minmax(0,1fr)_auto] md:items-center"
-              style={{ background: `color-mix(in oklab, var(--stratum-deep) ${Math.round((i / last) * 100)}%, var(--card))` }}
-            >
-              <div>
-                <span className="font-mono text-[11px] tracking-[0.14em] text-brand" dir="ltr">
-                  L{i + 1}
-                </span>
-                <h3 className="text-lg leading-snug font-semibold">{t(`categories.${c}`)}</h3>
-              </div>
-              <ul dir="ltr" className="flex flex-wrap items-center gap-x-1 gap-y-2 rtl:justify-end">
-                {items.map((s, j) => (
-                  <li key={s._id} className="inline-flex items-center gap-1.5 text-base text-heading sm:text-lg">
-                    <SkillIcon name={s.icon} className="size-4 text-muted-foreground" />
-                    <span className="font-light">{s.name}</span>
-                    {j < items.length - 1 && (
-                      <span aria-hidden className="ms-1.5 text-muted-foreground/50">
-                        /
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-              <span className="text-xs text-muted-foreground md:text-end ltr:font-mono ltr:tracking-wide">
-                {t(`depth.${c}`)}
-              </span>
-            </li>
-          ))}
-        </ol>
-      </Reveal>
-    </Section>
-  );
-}
-
-/* ── Experience: spans on a shared year axis ────────────────────────────── */
-
-const yearOf = (v: string) => {
-  const y = parseInt(v.slice(0, 4), 10);
-  return Number.isFinite(y) ? y : undefined;
-};
+/* ── Experience ─────────────────────────────────────────────────────────── */
 
 export async function ExperienceSection({ items }: { items: Experience[] }) {
   const locale = await getLocale();
   const t = await getTranslations("experience");
-  const now = new Date();
-  const nowYear = now.getFullYear();
-
-  const spans = items.map((e) => {
-    const start = yearOf(e.start) ?? nowYear;
-    const end = e.current ? nowYear + (now.getMonth() + 1) / 12 : (yearOf(e.end) ?? start) + 1;
-    return { e, start, end };
-  });
-  const min = Math.min(...spans.map((s) => s.start));
-  const max = Math.max(nowYear + 1, ...spans.map((s) => Math.ceil(s.end)));
-  const pct = (v: number) => `${((v - min) / (max - min)) * 100}%`;
-  const years = Array.from({ length: max - min }, (_, i) => min + i);
 
   return (
-    <Section id="experience" eyebrow={t("eyebrow")} title={t("title")} description={t("lead")}>
-      <div aria-hidden className="mb-2 hidden gap-8 md:grid md:grid-cols-[15rem_minmax(0,1fr)]">
-        <span />
-        <div className="relative h-5 font-mono text-[11px] text-muted-foreground">
-          {years.map((y) => (
-            <span key={y} className="absolute" style={{ insetInlineStart: pct(y) }}>
-              {y}
-            </span>
-          ))}
-        </div>
-      </div>
-
+    <Section id="experience" eyebrow={t("eyebrow")} title={t("title")}>
       <ol className="border-b">
-        {spans.map(({ e, start, end }, i) => {
+        {items.map((e, i) => {
           const highlights = trList(e.highlights, locale);
           return (
             <Reveal
               as="li"
               key={e._id}
               delay={i * 0.05}
-              className="grid gap-x-8 gap-y-3 border-t py-6 md:grid-cols-[15rem_minmax(0,1fr)]"
+              className="grid gap-x-10 gap-y-4 border-t py-7 md:grid-cols-[16rem_minmax(0,1fr)]"
             >
               <div>
                 <h3 className="text-lg leading-snug font-semibold">
@@ -200,40 +98,13 @@ export async function ExperienceSection({ items }: { items: Experience[] }) {
                 <p className="text-sm text-muted-foreground">
                   {tr(e.role, locale)} · {t(`types.${e.type}`)}
                 </p>
-                <p className="mt-1 font-mono text-xs text-muted-foreground" dir="ltr">
-                  {e.start} — {e.current ? t("present") : e.end}
+                <p className="mt-2 text-sm text-brand">
+                  {e.start} – {e.current ? t("present") : e.end}
                 </p>
               </div>
               <div className="min-w-0">
-                <div className="relative mt-2 h-2.5">
-                  {years.map((y) => (
-                    <span
-                      key={y}
-                      aria-hidden
-                      className="absolute inset-y-0 w-px bg-border"
-                      style={{ insetInlineStart: pct(y) }}
-                    />
-                  ))}
-                  <span
-                    className={cn(
-                      "absolute inset-y-0 rounded-[2px]",
-                      e.type === "work" ? "bg-brand" : "bg-brand/45",
-                    )}
-                    style={{ insetInlineStart: pct(start), width: `calc(${pct(end)} - ${pct(start)})` }}
-                  >
-                    {e.current && (
-                      <span
-                        aria-hidden
-                        className={cn(
-                          "absolute -end-2 -top-[3px] h-4 w-2 [clip-path:polygon(0_0,100%_50%,0_100%)] rtl:-scale-x-100",
-                          e.type === "work" ? "bg-brand" : "bg-brand/45",
-                        )}
-                      />
-                    )}
-                  </span>
-                </div>
                 {highlights.length > 0 && (
-                  <ul className="mt-5 max-w-[70ch] list-disc space-y-2 ps-5 text-[15px] leading-relaxed marker:text-brand">
+                  <ul className="max-w-[70ch] list-disc space-y-2 ps-5 text-[15px] leading-relaxed marker:text-brand">
                     {highlights.map((h, j) => (
                       <li key={j}>{h}</li>
                     ))}
@@ -299,7 +170,6 @@ export async function ProjectsSection({ projects }: { projects: Project[] }) {
       id="projects"
       eyebrow={t("eyebrow")}
       title={t("title")}
-      description={t("lead")}
       action={
         <Link href="/projects" className={quietLink}>
           {t("viewAll")}
@@ -326,7 +196,7 @@ export async function ProjectsSection({ projects }: { projects: Project[] }) {
             </div>
           </div>
           <div>
-            <p className="text-sm text-brand ltr:font-mono ltr:text-[11px] ltr:tracking-[0.16em] ltr:uppercase">
+            <p className="text-sm text-brand">
               {t("featured")} · {t(`categories.${lead.category}`)} · {lead.year}
             </p>
             <h3 className="mt-3 text-2xl leading-snug font-bold sm:text-3xl">
@@ -346,7 +216,7 @@ export async function ProjectsSection({ projects }: { projects: Project[] }) {
               </p>
             )}
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
-              <span className="inline-flex items-center gap-1.5 text-heading">
+              <span className="inline-flex items-center gap-1.5 font-medium text-heading">
                 {t("details")}
                 <ArrowRight className={cn("size-4", arrow)} />
               </span>
@@ -403,73 +273,30 @@ export async function ProjectsSection({ projects }: { projects: Project[] }) {
   );
 }
 
-/* ── Services: each with the layers of the stack it touches ─────────────── */
-
-type Layer = "ui" | "api" | "data";
-const LAYERS: Layer[] = ["ui", "api", "data"];
-/** Derived from the service icon chosen in the dashboard; unknown icons show no meter. */
-const SERVICE_LAYERS: Record<string, Layer[]> = {
-  layers: ["ui", "api", "data"],
-  server: ["api", "data"],
-  database: ["api", "data"],
-  "layout-dashboard": ["ui", "api"],
-  gauge: ["ui"],
-  globe: ["ui"],
-  code: ["ui", "api"],
-};
+/* ── Services ───────────────────────────────────────────────────────────── */
 
 export async function ServicesSection({ services }: { services: Service[] }) {
   const locale = await getLocale();
   const t = await getTranslations("services");
   return (
-    <Section id="services" eyebrow={t("eyebrow")} title={t("title")} description={t("lead")}>
+    <Section id="services" eyebrow={t("eyebrow")} title={t("title")}>
       <div className="grid border-t sm:grid-cols-2">
-        {services.map((s, i) => {
-          const on = SERVICE_LAYERS[s.icon];
-          return (
-            <Reveal
-              as="article"
-              key={s._id}
-              delay={(i % 2) * 0.06}
-              className={cn(
-                "grid grid-cols-[minmax(0,1fr)_auto] gap-x-6 gap-y-3 border-b py-7",
-                i % 2 === 0 ? "sm:pe-8" : "sm:border-s sm:ps-8",
-              )}
-            >
-              <h3 className="flex items-center gap-3 text-lg leading-snug font-semibold sm:text-xl">
-                <ServiceIcon name={s.icon} className="size-5 shrink-0 text-brand" />
-                {tr(s.title, locale)}
-              </h3>
-              {on ? (
-                <div
-                  role="img"
-                  aria-label={`${t("layers")}: ${on.map((l) => l.toUpperCase()).join(", ")}`}
-                  className="row-span-2 flex flex-col items-end gap-1"
-                  dir="ltr"
-                >
-                  {LAYERS.map((l) => {
-                    const lit = on.includes(l);
-                    return (
-                      <span
-                        key={l}
-                        className={cn(
-                          "flex items-center gap-2 font-mono text-[10px] tracking-widest uppercase",
-                          lit ? "text-heading" : "text-muted-foreground/50",
-                        )}
-                      >
-                        {l}
-                        <span className={cn("h-1.5 w-7 rounded-[1px]", lit ? "bg-brand" : "bg-border")} />
-                      </span>
-                    );
-                  })}
-                </div>
-              ) : (
-                <span />
-              )}
-              <p className="max-w-[46ch] text-[15px] leading-relaxed text-pretty">{tr(s.description, locale)}</p>
-            </Reveal>
-          );
-        })}
+        {services.map((s, i) => (
+          <Reveal
+            as="article"
+            key={s._id}
+            delay={(i % 2) * 0.06}
+            className={cn("flex gap-4 border-b py-7", i % 2 === 0 ? "sm:pe-8" : "sm:border-s sm:ps-8")}
+          >
+            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-brand-soft text-brand">
+              <ServiceIcon name={s.icon} className="size-5" />
+            </span>
+            <div className="min-w-0">
+              <h3 className="text-lg leading-snug font-semibold sm:text-xl">{tr(s.title, locale)}</h3>
+              <p className="mt-2 max-w-[46ch] text-[15px] leading-relaxed text-pretty">{tr(s.description, locale)}</p>
+            </div>
+          </Reveal>
+        ))}
       </div>
     </Section>
   );

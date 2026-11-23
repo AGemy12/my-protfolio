@@ -40,8 +40,6 @@
 
   /* faint top sheen used on cards */
   --sheen: rgb(28 24 20 / 0.025);
-  /* skill strata: top layer = card, deepest layer = this */
-  --stratum-deep: #dccdbb;
 
   /* instrument panel (trace, featured cover): dark in both themes on purpose */
   --metal: linear-gradient(100deg, #070605 0%, #13100d 36%, #211a15 72%, #2b211a 92%, #1a1310 100%);
@@ -80,7 +78,6 @@
   --brand-2: #f08a4b;
 
   --sheen: rgb(255 255 255 / 0.04);
-  --stratum-deep: #2b211a;
 
   color-scheme: dark;
 }
@@ -170,24 +167,6 @@ html {
   box-shadow:
     inset 0 0 80px rgb(0 0 0 / 0.55),
     inset 0 1px rgb(255 255 255 / 0.06);
-}
-
-/* ── Hero trace ───────────────────────────────────────────────────────── */
-
-.trace-bar {
-  transform-origin: var(--trace-origin, left);
-  animation: trace-grow 0.9s cubic-bezier(0.7, 0, 0.2, 1) both;
-}
-[dir="rtl"] .trace-bar {
-  --trace-origin: right;
-}
-@keyframes trace-grow {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
 }
 
 /* ── Marquee (makkook.ai partner strip) ───────────────────────────────── */

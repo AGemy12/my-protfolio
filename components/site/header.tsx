@@ -61,15 +61,9 @@ export function Header({
         </Link>
 
         <ul className="hidden items-center gap-6 lg:flex">
-          {sections.map((id, i) => (
+          {sections.map((id) => (
             <li key={id}>
-              <Link
-                href={`/#${id}`}
-                className="group inline-flex items-baseline gap-1.5 text-sm text-foreground/85 transition-colors hover:text-heading"
-              >
-                <span aria-hidden dir="ltr" className="font-mono text-[10px] text-brand/70 group-hover:text-brand">
-                  L{i}
-                </span>
+              <Link href={`/#${id}`} className="text-sm text-foreground/85 transition-colors hover:text-heading">
                 {t(id)}
               </Link>
             </li>
