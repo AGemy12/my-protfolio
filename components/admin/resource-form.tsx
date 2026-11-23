@@ -49,7 +49,7 @@ export function useActionToast() {
 
 /** Where an item shows up on the public site, for the "View on site" link. */
 function publicHref(resource: ResourceKey, data: Data) {
-  if (resource === "projects") return data.slug ? `/projects#${data.slug}` : "/projects";
+  if (resource === "projects") return data.slug ? `/projects/${data.slug}` : "/projects";
   return `/#${resource}`;
 }
 
@@ -193,7 +193,7 @@ export function ResourceForm({
       case "slug":
         return (
           <div key={field.name} className="sm:col-span-2">
-            <FieldLabel htmlFor={field.name} hint={`/projects#${(value as string) || "…"}`}>
+            <FieldLabel htmlFor={field.name} hint={`/projects/${(value as string) || "…"}`}>
               {label(field.name)}
             </FieldLabel>
             <Input

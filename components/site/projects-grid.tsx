@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { Project } from "@/lib/types";
 import { ProjectCard } from "./project-card";
+import { projectPath } from "./project-dialog";
 
 export function ProjectsGrid({ projects }: { projects: Project[] }) {
   const t = useTranslations("projects");
@@ -14,6 +15,15 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
 
   const categories = useMemo(() => [...new Set(projects.map((p) => p.category))], [projects]);
   const shown = filter === "all" ? projects : projects.filter((p) => p.category === filter);
+
+  // Links shared before projects had their own pages look like /projects#slug:
+  // move them to /projects/slug, which opens that project's dialog here.
+  useEffect(() => {
+    const slug = decodeURIComponent(window.location.hash.slice(1));
+    if (slug && projects.some((p) => p.slug === slug)) {
+      window.history.replaceState(null, "", `/${locale}${projectPath(slug)}`);
+    }
+  }, [projects, locale]);
 
   return (
     <>
@@ -59,7 +69,6 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                   project={p}
                   locale={locale}
                   priority={i < 3}
-                  deepLink
                   labels={{ category: t(`categories.${p.category}`), private: t("private"), details: t("details") }}
                 />
               </motion.div>

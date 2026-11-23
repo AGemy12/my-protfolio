@@ -33,7 +33,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <Hero settings={settings} experience={experience} skills={show.skills ? skills : []} />
       {show.about && <About settings={settings} />}
       {show.experience && experience.length > 0 && <ExperienceSection items={experience} texts={settings.texts} />}

@@ -6,6 +6,8 @@ export default function GlobalNotFound() {
         <div style={{ textAlign: "center" }}>
           <h1 style={{ fontSize: 48, margin: 0 }}>404</h1>
           <p>
+            {/* A full page load on purpose: this page renders outside the app\'s router. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a href="/">Go home</a>
           </p>
         </div>

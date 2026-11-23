@@ -35,6 +35,8 @@ export default function GlobalError({ retry }: { error: unknown; retry: () => vo
             >
               Try again · حاول مرة أخرى
             </button>
+            {/* A full page load on purpose: this page renders outside the app\'s router. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a href="/" style={{ padding: "10px 20px", color: "inherit" }}>
               Home · الرئيسية
             </a>

@@ -76,11 +76,10 @@ export function ShowcaseCard({
               lead ? "text-xl font-semibold sm:text-2xl" : "text-lg font-medium",
             )}
           >
-            <ProjectDialog project={p}>
-              <button
-                type="button"
-                className="cursor-pointer text-start after:absolute after:-inset-2 after:rounded-3xl focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring focus-visible:after:ring-offset-4 focus-visible:after:ring-offset-background"
-              >
+            <ProjectDialog
+              project={p}
+              className="cursor-pointer text-start after:absolute after:-inset-2 after:rounded-3xl focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring focus-visible:after:ring-offset-4 focus-visible:after:ring-offset-background"
+            >
                 {/* Orange hairline that draws in from the reading start. */}
                 <span className="bg-linear-to-r from-brand to-brand bg-[length:0%_1px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] card-on:bg-[length:100%_1px] rtl:bg-right-bottom">
                   {title}
@@ -89,7 +88,6 @@ export function ShowcaseCard({
                   aria-hidden
                   className="ms-1.5 inline size-4 align-[-0.1em] text-brand opacity-0 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ltr:-translate-x-1.5 ltr:translate-y-1 rtl:translate-x-1.5 rtl:translate-y-1 rtl:-scale-x-100 card-on:translate-0 card-on:opacity-100"
                 />
-              </button>
             </ProjectDialog>
           </h3>
           {lead && (

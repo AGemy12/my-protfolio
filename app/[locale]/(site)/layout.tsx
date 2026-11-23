@@ -1,3 +1,5 @@
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { setRequestLocale } from "next-intl/server";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
@@ -24,6 +26,9 @@ export default async function SiteLayout({
       <main id="main">{children}</main>
       <Footer settings={settings} />
       <ScrollTop />
+      {/* Visitor counts and real-user page speed, on Vercel only (no-ops elsewhere). The dashboard isn't tracked. */}
+      <Analytics />
+      <SpeedInsights />
     </>
   );
 }

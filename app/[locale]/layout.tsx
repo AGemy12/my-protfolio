@@ -31,7 +31,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const s = await getSettings();
   const title = tr(s.seoTitle, locale) || tr(s.name, locale);
   const description = tr(s.seoDescription, locale) || tr(s.bio, locale);
-  const image = s.ogImage || s.avatar;
   return {
     metadataBase: new URL(siteUrl()),
     title: { default: title, template: `%s — ${tr(s.name, locale)}` },
@@ -45,9 +44,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       title,
       description,
       locale: locale === "ar" ? "ar_EG" : "en_US",
-      images: image ? [{ url: image }] : undefined,
+      // The image comes from ./opengraph-image.tsx (the dashboard's OG image, or a generated card).
     },
-    twitter: { card: "summary_large_image", title, description, images: image ? [image] : undefined },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 

@@ -8,14 +8,11 @@ export function ProjectCard({
   locale,
   labels,
   priority,
-  deepLink,
 }: {
   project: Project;
   locale: string;
   labels: { category: string; private: string; details?: string };
   priority?: boolean;
-  /** Sync the open dialog with `#slug` in the URL (used on the projects page). */
-  deepLink?: boolean;
 }) {
   const title = tr(p.title, locale);
   const tech = p.tech.slice(0, 4);
@@ -67,13 +64,11 @@ export function ProjectCard({
       <div className="flex flex-1 flex-col px-4 pt-5 pb-4">
         <div className="flex items-start justify-between gap-4">
           <h3 className="text-lg leading-snug font-semibold tracking-tight text-balance">
-            <ProjectDialog project={p} deepLink={deepLink}>
-              <button
-                type="button"
-                className="cursor-pointer text-start transition-colors after:absolute after:inset-0 after:rounded-2xl group-hover:text-brand focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring"
-              >
-                {title}
-              </button>
+            <ProjectDialog
+              project={p}
+              className="cursor-pointer text-start transition-colors after:absolute after:inset-0 after:rounded-2xl group-hover:text-brand focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring"
+            >
+              {title}
             </ProjectDialog>
           </h3>
           <span className="grid size-9 shrink-0 place-items-center rounded-full border text-muted-foreground transition-colors duration-300 group-hover:border-brand group-hover:text-brand">

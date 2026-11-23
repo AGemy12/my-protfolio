@@ -28,7 +28,10 @@ export function ScrollTop() {
   const [visible, setVisible] = useState(false);
 
   // Covers a reload mid-page, before any scroll event fires.
-  useEffect(() => setVisible(window.scrollY > threshold()), []);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setVisible(window.scrollY > threshold()));
+    return () => cancelAnimationFrame(frame);
+  }, []);
   useMotionValueEvent(scrollY, "change", (y) => setVisible(y > threshold()));
 
   return (

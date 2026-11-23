@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useTransition } from "react";
+import { useMounted } from "@/lib/use-mounted";
 import { useTheme } from "next-themes";
 import { useLocale, useTranslations } from "next-intl";
 import { Monitor, Moon, Sun } from "lucide-react";
@@ -31,8 +32,7 @@ const THEME_OPTIONS = [
 export function ThemeToggle({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme();
   const t = useTranslations("nav");
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const mounted = useMounted();
   // `theme` is unknown on the server; until mount, let the CSS pick sun or moon.
   const current = mounted ? (theme ?? "system") : undefined;
 
