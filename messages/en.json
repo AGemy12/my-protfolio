@@ -12,7 +12,10 @@
     "contact": "Contact",
     "cta": "Start a project",
     "menu": "Menu",
-    "toggleTheme": "Toggle theme",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
     "language": "Language",
     "skip": "Skip to content"
   },
