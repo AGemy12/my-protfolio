@@ -1,4 +1,7 @@
 {
+  "loader": {
+    "label": "Loading"
+  },
   "nav": {
     "home": "Home",
     "about": "About",
@@ -10,7 +13,7 @@
     "cta": "Start a project",
     "menu": "Menu",
     "toggleTheme": "Toggle theme",
-    "switchLanguage": "العربية",
+    "language": "Language",
     "skip": "Skip to content"
   },
   "hero": {
@@ -105,13 +108,47 @@
     "whatsappHint": "Include your country code, e.g. +20 114 956 0988",
     "subject": "Subject",
     "message": "Message",
+    "optional": "optional",
+    "messageHint": "What you need, and roughly when. At least 10 characters.",
     "send": "Send message",
     "sending": "Sending…",
     "success": "Thanks! Your message has been sent.",
+    "fixSummary": "{count, plural, one {Fix the highlighted field to send your message.} other {Fix the # highlighted fields to send your message.}}",
     "errors": {
-      "validation": "Please check the fields: name, a valid email, a WhatsApp number with country code and a message of at least 10 characters.",
+      "validation": "Some fields need another look. Check them and send again.",
       "rate": "Too many messages. Please try again in a few minutes.",
-      "server": "Something went wrong. Please email me directly."
+      "server": "Something went wrong. Please email me directly.",
+      "fields": {
+        "name": {
+          "required": "Please enter your name.",
+          "tooShort": "Your name needs at least 2 characters.",
+          "tooLong": "Please keep your name under 100 characters."
+        },
+        "email": {
+          "required": "Please enter your email so I can reply.",
+          "spaces": "An email address can't contain spaces.",
+          "noAt": "The email is missing the @ sign, e.g. name@gmail.com.",
+          "noName": "Add your account name before the @, e.g. name@gmail.com.",
+          "noDomain": "Finish the part after the @, e.g. name@gmail.com.",
+          "tooLong": "This email is too long.",
+          "invalid": "This email doesn't look right. It should look like name@gmail.com."
+        },
+        "whatsapp": {
+          "required": "Please enter your WhatsApp number so I can reach you.",
+          "chars": "Use digits only, with + at the start for the country code.",
+          "countryCode": "Start with your country code, e.g. +20 for Egypt or +966 for Saudi Arabia.",
+          "tooShort": "This number has only {count} digits. A full number with country code has 8 to 15.",
+          "tooLong": "This number has {count} digits. A full number with country code has at most 15."
+        },
+        "subject": {
+          "tooLong": "Please keep the subject under 200 characters."
+        },
+        "message": {
+          "required": "Please write your message.",
+          "tooShort": "Tell me a little more: at least 10 characters (you've written {count}).",
+          "tooLong": "Your message is {count} characters. Please keep it under 5,000."
+        }
+      }
     },
     "orReach": "Or reach me directly"
   },

@@ -57,13 +57,15 @@ export function Header({
           className="group flex items-center gap-2.5 font-semibold"
         >
           <LogoMark className="text-heading" />
-          <span className="hidden text-heading sm:inline">{name}</span>
         </Link>
 
         <ul className="hidden items-center gap-6 lg:flex">
           {sections.map((id) => (
             <li key={id}>
-              <Link href={`/#${id}`} className="text-sm text-foreground/85 transition-colors hover:text-heading">
+              <Link
+                href={`/#${id}`}
+                className="text-sm text-foreground/85 transition-colors hover:text-heading"
+              >
                 {t(id)}
               </Link>
             </li>

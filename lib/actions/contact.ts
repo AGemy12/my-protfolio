@@ -7,14 +7,21 @@ import { notifyWhatsApp } from "../whatsapp";
 import { connectDB } from "../db";
 import { MessageModel } from "../models";
 import { contactSchema } from "../schemas";
+import { checkContact, type FieldErrors } from "../contact-rules";
 
-export type ContactState = { ok?: boolean; error?: "validation" | "rate" | "server" } | undefined;
+export type ContactState =
+  | { ok?: boolean; error?: "validation" | "rate" | "server"; fieldErrors?: FieldErrors }
+  | undefined;
 
 // Best-effort per-instance limiter: 5 messages per IP per 10 minutes.
 const hits = new Map<string, number[]>();
 
 export async function sendMessage(_: ContactState, formData: FormData): Promise<ContactState> {
-  const parsed = contactSchema.safeParse(Object.fromEntries(formData));
+  const values = Object.fromEntries(formData);
+  // Same rules as the browser, so a bypassed form still gets field-by-field reasons.
+  const fieldErrors = checkContact(values);
+  if (Object.keys(fieldErrors).length) return { error: "validation", fieldErrors };
+  const parsed = contactSchema.safeParse(values);
   if (!parsed.success) return { error: "validation" };
   if (parsed.data.website) return { ok: true }; // bot filled the honeypot: pretend success
 

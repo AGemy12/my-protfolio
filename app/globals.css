@@ -3,6 +3,19 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* `card-on:` — styles for a `.card-hover` tile that is hovered (on devices that
+   can hover) or holds keyboard focus, so mouse and keyboard users get the same cues. */
+@custom-variant card-on {
+  @media (hover: hover) {
+    :where(.card-hover):hover & {
+      @slot;
+    }
+  }
+  :where(.card-hover):has(:focus-visible) & {
+    @slot;
+  }
+}
+
 /*
  * shadcn/ui tokens — "Ember Stack" palette (makkook.ai identity).
  * Warm charcoal ground, one ember-orange signal colour (`brand`), hairline borders.
@@ -151,6 +164,19 @@ html {
   color: var(--brand-foreground);
 }
 
+/* Language switch: the page dims while the other locale loads, then fades back in
+   with the new language and direction, so the button and the page change together.
+   Kept in the base layer so components' own transition/opacity utilities still win. */
+@layer base {
+  body > * {
+    transition: opacity 180ms ease;
+  }
+  html[data-locale-switching] body > * {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+}
+
 /* Faint hairline field, only used behind the admin login. */
 .bg-grid {
   background-image:
@@ -189,6 +215,140 @@ html {
 }
 .marquee-mask {
   mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* ── Loader (components/loader.tsx) ──────────────────────────────────── */
+
+/* Waits a beat before showing, so fast navigations never flash it. */
+.loader {
+  animation: loader-in 600ms cubic-bezier(0.22, 1, 0.36, 1) 200ms both;
+}
+@keyframes loader-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+    filter: blur(6px);
+  }
+}
+
+/* The mark rebuilds itself: base, middle, then the ember tip drops in. */
+.loader-layer {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: 2.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+.loader-layer-1 {
+  animation-name: loader-layer-1;
+}
+.loader-layer-2 {
+  animation-name: loader-layer-2;
+}
+.loader-layer-3 {
+  animation-name: loader-layer-3;
+}
+@keyframes loader-layer-1 {
+  0%, 6% { opacity: 0; transform: translateY(6px); }
+  20%, 80% { opacity: 1; transform: none; }
+  92%, 100% { opacity: 0; transform: none; }
+}
+@keyframes loader-layer-2 {
+  0%, 18% { opacity: 0; transform: translateY(6px); }
+  32%, 80% { opacity: 1; transform: none; }
+  92%, 100% { opacity: 0; transform: none; }
+}
+@keyframes loader-layer-3 {
+  0%, 32% { opacity: 0; transform: translateY(-12px) scale(0.9); }
+  44% { opacity: 1; transform: translateY(1.5px) scale(1.04); }
+  52%, 80% { opacity: 1; transform: none; }
+  92%, 100% { opacity: 0; transform: none; }
+}
+
+/* Soft ember halo that swells when the tip lands. */
+.loader-glow {
+  background: radial-gradient(circle, var(--brand-soft) 0%, transparent 68%);
+  animation: loader-glow 2.8s ease-in-out infinite;
+}
+@keyframes loader-glow {
+  0%, 30% { opacity: 0.35; transform: scale(0.8); }
+  48% { opacity: 1; transform: scale(1.15); }
+  80% { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 0.35; transform: scale(0.8); }
+}
+
+/* A comet arc riding the hairline ring, with a bright head. The tail is masked
+   to a thin ring on ::before; the head dot (::after) sits outside that mask. */
+.loader-arc {
+  animation: loader-spin 1.6s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+}
+.loader-arc::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0turn 0.5turn,
+    color-mix(in oklab, var(--brand) 35%, transparent) 0.8turn,
+    var(--brand-2) 1turn
+  );
+  mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
+}
+.loader-arc::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--brand-2);
+  box-shadow: 0 0 10px 2px var(--brand);
+  transform: translate(-50%, -25%);
+}
+@keyframes loader-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+.loader-dots > span {
+  animation: loader-dot 1.4s ease-in-out infinite;
+}
+.loader-dots > span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.loader-dots > span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes loader-dot {
+  0%, 100% { opacity: 0.15; }
+  40% { opacity: 1; }
+}
+
+/* An ember glint sweeping a hairline track. */
+.loader-bar::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, var(--brand), transparent);
+  animation: loader-sweep 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes loader-sweep {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(225%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Show the finished mark and a still arc instead of a frozen frame. */
+  .loader,
+  .loader-layer,
+  .loader-glow,
+  .loader-arc,
+  .loader-dots > span,
+  .loader-bar::after {
+    animation: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

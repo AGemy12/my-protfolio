@@ -1,6 +1,7 @@
 // Zod schemas that validate everything the dashboard sends to the server.
 import { z } from "zod";
 import { EXPERIENCE_TYPES, PROJECT_CATEGORIES, SECTION_KEYS, SKILL_CATEGORIES, TEXT_KEYS } from "./types";
+import { normalizeWhatsApp } from "./contact-rules";
 
 const str = (max = 300) => z.string().trim().max(max).default("");
 const L = (max = 300) => z.object({ en: str(max), ar: str(max) });
@@ -106,12 +107,12 @@ export const serviceSchema = z.object({
 export const contactSchema = z.object({
   name: z.string().trim().min(2).max(100),
   email: z.email().max(200),
-  // International WhatsApp number: "+20 114 956 0988", "0020-114…" → "+201149560988"
+  // International WhatsApp number with country code: "+20 114 956 0988", "0020-114…" → "+201149560988"
   whatsapp: z
     .string()
     .trim()
-    .transform((v) => v.replace(/^00/, "+").replace(/(?!^\+)\D/g, ""))
-    .pipe(z.string().regex(/^\+?\d{8,15}$/)),
+    .transform(normalizeWhatsApp)
+    .pipe(z.string().regex(/^\+\d{8,15}$/)),
   subject: z.string().trim().max(200).default(""),
   message: z.string().trim().min(10).max(5000),
   website: z.string().max(0).optional(), // honeypot: must stay empty

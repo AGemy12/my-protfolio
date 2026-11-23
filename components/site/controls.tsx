@@ -3,10 +3,17 @@
 import { useEffect, useState, useTransition } from "react";
 import { useTheme } from "next-themes";
 import { useLocale, useTranslations } from "next-intl";
-import { Moon, Sun } from "lucide-react";
+import { ChevronDown, Moon, Sun } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
@@ -43,9 +50,16 @@ const LOCALE_LABELS: Record<Locale, { short: string; name: string }> = {
   ar: { short: "ع", name: "العربية" },
 };
 
+const SWITCHING_ATTR = "data-locale-switching";
+
 /**
- * Segmented EN | ع pill with a sliding thumb. The thumb moves immediately on click
- * (optimistic) while the route switches in a transition.
+ * Language picker: a quiet pill with the current code (EN / ع) that opens a short list
+ * of language names, the current one on a soft brand-tinted background.
+ * Nothing in the trigger changes until the new page has rendered,
+ * so the control and the page always switch together:
+ *  - the other locales are prefetched up front, so the switch is near-instant;
+ *  - while the route loads the page dims (html[data-locale-switching]) and comes back
+ *    as one movement once the new locale is on screen.
  */
 export function LocaleSwitch({ className }: { className?: string }) {
   const locale = useLocale() as Locale;
@@ -53,65 +67,94 @@ export function LocaleSwitch({ className }: { className?: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const [pending, startTransition] = useTransition();
-  const [requested, setRequested] = useState<Locale>(locale);
-  // while switching, show the requested locale; otherwise trust the real one
-  const target = pending ? requested : locale;
+  const current = LOCALE_LABELS[locale];
 
-  const locales = routing.locales;
-  const activeIndex = Math.max(0, locales.indexOf(target));
+  // Warm the other locales' pages so choosing one doesn't wait on the network.
+  const prefetchOthers = () => {
+    for (const l of routing.locales) if (l !== locale) router.prefetch(pathname, { locale: l });
+  };
+  useEffect(() => {
+    for (const l of routing.locales) if (l !== locale) router.prefetch(pathname, { locale: l });
+  }, [router, pathname, locale]);
+
+  // The new locale is on screen (or the switch was abandoned): bring the page back.
+  useEffect(() => {
+    if (!pending) document.documentElement.removeAttribute(SWITCHING_ATTR);
+  }, [pending, locale]);
 
   const switchTo = (next: Locale) => {
     if (next === locale || pending) return;
-    setRequested(next);
+    document.documentElement.setAttribute(SWITCHING_ATTR, "");
+    // keep the current page and its hash (#projects) when switching
+    const hash = window.location.hash;
     startTransition(() => {
-      // keep the hash (#projects) and the current page when switching
-      const hash = typeof window !== "undefined" ? window.location.hash : "";
-      router.replace(pathname, { locale: next, scroll: false });
-      if (hash) setTimeout(() => (window.location.hash = hash), 50);
+      router.replace(`${pathname}${hash}`, { locale: next, scroll: false });
     });
   };
 
   return (
-    <div
-      role="radiogroup"
-      aria-label={t("switchLanguage")}
-      aria-busy={pending || undefined}
-      className={cn(
-        "relative inline-grid h-9 shrink-0 grid-cols-2 items-center rounded-full border bg-card/60 p-0.5 shadow-xs",
-        "transition-colors hover:border-brand/50",
-        pending && "opacity-80",
-        className,
-      )}
-    >
-      {/* sliding thumb — logical inset so it follows the reading direction */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-y-0.5 w-[calc(50%-2px)] rounded-full bg-brand shadow-sm transition-[inset-inline-start] duration-300 ease-out"
-        style={{ insetInlineStart: activeIndex === 0 ? "2px" : "50%" }}
-      />
-      {locales.map((l) => {
-        const active = l === target;
-        return (
-          <button
-            key={l}
-            type="button"
-            role="radio"
-            aria-checked={active}
-            aria-label={LOCALE_LABELS[l].name}
-            title={LOCALE_LABELS[l].name}
-            lang={l}
-            onClick={() => switchTo(l)}
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          onPointerEnter={prefetchOthers}
+          aria-label={`${t("language")}: ${current.name}`}
+          aria-busy={pending || undefined}
+          className={cn(
+            "group inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full border bg-card/60 ps-3 pe-2.5 text-foreground/85 shadow-xs outline-none",
+            "transition-[color,border-color,background-color] duration-200",
+            "hover:border-brand/60 hover:text-heading data-[state=open]:border-brand/60 data-[state=open]:text-heading",
+            "focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-busy:cursor-wait",
+            className,
+          )}
+        >
+          <span
+            lang={locale}
             className={cn(
-              "relative z-10 grid h-full min-w-9 place-items-center rounded-full px-2.5 text-xs font-semibold transition-colors duration-300",
-              "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
-              l === "ar" ? "text-sm leading-none" : "font-mono tracking-wide",
-              active ? "text-brand-foreground" : "cursor-pointer text-muted-foreground hover:text-foreground",
+              "min-w-4 text-center leading-none font-semibold",
+              locale === "en" ? "font-mono text-xs tracking-wider" : "text-sm",
             )}
           >
-            {LOCALE_LABELS[l].short}
-          </button>
-        );
-      })}
-    </div>
+            {current.short}
+          </span>
+          <ChevronDown
+            aria-hidden
+            className={cn(
+              "size-3.5 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180",
+              pending && "animate-pulse",
+            )}
+          />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent
+        align="end"
+        sideOffset={8}
+        className="w-40 rounded-xl border-border/70 bg-popover/95 p-1.5 shadow-xl backdrop-blur-xl"
+      >
+        <DropdownMenuLabel className="px-2 pt-1 pb-2 text-[11px] font-medium tracking-[0.14em] text-muted-foreground uppercase">
+          {t("language")}
+        </DropdownMenuLabel>
+        {routing.locales.map((l) => {
+          const active = l === locale;
+          return (
+            <DropdownMenuItem
+              key={l}
+              lang={l}
+              onSelect={() => switchTo(l)}
+              aria-current={active || undefined}
+              className={cn(
+                "rounded-lg px-3 py-2 text-sm",
+                active
+                  ? "cursor-default bg-brand/10 font-medium text-brand focus:bg-brand/15 focus:text-brand"
+                  : "cursor-pointer text-foreground/85",
+              )}
+            >
+              {LOCALE_LABELS[l].name}
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
