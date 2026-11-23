@@ -43,6 +43,7 @@ const SettingsSchema = define(  {
     seoDescription: L,
     ogImage: String,
     sections: { type: Schema.Types.Mixed, default: {} },
+    texts: { type: Schema.Types.Mixed, default: {} },
   },
   opts,
 );

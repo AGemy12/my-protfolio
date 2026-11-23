@@ -40,6 +40,16 @@
     "email": "Email",
     "phone": "Phone"
   },
+  "skills": {
+    "categories": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "database": "Databases & ORMs",
+      "devops": "DevOps & Cloud",
+      "tools": "Tools",
+      "ai": "AI-assisted"
+    }
+  },
   "experience": {
     "eyebrow": "Experience",
     "title": "Where I've worked",
@@ -169,7 +179,18 @@
       "onePerLine": "One item per line",
       "items": "items",
       "none": "None",
-      "open": "Open"
+      "open": "Open",
+      "unsaved": "Unsaved changes",
+      "allSaved": "All changes saved",
+      "discard": "Discard",
+      "viewOnSite": "View on site"
+    },
+    "texts": {
+      "eyebrow": "Small label above the title",
+      "title": "Title",
+      "lead": "Text under the title",
+      "heroPrimary": "Main button",
+      "heroSecondary": "Second button"
     },
     "errors": {
       "validation": "Some fields are invalid",
@@ -202,12 +223,19 @@
       "files": "Photo & CV",
       "seo": "SEO",
       "visibility": "Visible sections",
-      "visibilityHint": "Turn sections of the home page on or off."
+      "visibilityHint": "Turn sections of the home page on or off.",
+      "texts": "Section headings & buttons",
+      "textsHint": "Leave a field empty to keep the default text shown in grey.",
+      "heroHint": "The first thing visitors see at the top of the home page.",
+      "headlineHint": "Wrap a word in *stars* to show it in orange",
+      "aboutHint": "Leave an empty line between paragraphs",
+      "seoHint": "How the site appears in Google results and when the link is shared.",
+      "jump": "Jump to"
     },
     "fields": {
       "name": "Name",
       "role": "Role / title",
-      "headline": "Headline — wrap words in *stars* to highlight them",
+      "headline": "Headline",
       "bio": "Short bio",
       "about": "About text",
       "location": "Location",

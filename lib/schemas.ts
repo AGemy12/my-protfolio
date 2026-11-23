@@ -1,6 +1,6 @@
 // Zod schemas that validate everything the dashboard sends to the server.
 import { z } from "zod";
-import { EXPERIENCE_TYPES, PROJECT_CATEGORIES, SECTION_KEYS, SKILL_CATEGORIES } from "./types";
+import { EXPERIENCE_TYPES, PROJECT_CATEGORIES, SECTION_KEYS, SKILL_CATEGORIES, TEXT_KEYS } from "./types";
 
 const str = (max = 300) => z.string().trim().max(max).default("");
 const L = (max = 300) => z.object({ en: str(max), ar: str(max) });
@@ -45,6 +45,9 @@ export const settingsSchema = z.object({
       z.ZodDefault<z.ZodBoolean>
     >,
   ),
+  texts: z
+    .object(Object.fromEntries(TEXT_KEYS.map((k) => [k, L(200).optional()])) as Record<string, z.ZodOptional<ReturnType<typeof L>>>)
+    .default({}),
 });
 
 export const projectSchema = z.object({

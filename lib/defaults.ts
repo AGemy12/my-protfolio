@@ -7,7 +7,7 @@ type Seed<T> = Omit<T, "_id">;
 
 export const defaultSettings: Settings = {
   name: { en: "Ahmad Marzouk", ar: "أحمد مرزوق" },
-  role: { en: "Full Stack Developer", ar: "مطوّر Full Stack" },
+  role: { en: "Full Stack Developer", ar: "مطوّر ويب" },
   headline: {
     en: "I build web products end to end — from the *database* to the *pixels*.",
     ar: "أبني منتجات الويب من البداية للنهاية — من *قاعدة البيانات* حتى *الواجهة*.",
@@ -22,8 +22,18 @@ export const defaultSettings: Settings = {
   },
   location: { en: "Beni Suef, Egypt · Remote", ar: "بني سويف، مصر · عن بُعد" },
   heroRoles: {
-    en: ["Full Stack Developer", "Next.js on the frontend", "NestJS on the backend", "From idea to production"],
-    ar: ["مطوّر Full Stack", "Next.js في الواجهات", "NestJS في الخوادم", "من الفكرة حتى الإطلاق"],
+    en: [
+      "Full Stack Developer",
+      "Next.js on the frontend",
+      "NestJS on the backend",
+      "From idea to production",
+    ],
+    ar: [
+      "مطوّر Full Stack",
+      "Next.js في الواجهات",
+      "NestJS في الخوادم",
+      "من الفكرة حتى الإطلاق",
+    ],
   },
   email: "aggamal98@gmail.com",
   phone: "+20 114 956 0988",
@@ -46,10 +56,20 @@ export const defaultSettings: Settings = {
     ar: "مطوّر Full Stack يبني تطبيقات ويب قابلة للتوسع باستخدام Next.js وReact وNode.js وNestJS وMongoDB وPostgreSQL.",
   },
   ogImage: "",
-  sections: { about: true, skills: true, experience: true, projects: true, services: true, contact: true },
+  sections: {
+    about: true,
+    skills: true,
+    experience: true,
+    projects: true,
+    services: true,
+    contact: true,
+  },
+  texts: {},
 };
 
-const project = (p: Partial<Seed<Project>> & Pick<Seed<Project>, "slug" | "title" | "summary">): Seed<Project> => ({
+const project = (
+  p: Partial<Seed<Project>> & Pick<Seed<Project>, "slug" | "title" | "summary">,
+): Seed<Project> => ({
   description: { en: "", ar: "" },
   role: { en: "Full Stack Developer", ar: "مطوّر Full Stack" },
   cover: "",
@@ -214,7 +234,10 @@ export const defaultProjects: Seed<Project>[] = [
     },
     role: { en: "WordPress Developer", ar: "مطوّر WordPress" },
     cover: "/images/projects/amira-inspiring-careers.png",
-    gallery: ["/images/projects/amira-nine-gates.png", "/images/projects/amira-home.png"],
+    gallery: [
+      "/images/projects/amira-nine-gates.png",
+      "/images/projects/amira-home.png",
+    ],
     tech: ["WordPress", "WooCommerce", "PHP", "WPML", "ACF"],
     category: "corporate",
     year: 2026,
@@ -272,7 +295,12 @@ export const defaultExperience: Seed<Experience>[] = [
   },
 ];
 
-const skill = (name: string, icon: string, category: Skill["category"], order: number): Seed<Skill> => ({
+const skill = (
+  name: string,
+  icon: string,
+  category: Skill["category"],
+  order: number,
+): Seed<Skill> => ({
   name,
   icon,
   category,

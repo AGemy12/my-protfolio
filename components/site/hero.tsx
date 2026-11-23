@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowDownToLine, ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import { tr, type Experience, type Settings, type Skill } from "@/lib/types";
+import { siteText, tr, type Experience, type Settings, type Skill } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { SmartImage } from "@/components/smart-image";
 import { cn } from "@/lib/utils";
@@ -74,7 +74,7 @@ export async function Hero({
                 className="group h-12 rounded-lg bg-brand px-6 text-base text-brand-foreground hover:bg-brand/90"
               >
                 <Link href="/#contact">
-                  {t("startProject")}
+                  {siteText(s.texts, "heroPrimary", locale, t("startProject"))}
                   <ArrowRight className="transition group-hover:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5" />
                 </Link>
               </Button>
@@ -84,7 +84,7 @@ export async function Hero({
                 variant="outline"
                 className="h-12 rounded-lg bg-transparent px-6 text-base hover:border-brand hover:bg-transparent hover:text-brand dark:bg-transparent"
               >
-                <Link href="/#projects">{t("viewWork")}</Link>
+                <Link href="/#projects">{siteText(s.texts, "heroSecondary", locale, t("viewWork"))}</Link>
               </Button>
               {cv && (
                 <a

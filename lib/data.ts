@@ -34,7 +34,12 @@ export const getSettings = cache(() =>
       const doc = await SettingsModel.findOne({ key: "main" }).lean();
       if (!doc) return null;
       const s = serialize<Settings>(doc);
-      return { ...defaultSettings, ...s, sections: { ...defaultSettings.sections, ...s.sections } };
+      return {
+        ...defaultSettings,
+        ...s,
+        sections: { ...defaultSettings.sections, ...s.sections },
+        texts: { ...defaultSettings.texts, ...s.texts },
+      };
     },
     () => defaultSettings,
   ),

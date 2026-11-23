@@ -35,7 +35,12 @@ export async function adminSettings(): Promise<{ settings: Settings; saved: bool
   if (!doc) return { settings: defaultSettings, saved: false };
   const s = serialize<Settings>(doc);
   return {
-    settings: { ...defaultSettings, ...s, sections: { ...defaultSettings.sections, ...s.sections } },
+    settings: {
+      ...defaultSettings,
+      ...s,
+      sections: { ...defaultSettings.sections, ...s.sections },
+      texts: { ...defaultSettings.texts, ...s.texts },
+    },
     saved: true,
   };
 }

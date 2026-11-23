@@ -5,18 +5,20 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { cn } from "@/lib/utils";
 
 export function CardSection({
+  id,
   title,
   description,
   children,
   className,
 }: {
+  id?: string;
   title: string;
   description?: string;
   children: React.ReactNode;
   className?: string;
 }) {
   return (
-    <Card className={className}>
+    <Card id={id} className={cn("scroll-mt-24", className)}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}

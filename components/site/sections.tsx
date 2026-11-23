@@ -3,7 +3,16 @@ import { ArrowRight, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { ServiceIcon } from "@/components/icons";
 import { SmartImage } from "@/components/smart-image";
-import { tr, trList, type Experience, type Project, type Service, type Settings } from "@/lib/types";
+import {
+  siteText,
+  tr,
+  trList,
+  type Experience,
+  type Project,
+  type Service,
+  type Settings,
+  type SiteTexts,
+} from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./reveal";
 import { Eyebrow, Section } from "./section";
@@ -28,7 +37,11 @@ export async function About({ settings: s }: { settings: Settings }) {
   ].filter((d) => d.value);
 
   return (
-    <Section id="about" eyebrow={t("eyebrow")} title={t("title")}>
+    <Section
+      id="about"
+      eyebrow={siteText(s.texts, "aboutEyebrow", locale, t("eyebrow"))}
+      title={siteText(s.texts, "aboutTitle", locale, t("title"))}
+    >
       <div className="grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
         <Reveal>
           {lead && (
@@ -69,12 +82,16 @@ export async function About({ settings: s }: { settings: Settings }) {
 
 /* ── Experience ─────────────────────────────────────────────────────────── */
 
-export async function ExperienceSection({ items }: { items: Experience[] }) {
+export async function ExperienceSection({ items, texts }: { items: Experience[]; texts: SiteTexts }) {
   const locale = await getLocale();
   const t = await getTranslations("experience");
 
   return (
-    <Section id="experience" eyebrow={t("eyebrow")} title={t("title")}>
+    <Section
+      id="experience"
+      eyebrow={siteText(texts, "experienceEyebrow", locale, t("eyebrow"))}
+      title={siteText(texts, "experienceTitle", locale, t("title"))}
+    >
       <ol className="border-b">
         {items.map((e, i) => {
           const highlights = trList(e.highlights, locale);
@@ -154,7 +171,7 @@ function host(url: string) {
   }
 }
 
-export async function ProjectsSection({ projects }: { projects: Project[] }) {
+export async function ProjectsSection({ projects, texts }: { projects: Project[]; texts: SiteTexts }) {
   const locale = await getLocale();
   const t = await getTranslations("projects");
   const lead = projects.find((p) => p.featured) ?? projects[0];
@@ -168,8 +185,8 @@ export async function ProjectsSection({ projects }: { projects: Project[] }) {
   return (
     <Section
       id="projects"
-      eyebrow={t("eyebrow")}
-      title={t("title")}
+      eyebrow={siteText(texts, "projectsEyebrow", locale, t("eyebrow"))}
+      title={siteText(texts, "projectsTitle", locale, t("title"))}
       action={
         <Link href="/projects" className={quietLink}>
           {t("viewAll")}
@@ -275,11 +292,15 @@ export async function ProjectsSection({ projects }: { projects: Project[] }) {
 
 /* ── Services ───────────────────────────────────────────────────────────── */
 
-export async function ServicesSection({ services }: { services: Service[] }) {
+export async function ServicesSection({ services, texts }: { services: Service[]; texts: SiteTexts }) {
   const locale = await getLocale();
   const t = await getTranslations("services");
   return (
-    <Section id="services" eyebrow={t("eyebrow")} title={t("title")}>
+    <Section
+      id="services"
+      eyebrow={siteText(texts, "servicesEyebrow", locale, t("eyebrow"))}
+      title={siteText(texts, "servicesTitle", locale, t("title"))}
+    >
       <div className="grid border-t sm:grid-cols-2">
         {services.map((s, i) => (
           <Reveal
@@ -305,19 +326,22 @@ export async function ServicesSection({ services }: { services: Service[] }) {
 /* ── Contact ────────────────────────────────────────────────────────────── */
 
 export async function ContactSection({ settings: s }: { settings: Settings }) {
+  const locale = await getLocale();
   const t = await getTranslations("contact");
   return (
     <section id="contact" aria-labelledby="contact-title" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 md:py-24">
       <div className="grid gap-12 border-t border-foreground/20 pt-14 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-16">
         <Reveal>
-          <Eyebrow>{t("eyebrow")}</Eyebrow>
+          <Eyebrow>{siteText(s.texts, "contactEyebrow", locale, t("eyebrow"))}</Eyebrow>
           <h2
             id="contact-title"
             className="mt-4 text-4xl leading-[1.15] font-bold text-balance sm:text-5xl ltr:tracking-tight rtl:leading-[1.35]"
           >
-            {t("title")}
+            {siteText(s.texts, "contactTitle", locale, t("title"))}
           </h2>
-          <p className="mt-5 max-w-md text-lg text-muted-foreground">{t("lead")}</p>
+          <p className="mt-5 max-w-md text-lg text-muted-foreground">
+            {siteText(s.texts, "contactLead", locale, t("lead"))}
+          </p>
           {s.email && (
             <a
               href={`mailto:${s.email}`}

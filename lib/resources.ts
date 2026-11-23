@@ -7,7 +7,15 @@ export const RESOURCE_KEYS = ["projects", "experience", "skills", "services"] as
 export type ResourceKey = (typeof RESOURCE_KEYS)[number];
 
 export type Field =
-  | { name: string; type: "text" | "url" | "number"; required?: boolean; half?: boolean }
+  | {
+      name: string;
+      type: "text" | "url" | "number";
+      required?: boolean;
+      half?: boolean;
+      /** Disables the field while this switch is on (e.g. "end" while "current"). */
+      disabledWhen?: string;
+      placeholder?: string;
+    }
   | { name: string; type: "slug"; from: string }
   | { name: string; type: "ltext" | "llist"; required?: boolean }
   | { name: string; type: "ltextarea"; rows?: number }
@@ -72,8 +80,8 @@ export const resources: Record<ResourceKey, ResourceConfig> = {
       { name: "location", type: "ltext" },
       { name: "type", type: "select", options: EXPERIENCE_TYPES, optionsKey: "experienceTypes", half: true },
       { name: "order", type: "number", half: true },
-      { name: "start", type: "text", half: true },
-      { name: "end", type: "text", half: true },
+      { name: "start", type: "text", half: true, placeholder: "2022" },
+      { name: "end", type: "text", half: true, placeholder: "2024", disabledWhen: "current" },
       { name: "current", type: "switch" },
       { name: "highlights", type: "llist" },
       { name: "published", type: "switch" },

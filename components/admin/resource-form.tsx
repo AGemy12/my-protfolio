@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { ArrowLeft, Trash } from "lucide-react";
+import { ArrowLeft, ExternalLink, Trash } from "lucide-react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { deleteItem, saveItem, type ActionResult } from "@/lib/actions/content";
 import { resources, type Field, type ResourceKey } from "@/lib/resources";
@@ -25,6 +25,7 @@ import {
   SwitchField,
   TagsField,
 } from "./fields";
+import { SaveBar, useDirty, useFormGuard } from "./save-bar";
 
 type Data = Record<string, unknown>;
 
@@ -46,6 +47,12 @@ export function useActionToast() {
   };
 }
 
+/** Where an item shows up on the public site, for the "View on site" link. */
+function publicHref(resource: ResourceKey, data: Data) {
+  if (resource === "projects") return data.slug ? `/projects#${data.slug}` : "/projects";
+  return `/#${resource}`;
+}
+
 export function ResourceForm({
   resource,
   initial,
@@ -61,11 +68,16 @@ export function ResourceForm({
   const notify = useActionToast();
   const confirmDelete = useConfirmDelete();
   const config = resources[resource];
+  const formRef = useRef<HTMLFormElement>(null);
   const [data, setData] = useState<Data>(() => ({ ...config.empty, ...(initial ?? {}) }));
   const [slugTouched, setSlugTouched] = useState(Boolean(initial));
+  // bumping this remounts fields that keep their own draft text (lists) after Discard
+  const [version, setVersion] = useState(0);
   const [saving, startSave] = useTransition();
   const [deleting, startDelete] = useTransition();
+  const { dirty, markSaved, savedValue } = useDirty(data);
   const id = initial?._id ?? null;
+  useFormGuard(dirty, formRef);
 
   const set = (name: string, value: unknown) =>
     setData((prev) => {
@@ -107,7 +119,7 @@ export function ResourceForm({
       case "llist":
         return (
           <LocalizedListField
-            key={field.name}
+            key={`${field.name}-${version}`}
             label={label(field.name)}
             value={value as LList}
             onChange={(v) => set(field.name, v)}
@@ -197,19 +209,22 @@ export function ResourceForm({
             />
           </div>
         );
-      default:
+      default: {
+        const disabled = field.disabledWhen ? Boolean(data[field.disabledWhen]) : false;
         return (
           <div key={field.name} className={field.half ? undefined : "sm:col-span-2"}>
             <FieldLabel htmlFor={field.name}>
               {label(field.name)}
-              {"required" in field && field.required && <span className="text-destructive"> *</span>}
+              {field.required && <span className="text-destructive"> *</span>}
             </FieldLabel>
             <Input
               id={field.name}
               type={field.type === "number" ? "number" : field.type === "url" ? "url" : "text"}
               dir={field.type === "text" ? "auto" : "ltr"}
-              required={"required" in field ? field.required : undefined}
-              value={(value as string | number | undefined) ?? ""}
+              required={field.required}
+              disabled={disabled}
+              placeholder={field.placeholder ?? (field.type === "url" ? "https://" : undefined)}
+              value={disabled ? "" : ((value as string | number | undefined) ?? "")}
               onChange={(e) =>
                 set(
                   field.name,
@@ -223,11 +238,13 @@ export function ResourceForm({
             />
           </div>
         );
+      }
     }
   };
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (saving) return;
     startSave(async () => {
       const { _id, createdAt, updatedAt, ...payload } = data as Data & { createdAt?: unknown; updatedAt?: unknown };
       void _id;
@@ -235,23 +252,30 @@ export function ResourceForm({
       void updatedAt;
       const result = await saveItem(resource, id, payload);
       if (notify(result) && result.ok) {
+        markSaved(data);
         if (!id) router.replace(`/admin/${resource}/${result.id}`);
         router.refresh();
       }
     });
   };
 
+  const onDiscard = () => {
+    setData(savedValue());
+    setVersion((v) => v + 1);
+  };
+
   const onDelete = async () => {
     if (!id || !(await confirmDelete())) return;
     startDelete(async () => {
-      if (notify(await deleteItem(resource, id))) router.replace(`/admin/${resource}`);
+      if (notify(await deleteItem(resource, id))) {
+        markSaved(data); // nothing left to protect
+        router.replace(`/admin/${resource}`);
+      }
     });
   };
 
-  const saveLabel = saving ? t("common.saving") : t("common.save");
-
   return (
-    <form onSubmit={onSubmit}>
+    <form ref={formRef} onSubmit={onSubmit} noValidate={false}>
       <PageHeader
         title={title}
         actions={
@@ -263,6 +287,14 @@ export function ResourceForm({
               </Link>
             </Button>
             {id && (
+              <Button asChild variant="outline">
+                <a href={publicHref(resource, data)} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink />
+                  {t("common.viewOnSite")}
+                </a>
+              </Button>
+            )}
+            {id && (
               <LoadingButton
                 type="button"
                 variant="ghost-destructive"
@@ -273,20 +305,13 @@ export function ResourceForm({
                 {t("common.delete")}
               </LoadingButton>
             )}
-            <LoadingButton type="submit" loading={saving}>
-              {saveLabel}
-            </LoadingButton>
           </>
         }
       />
       <Card>
         <CardContent className="grid gap-5 sm:grid-cols-2">{config.fields.map(render)}</CardContent>
       </Card>
-      <div className="sticky bottom-4 mt-6 flex justify-end">
-        <LoadingButton type="submit" loading={saving} className="shadow-xl">
-          {saveLabel}
-        </LoadingButton>
-      </div>
+      <SaveBar dirty={dirty || !id} saving={saving} onDiscard={onDiscard} />
     </form>
   );
 }

@@ -245,6 +245,9 @@ export function LocalizedField({
   multiline,
   rows = 3,
   required,
+  placeholder,
+  max,
+  hint,
 }: {
   label: string;
   value: L;
@@ -252,6 +255,11 @@ export function LocalizedField({
   multiline?: boolean;
   rows?: number;
   required?: boolean;
+  /** Shown in grey when empty, e.g. the default text that is used instead. */
+  placeholder?: L;
+  /** Shows a character counter; turns red past this length. */
+  max?: number;
+  hint?: string;
 }) {
   const t = useTranslations("admin.common");
   const langs = [
@@ -260,29 +268,46 @@ export function LocalizedField({
   ];
   return (
     <fieldset className="sm:col-span-2">
-      <legend className="mb-2 text-sm font-medium">
-        {label}
-        {required && <span className="text-destructive"> *</span>}
+      <legend className="mb-2 flex w-full items-baseline justify-between gap-2 text-sm font-medium">
+        <span>
+          {label}
+          {required && <span className="text-destructive"> *</span>}
+        </span>
+        {hint && <span className="text-xs font-normal text-muted-foreground">{hint}</span>}
       </legend>
       <div className="grid gap-3 md:grid-cols-2">
         {langs.map((lang) => {
+          const text = value?.[lang.key] ?? "";
           const common = {
-            value: value?.[lang.key] ?? "",
+            value: text,
             dir: lang.dir,
             lang: lang.key,
+            placeholder: placeholder?.[lang.key] || undefined,
             "aria-label": `${label} (${lang.label})`,
             required: required && lang.key === "en",
             onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
               onChange({ ...value, [lang.key]: e.target.value }),
           };
           return (
-            <LangBox key={lang.key} lang={lang.key} dir={lang.dir} multiline={multiline}>
-              {multiline ? (
-                <Textarea rows={rows} className={cn("min-h-0 resize-y", inBox)} {...common} />
-              ) : (
-                <Input className={inBox} {...common} />
+            <div key={lang.key}>
+              <LangBox lang={lang.key} dir={lang.dir} multiline={multiline}>
+                {multiline ? (
+                  <Textarea rows={rows} className={cn("min-h-0 resize-y", inBox)} {...common} />
+                ) : (
+                  <Input className={inBox} {...common} />
+                )}
+              </LangBox>
+              {max && (
+                <p
+                  className={cn(
+                    "mt-1 text-end font-mono text-[11px] tabular-nums",
+                    text.length > max ? "text-destructive" : "text-muted-foreground",
+                  )}
+                >
+                  {text.length} / {max}
+                </p>
               )}
-            </LangBox>
+            </div>
           );
         })}
       </div>
