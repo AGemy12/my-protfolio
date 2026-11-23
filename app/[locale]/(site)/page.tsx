@@ -34,7 +34,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <Hero settings={settings} projects={projects} />
+      <Hero settings={settings} projects={projects} experience={experience} />
       {show.about && <About settings={settings} />}
       {show.skills && skills.length > 0 && <Skills skills={skills} />}
       {show.experience && experience.length > 0 && <ExperienceSection items={experience} />}

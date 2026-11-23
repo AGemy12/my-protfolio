@@ -23,7 +23,7 @@ export function ContactForm() {
   }, [state]);
 
   return (
-    <Card className="rounded-3xl shadow-none sm:py-8">
+    <Card className="rounded-2xl bg-linear-to-b from-sheen to-transparent shadow-none sm:py-8">
       <CardContent className="sm:px-8">
         <form ref={form} action={action} className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">

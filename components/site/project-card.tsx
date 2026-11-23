@@ -23,15 +23,9 @@ export function ProjectCard({
   const isPrivate = !p.liveUrl && !p.repoUrl;
 
   return (
-    <article className="group relative isolate flex h-full flex-col overflow-hidden rounded-3xl border bg-card p-2 transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-brand/40 hover:shadow-2xl hover:shadow-brand/10">
-      {/* soft glow behind the body on hover */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -bottom-24 start-1/2 -z-10 size-64 -translate-x-1/2 rounded-full bg-brand/15 opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100 rtl:translate-x-1/2"
-      />
-
+    <article className="group relative isolate flex h-full flex-col overflow-hidden rounded-2xl border bg-linear-to-b from-sheen to-transparent p-2 transition-colors duration-300 hover:border-brand/40">
       {/* framed cover */}
-      <div className="relative aspect-[16/10] overflow-hidden rounded-[1.1rem] bg-muted ring-1 ring-border/70 ring-inset">
+      <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-muted ring-1 ring-border ring-inset">
         {p.cover ? (
           <SmartImage
             src={p.cover}
@@ -42,8 +36,8 @@ export function ProjectCard({
             className="object-cover object-top transition duration-[1200ms] ease-out group-hover:scale-[1.05]"
           />
         ) : (
-          <div className="bg-grid absolute inset-0 grid place-items-center bg-linear-to-br from-brand-soft to-transparent">
-            <span className="font-mono text-5xl font-semibold tracking-tight text-brand/40">{title.slice(0, 2)}</span>
+          <div className="bg-metal absolute inset-0 grid place-items-center">
+            <span className="text-5xl font-semibold text-(--metal-dim)">{title.slice(0, 2)}</span>
           </div>
         )}
 
@@ -76,13 +70,13 @@ export function ProjectCard({
             <ProjectDialog project={p} deepLink={deepLink}>
               <button
                 type="button"
-                className="cursor-pointer text-start transition-colors after:absolute after:inset-0 after:rounded-3xl group-hover:text-brand focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring"
+                className="cursor-pointer text-start transition-colors after:absolute after:inset-0 after:rounded-2xl group-hover:text-brand focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring"
               >
                 {title}
               </button>
             </ProjectDialog>
           </h3>
-          <span className="grid size-9 shrink-0 place-items-center rounded-full border text-muted-foreground transition-all duration-500 group-hover:rotate-45 group-hover:border-brand group-hover:bg-brand group-hover:text-brand-foreground rtl:group-hover:-rotate-45">
+          <span className="grid size-9 shrink-0 place-items-center rounded-full border text-muted-foreground transition-colors duration-300 group-hover:border-brand group-hover:text-brand">
             <ArrowUpRight className="size-4 rtl:-scale-x-100" />
           </span>
         </div>
@@ -92,7 +86,7 @@ export function ProjectCard({
         </p>
 
         <div className="mt-auto pt-5">
-          <div className="mb-4 h-px bg-linear-to-r from-border via-border to-transparent rtl:bg-linear-to-l" />
+          <div className="mb-4 h-px bg-border" />
           <ul className="flex flex-wrap items-center gap-1.5" dir="ltr">
             {tech.map((t) => (
               <li

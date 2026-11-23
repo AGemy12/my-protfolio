@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cairo, Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Readex_Pro } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
@@ -10,14 +10,10 @@ import { tr } from "@/lib/types";
 import { siteUrl } from "@/lib/utils";
 import "../globals.css";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
+// Readex Pro (makkook.ai's typeface) covers Arabic and Latin, so one family serves both locales.
+// It is a variable font (160–700), so every weight is available.
+const readex = Readex_Pro({ subsets: ["arabic", "latin"], variable: "--font-readex", display: "swap" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
-// Cairo is a variable font (200–1000), so every weight is available.
-const arabic = Cairo({
-  subsets: ["arabic", "latin"],
-  variable: "--font-arabic",
-  display: "swap",
-});
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -25,8 +21,8 @@ export function generateStaticParams() {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f8fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#090c14" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f3ef" },
+    { media: "(prefers-color-scheme: dark)", color: "#161313" },
   ],
 };
 
@@ -72,7 +68,7 @@ export default async function LocaleLayout({
       lang={locale}
       dir={dir}
       suppressHydrationWarning
-      className={`${geist.variable} ${geistMono.variable} ${arabic.variable}`}
+      className={`${readex.variable} ${geistMono.variable}`}
     >
       <body className="min-h-dvh font-sans">
         <NextIntlClientProvider>

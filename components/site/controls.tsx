@@ -104,7 +104,7 @@ export function LocaleSwitch({ className }: { className?: string }) {
             className={cn(
               "relative z-10 grid h-full min-w-9 place-items-center rounded-full px-2.5 text-xs font-semibold transition-colors duration-300",
               "focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
-              l === "ar" ? "font-(family-name:--font-arabic) text-sm leading-none" : "font-mono tracking-wide",
+              l === "ar" ? "text-sm leading-none" : "font-mono tracking-wide",
               active ? "text-brand-foreground" : "cursor-pointer text-muted-foreground hover:text-foreground",
             )}
           >

@@ -22,10 +22,9 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
 
   return (
     <div className="relative">
-      <div aria-hidden className="bg-grid pointer-events-none absolute inset-x-0 top-0 h-96" />
       <div className="relative mx-auto max-w-6xl px-4 pt-32 pb-24 sm:px-6">
         <Eyebrow>{t("eyebrow")}</Eyebrow>
-        <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl rtl:leading-[1.3] rtl:tracking-normal">
+        <h1 className="mt-4 text-4xl font-bold sm:text-5xl ltr:tracking-tight rtl:leading-[1.35]">
           {t("pageTitle")}
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("pageLead")}</p>

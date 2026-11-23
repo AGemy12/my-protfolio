@@ -56,20 +56,22 @@ export function Header({
           aria-label={name}
           className="group flex items-center gap-2.5 font-semibold"
         >
-          <LogoMark className="text-foreground" />
+          <LogoMark className="text-heading" />
+          <span className="hidden text-heading sm:inline">{name}</span>
         </Link>
 
-        <ul className="hidden items-center gap-1 md:flex">
-          {sections.map((id) => (
+        <ul className="hidden items-center gap-6 lg:flex">
+          {sections.map((id, i) => (
             <li key={id}>
-              <Button
-                asChild
-                variant="ghost"
-                size="sm"
-                className="rounded-full text-muted-foreground hover:text-foreground"
+              <Link
+                href={`/#${id}`}
+                className="group inline-flex items-baseline gap-1.5 text-sm text-foreground/85 transition-colors hover:text-heading"
               >
-                <Link href={`/#${id}`}>{t(id)}</Link>
-              </Button>
+                <span aria-hidden dir="ltr" className="font-mono text-[10px] text-brand/70 group-hover:text-brand">
+                  L{i}
+                </span>
+                {t(id)}
+              </Link>
             </li>
           ))}
         </ul>
@@ -77,12 +79,21 @@ export function Header({
         <div className="flex items-center gap-2">
           <LocaleSwitch />
           <ThemeToggle />
+          {sections.includes("contact") && (
+            <Button
+              asChild
+              size="sm"
+              className="hidden h-9 rounded-lg bg-brand px-4 text-brand-foreground hover:bg-brand/90 sm:inline-flex"
+            >
+              <Link href="/#contact">{t("cta")}</Link>
+            </Button>
+          )}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button
                 variant="outline"
                 size="icon"
-                className="rounded-full md:hidden"
+                className="rounded-full lg:hidden"
                 aria-label={t("menu")}
               >
                 <Menu />

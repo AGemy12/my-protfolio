@@ -2,19 +2,20 @@ import { cn } from "@/lib/utils";
 import { Reveal } from "./reveal";
 
 /**
- * Small label above section titles. Letter-spacing / uppercase / mono only
- * apply to LTR text — tracking breaks Arabic letter joining.
+ * Small label above section titles: a short ember rule and the label.
+ * Letter-spacing / uppercase / mono only apply to LTR text — tracking breaks
+ * Arabic letter joining.
  */
 export function Eyebrow({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
     <p
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand-soft py-1 ps-2.5 pe-3.5 text-xs font-medium text-brand",
-        "ltr:font-mono ltr:tracking-[0.16em] ltr:uppercase rtl:text-sm",
+        "inline-flex items-center gap-2.5 text-sm font-medium text-brand",
+        "ltr:font-mono ltr:text-[11px] ltr:tracking-[0.2em] ltr:uppercase",
         className,
       )}
     >
-      <span aria-hidden className="size-1.5 rounded-full bg-brand ring-3 ring-brand/20" />
+      <span aria-hidden className="h-0.5 w-5 bg-brand" />
       {children}
     </p>
   );
@@ -41,24 +42,26 @@ export function Section({
     <section
       id={id}
       aria-labelledby={`${id}-title`}
-      className={cn("mx-auto max-w-6xl px-4 py-20 sm:px-6 md:py-28", className)}
+      className={cn("mx-auto max-w-6xl px-4 py-20 sm:px-6 md:py-24", className)}
     >
-      <Reveal className="mb-12 flex flex-wrap items-end justify-between gap-6 md:mb-14">
-        <div className="max-w-2xl">
+      <Reveal className="mb-10 grid items-end gap-x-12 gap-y-4 md:mb-12 md:grid-cols-2">
+        <div>
           <Eyebrow>{eyebrow}</Eyebrow>
           <h2
             id={`${id}-title`}
-            className="mt-5 text-3xl leading-[1.15] font-semibold tracking-tight text-balance sm:text-4xl lg:text-[2.75rem] rtl:leading-[1.35] rtl:tracking-normal"
+            className="mt-3 text-3xl leading-[1.2] font-bold text-balance sm:text-4xl lg:text-[2.6rem] ltr:tracking-tight rtl:leading-[1.4]"
           >
             {title}
           </h2>
-          {description && (
-            <p className="mt-4 text-base leading-relaxed text-pretty text-muted-foreground sm:text-lg">
-              {description}
-            </p>
-          )}
         </div>
-        {action}
+        {(description || action) && (
+          <div className="flex flex-col items-start gap-5">
+            {description && (
+              <p className="max-w-md text-base leading-relaxed text-pretty text-muted-foreground">{description}</p>
+            )}
+            {action}
+          </div>
+        )}
       </Reveal>
       {children}
     </section>

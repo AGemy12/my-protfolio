@@ -54,7 +54,7 @@ export function ProjectDialog({ project: p, deepLink, children }: { project: Pro
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
         showCloseButton={false}
-        className="max-h-[92dvh] gap-0 overflow-hidden overflow-y-auto overscroll-contain rounded-3xl p-0 sm:max-w-4xl"
+        className="max-h-[92dvh] gap-0 overflow-hidden overflow-y-auto overscroll-contain rounded-2xl p-0 sm:max-w-4xl"
       >
         {/* Cover */}
         <div className="relative">
@@ -79,7 +79,7 @@ export function ProjectDialog({ project: p, deepLink, children }: { project: Pro
               </span>
             </button>
           ) : (
-            <div className="bg-grid h-24 border-b" />
+            <div className="bg-metal h-24 border-b" />
           )}
           <DialogClose asChild>
             <Button

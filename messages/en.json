@@ -7,6 +7,7 @@
     "projects": "Projects",
     "services": "Services",
     "contact": "Contact",
+    "cta": "Start a project",
     "menu": "Menu",
     "toggleTheme": "Toggle theme",
     "switchLanguage": "العربية",
@@ -20,7 +21,30 @@
     "yearsExp": "years shipping production code",
     "projectsDone": "projects delivered",
     "shipped": "Recently shipped",
-    "allProjects": "All {count} projects"
+    "allProjects": "All {count} projects",
+    "shippedCount": "{count, plural, one {# shipped project} other {# shipped projects}}",
+    "spec": {
+      "experience": "Experience",
+      "years": "{count}+ years",
+      "projects": "Shipped",
+      "projectsValue": "{count, plural, one {# project} other {# projects}}",
+      "current": "Currently at",
+      "status": "Status"
+    },
+    "trace": {
+      "title": "One request through every layer I build",
+      "page": "Page",
+      "routing": "Locale & routing",
+      "api": "API",
+      "auth": "Access check",
+      "cache": "Cache",
+      "db": "Database",
+      "render": "Render",
+      "ui": "Interface",
+      "server": "Server",
+      "data": "Data",
+      "note": "Illustrative timings"
+    }
   },
   "about": {
     "eyebrow": "About me",
@@ -30,9 +54,17 @@
     "phone": "Phone"
   },
   "skills": {
-    "eyebrow": "Tech stack",
-    "title": "Tools I use to ship production apps",
-    "lead": "The stack I reach for every day on real client work — from the interface down to the database and deployment.",
+    "eyebrow": "The layers",
+    "title": "From the pixel down to the disk",
+    "lead": "Ordered the way a request travels: what people see at the top, where the data lives further down.",
+    "depth": {
+      "frontend": "what people see",
+      "backend": "business logic",
+      "database": "where data persists",
+      "devops": "how it ships",
+      "tools": "day-to-day tooling",
+      "ai": "assisted workflow"
+    },
     "countLabel": "{count, plural, one {technology} other {technologies}}",
     "groupsLabel": "{count, plural, one {area} other {areas}}",
     "categories": {
@@ -48,6 +80,7 @@
     "eyebrow": "Journey",
     "title": "Experience & education",
     "present": "Present",
+    "lead": "Each bar is one role on a shared year axis, so overlapping work shows as parallel tracks.",
     "types": { "work": "Full-time", "freelance": "Freelance", "education": "Education" }
   },
   "projects": {
@@ -55,6 +88,8 @@
     "title": "Projects I've built and shipped",
     "pageTitle": "All projects",
     "pageLead": "Platforms, dashboards and websites built for companies and clients.",
+    "lead": "One featured build, then an index of the rest, newest first.",
+    "featured": "Featured",
     "viewAll": "View all projects",
     "all": "All",
     "live": "Live site",
@@ -86,7 +121,9 @@
   },
   "services": {
     "eyebrow": "What I do",
-    "title": "How I can help your product"
+    "title": "How I can help your product",
+    "lead": "Next to each service: the layers of the stack it touches.",
+    "layers": "Layers covered"
   },
   "contact": {
     "eyebrow": "Contact",
