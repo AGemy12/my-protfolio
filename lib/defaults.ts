@@ -7,14 +7,14 @@ type Seed<T> = Omit<T, "_id">;
 
 export const defaultSettings: Settings = {
   name: { en: "Ahmad Marzouk", ar: "أحمد مرزوق" },
-  role: { en: "Full Stack Developer", ar: "مطوّر ويب متكامل" },
+  role: { en: "Full Stack Developer", ar: "مطوّر Full Stack" },
   headline: {
     en: "I build web products end to end — from the *database* to the *pixels*.",
     ar: "أبني منتجات الويب من البداية للنهاية — من *قاعدة البيانات* حتى *الواجهة*.",
   },
   bio: {
     en: "Full Stack JavaScript developer with 3+ years of experience shipping scalable web applications with Next.js, React, Node.js and NestJS. I design the data, build secure APIs and craft fast, SEO-friendly interfaces.",
-    ar: "مطوّر JavaScript متكامل بخبرة تزيد عن 3 سنوات في بناء تطبيقات ويب قابلة للتوسع باستخدام Next.js وReact وNode.js وNestJS. أصمّم البيانات، وأبني واجهات برمجية آمنة، وأطوّر واجهات سريعة ومتوافقة مع محركات البحث.",
+    ar: "مطوّر Full Stack بخبرة تزيد عن 3 سنوات في بناء تطبيقات ويب قابلة للتوسع باستخدام Next.js وReact وNode.js وNestJS. أصمّم البيانات، وأبني واجهات برمجية آمنة، وأطوّر واجهات سريعة ومتوافقة مع محركات البحث.",
   },
   about: {
     en: "I work on the whole product: the database, the API behind it, and the interface people use every day. Owning every layer keeps the product consistent and easier to grow.\n\nOn the backend I design modular REST APIs with NestJS and Node.js, model data in PostgreSQL and MongoDB with Prisma and Mongoose, and secure them with JWT, guards and role-based access control. On the frontend I build fast, SEO-optimized interfaces with Next.js (App Router, SSR, SSG), React and Tailwind CSS.\n\nI work directly with business stakeholders, own features from requirements to production, and care about clean, maintainable and reusable code.",
@@ -23,7 +23,7 @@ export const defaultSettings: Settings = {
   location: { en: "Beni Suef, Egypt · Remote", ar: "بني سويف، مصر · عن بُعد" },
   heroRoles: {
     en: ["Full Stack Developer", "Next.js on the frontend", "NestJS on the backend", "From idea to production"],
-    ar: ["مطوّر ويب متكامل", "Next.js في الواجهات", "NestJS في الخوادم", "من الفكرة حتى الإطلاق"],
+    ar: ["مطوّر Full Stack", "Next.js في الواجهات", "NestJS في الخوادم", "من الفكرة حتى الإطلاق"],
   },
   email: "aggamal98@gmail.com",
   phone: "+20 114 956 0988",
@@ -39,11 +39,11 @@ export const defaultSettings: Settings = {
   projectsDone: 10,
   seoTitle: {
     en: "Ahmad Marzouk — Full Stack Developer (Next.js & NestJS)",
-    ar: "أحمد مرزوق — مطوّر ويب متكامل (Next.js و NestJS)",
+    ar: "أحمد مرزوق — مطوّر Full Stack (Next.js و NestJS)",
   },
   seoDescription: {
     en: "Full Stack JavaScript developer building scalable web apps with Next.js, React, Node.js, NestJS, MongoDB and PostgreSQL.",
-    ar: "مطوّر JavaScript متكامل يبني تطبيقات ويب قابلة للتوسع باستخدام Next.js وReact وNode.js وNestJS وMongoDB وPostgreSQL.",
+    ar: "مطوّر Full Stack يبني تطبيقات ويب قابلة للتوسع باستخدام Next.js وReact وNode.js وNestJS وMongoDB وPostgreSQL.",
   },
   ogImage: "",
   sections: { about: true, skills: true, experience: true, projects: true, services: true, contact: true },
@@ -51,7 +51,7 @@ export const defaultSettings: Settings = {
 
 const project = (p: Partial<Seed<Project>> & Pick<Seed<Project>, "slug" | "title" | "summary">): Seed<Project> => ({
   description: { en: "", ar: "" },
-  role: { en: "Full Stack Developer", ar: "مطوّر متكامل" },
+  role: { en: "Full Stack Developer", ar: "مطوّر Full Stack" },
   cover: "",
   gallery: [],
   tech: [],
@@ -227,7 +227,7 @@ export const defaultExperience: Seed<Experience>[] = [
   {
     company: "DeyarTech",
     companyUrl: "https://deyartech.com",
-    role: { en: "Full Stack Developer", ar: "مطوّر ويب متكامل" },
+    role: { en: "Full Stack Developer", ar: "مطوّر Full Stack" },
     location: { en: "Remote", ar: "عن بُعد" },
     type: "work",
     start: "2022",
@@ -251,7 +251,7 @@ export const defaultExperience: Seed<Experience>[] = [
   {
     company: "Freelance",
     companyUrl: "",
-    role: { en: "Full Stack Developer", ar: "مطوّر ويب متكامل (عمل حر)" },
+    role: { en: "Full Stack Developer", ar: "مطوّر Full Stack (عمل حر)" },
     location: { en: "Remote", ar: "عن بُعد" },
     type: "freelance",
     start: "2021",
