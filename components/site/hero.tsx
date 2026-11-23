@@ -2,12 +2,12 @@ import { Fragment } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowDownToLine, ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import { tr, trList, type Experience, type Project, type Settings } from "@/lib/types";
+import { tr, trList, type Experience, type Project, type Settings, type Skill } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RotatingRoles } from "./hero-fx";
 import { Reveal } from "./reveal";
-import { ProjectMarquee } from "./marquee";
+import { SkillMarquee } from "./marquee";
 import { Trace } from "./trace";
 
 /** Renders `*word*` in the headline in the ember colour (editable from the dashboard). */
@@ -27,10 +27,12 @@ export async function Hero({
   settings: s,
   projects,
   experience,
+  skills,
 }: {
   settings: Settings;
   projects: Project[];
   experience: Experience[];
+  skills: Skill[];
 }) {
   const locale = await getLocale();
   const t = await getTranslations("hero");
@@ -138,7 +140,7 @@ export async function Hero({
           </dl>
         </Reveal>
 
-        <ProjectMarquee projects={projects} label={t("shipped")} className="mt-12" />
+        <SkillMarquee skills={skills} label={t("stack")} className="mt-12" />
       </div>
     </section>
   );

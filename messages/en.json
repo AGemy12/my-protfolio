@@ -22,7 +22,8 @@
     "projectsDone": "projects delivered",
     "shipped": "Recently shipped",
     "allProjects": "All {count} projects",
-    "shippedCount": "{count, plural, one {# shipped project} other {# shipped projects}}",
+    "stack": "The stack I work with",
+    "shippedCount":"{count, plural, one {# shipped project} other {# shipped projects}}",
     "spec": {
       "experience": "Experience",
       "years": "{count}+ years",

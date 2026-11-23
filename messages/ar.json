@@ -22,7 +22,8 @@
     "projectsDone": "مشروعاً مُسلَّماً",
     "shipped": "أحدث ما أطلقته",
     "allProjects": "كل المشاريع ({count})",
-    "shippedCount": "{count, plural, one {مشروع واحد منشور} two {مشروعان منشوران} few {# مشاريع منشورة} other {# مشروعاً منشوراً}}",
+    "stack": "التقنيات التي أعمل بها",
+    "shippedCount":"{count, plural, one {مشروع واحد منشور} two {مشروعان منشوران} few {# مشاريع منشورة} other {# مشروعاً منشوراً}}",
     "spec": {
       "experience": "الخبرة",
       "years": "+{count} سنوات",
