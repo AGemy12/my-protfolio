@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { del } from "@vercel/blob";
 import { connectDB } from "../db";
 import { requireAdmin } from "../auth";
@@ -17,6 +18,22 @@ const registry = {
   skills: { model: SkillModel, schema: skillSchema },
   services: { model: ServiceModel, schema: serviceSchema },
 } as const;
+
+const BLOB_URL = /^https:\/\/[^/]+\.public\.blob\.vercel-storage\.com\//;
+
+/**
+ * Deletes these Blob files unless saved content still uses them (the same image
+ * can be picked from the media library for more than one item).
+ */
+async function deleteUnusedBlobs(urls: unknown[]) {
+  const candidates = [...new Set(urls)].filter((u): u is string => typeof u === "string" && BLOB_URL.test(u));
+  if (!candidates.length || !process.env.BLOB_READ_WRITE_TOKEN) return;
+  await connectDB();
+  const models = [SettingsModel, ...Object.values(registry).map((r) => r.model)];
+  const inUse = JSON.stringify(await Promise.all(models.map((m) => m.find().lean())));
+  const unused = candidates.filter((url) => !inUse.includes(url));
+  if (unused.length) await del(unused);
+}
 
 /** Content changed → regenerate every statically rendered page (both locales). */
 function refresh() {
@@ -61,8 +78,16 @@ export async function deleteItem(resource: ResourceKey, id: string): Promise<Act
   try {
     await requireAdmin();
     await connectDB();
-    await registry[resource].model.findByIdAndDelete(id);
+    const removed = await registry[resource].model.findByIdAndDelete(id).lean<Record<string, unknown>>();
     refresh();
+    if (removed && resource === "projects") {
+      // Cleans up the project's images after the response, so the list updates right away.
+      after(() =>
+        deleteUnusedBlobs([removed.cover, ...((removed.gallery as unknown[]) ?? [])]).catch((error) =>
+          console.error("[blob cleanup]", error),
+        ),
+      );
+    }
     return { ok: true };
   } catch (error) {
     return fail(error);
@@ -172,7 +197,7 @@ export async function deleteMessage(id: string): Promise<ActionResult> {
 export async function deleteBlob(url: string): Promise<ActionResult> {
   try {
     await requireAdmin();
-    if (!/^https:\/\/[^/]+\.public\.blob\.vercel-storage\.com\//.test(url)) {
+    if (!BLOB_URL.test(url)) {
       return { ok: false, error: "notBlob" };
     }
     await del(url);

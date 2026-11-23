@@ -118,8 +118,21 @@ const MessageSchema = define(  {
 const AdminSchema = define(  {
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     passwordHash: { type: String, required: true },
+    // Stored in every session token; bumping it signs out all existing sessions.
+    sessionVersion: { type: Number, default: 0 },
   },
   opts,
+);
+
+// Fixed-window counters for login attempts and contact messages. Kept in the DB
+// (not in memory) so the limit holds across serverless instances; the TTL index
+// removes each window once it ends.
+const RateLimitSchema = define(  {
+    key: { type: String, required: true, unique: true },
+    count: { type: Number, default: 0 },
+    expiresAt: { type: Date, required: true, expires: 0 },
+  },
+  { versionKey: false },
 );
 
 export const SettingsModel = model("Settings", SettingsSchema);
@@ -129,3 +142,4 @@ export const SkillModel = model("Skill", SkillSchema);
 export const ServiceModel = model("Service", ServiceSchema);
 export const MessageModel = model("Message", MessageSchema);
 export const AdminModel = model("Admin", AdminSchema);
+export const RateLimitModel = model("RateLimit", RateLimitSchema);

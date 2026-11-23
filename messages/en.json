@@ -164,6 +164,13 @@
     "text": "The page you're looking for doesn't exist or was moved.",
     "home": "Back home"
   },
+  "error": {
+    "title": "Something went wrong",
+    "text": "This page didn't load properly. Try again, or come back in a moment.",
+    "retry": "Try again",
+    "home": "Back home",
+    "code": "Error code"
+  },
   "admin": {
     "brand": "Dashboard",
     "nav": {
@@ -186,7 +193,8 @@
       "password": "Password",
       "submit": "Sign in",
       "invalid": "Wrong email or password.",
-      "server": "Could not reach the database. Check MONGODB_URI and AUTH_SECRET."
+      "server": "Could not reach the database. Check MONGODB_URI and AUTH_SECRET.",
+      "locked": "Too many wrong attempts. Try again in 15 minutes."
     },
     "common": {
       "save": "Save changes",
@@ -344,7 +352,12 @@
       "submit": "Update password",
       "changed": "Password updated",
       "passwordRules": "Passwords must match and be at least 8 characters.",
-      "wrongPassword": "Current password is incorrect."
+      "wrongPassword": "Current password is incorrect.",
+      "changeText": "Changing the password also signs out every other device.",
+      "sessions": "Sessions",
+      "everywhere": "Sign out of all devices",
+      "everywhereConfirm": "Sign out of all devices?",
+      "everywhereText": "Ends every open session, including this one. You will need to sign in again."
     }
   }
 }

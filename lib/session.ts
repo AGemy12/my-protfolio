@@ -1,4 +1,6 @@
-// Edge-safe session helpers (used by proxy.ts and server code). No DB access here.
+// Edge-safe session helpers (used by proxy.ts and server code). No DB access here:
+// the proxy only checks the signature; lib/auth.ts also checks the token is still
+// valid against the admin record (see `sessionVersion`).
 import { SignJWT, jwtVerify } from "jose";
 
 export const SESSION_COOKIE = "pf_session";
@@ -12,10 +14,11 @@ function secret() {
   return new TextEncoder().encode(value);
 }
 
-export type SessionPayload = { sub: string; email: string };
+/** `v` is the admin's sessionVersion when the token was issued. */
+export type SessionPayload = { sub: string; email: string; v: number };
 
 export async function signSession(payload: SessionPayload) {
-  return new SignJWT({ email: payload.email })
+  return new SignJWT({ email: payload.email, v: payload.v })
     .setProtectedHeader({ alg: "HS256" })
     .setSubject(payload.sub)
     .setIssuedAt()
@@ -28,8 +31,18 @@ export async function verifySession(token: string | undefined): Promise<SessionP
   try {
     const { payload } = await jwtVerify(token, secret(), { algorithms: ["HS256"] });
     if (!payload.sub || typeof payload.email !== "string") return null;
-    return { sub: payload.sub, email: payload.email };
+    // Tokens issued before versioning existed carry no `v`; they count as version 0.
+    const v = typeof payload.v === "number" ? payload.v : 0;
+    return { sub: payload.sub, email: payload.email, v };
   } catch {
     return null;
   }
 }
+
+export const sessionCookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
+  path: "/",
+  maxAge: SESSION_MAX_AGE,
+} as const;

@@ -1,6 +1,5 @@
 "use server";
 
-import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { notifyWhatsApp } from "../whatsapp";
@@ -8,13 +7,15 @@ import { connectDB } from "../db";
 import { MessageModel } from "../models";
 import { contactSchema } from "../schemas";
 import { checkContact, type FieldErrors } from "../contact-rules";
+import { clientIp, rateHit } from "../rate-limit";
 
 export type ContactState =
   | { ok?: boolean; error?: "validation" | "rate" | "server"; fieldErrors?: FieldErrors }
   | undefined;
 
-// Best-effort per-instance limiter: 5 messages per IP per 10 minutes.
-const hits = new Map<string, number[]>();
+// At most 5 messages per IP per 10 minutes, counted in the DB so it holds across instances.
+const CONTACT_MAX = 5;
+const CONTACT_WINDOW_MS = 10 * 60_000;
 
 export async function sendMessage(_: ContactState, formData: FormData): Promise<ContactState> {
   const values = Object.fromEntries(formData);
@@ -25,13 +26,8 @@ export async function sendMessage(_: ContactState, formData: FormData): Promise<
   if (!parsed.success) return { error: "validation" };
   if (parsed.data.website) return { ok: true }; // bot filled the honeypot: pretend success
 
-  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < 10 * 60_000);
-  if (recent.length >= 5) return { error: "rate" };
-  hits.set(ip, [...recent, now]);
-
   try {
+    if ((await rateHit(`contact:${await clientIp()}`, CONTACT_WINDOW_MS)) > CONTACT_MAX) return { error: "rate" };
     await connectDB();
     const { name, email, whatsapp, subject, message } = parsed.data;
     await MessageModel.create({ name, email, whatsapp, subject, message });
