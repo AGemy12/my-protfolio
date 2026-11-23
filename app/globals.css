@@ -190,9 +190,34 @@ html {
   }
 }
 
+/* ── Marquee (makkook.ai partner strip) ───────────────────────────────── */
+
+/* The track holds the items twice; sliding it by half its width loops seamlessly. */
+.marquee-track {
+  animation: marquee-scroll var(--marquee-duration, 30s) linear infinite;
+}
+.marquee-track:hover,
+.marquee-track:focus-within {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-mask {
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .marquee-track {
+    animation: none !important;
   }
   *,
   *::before,

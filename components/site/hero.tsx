@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RotatingRoles } from "./hero-fx";
 import { Reveal } from "./reveal";
+import { ProjectMarquee } from "./marquee";
 import { Trace } from "./trace";
 
 /** Renders `*word*` in the headline in the ember colour (editable from the dashboard). */
@@ -136,6 +137,8 @@ export async function Hero({
             ))}
           </dl>
         </Reveal>
+
+        <ProjectMarquee projects={projects} label={t("shipped")} className="mt-12" />
       </div>
     </section>
   );
