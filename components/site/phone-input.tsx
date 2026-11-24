@@ -3,27 +3,63 @@
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Check, ChevronDown } from "lucide-react";
-import PhoneInputWithCountry, { type Country, type Value } from "react-phone-number-input";
-import { getCountryCallingCode, getExampleNumber } from "libphonenumber-js";
-import examples from "libphonenumber-js/mobile/examples";
+import PhoneInputWithCountry, {
+  type Country,
+  type Value,
+} from "react-phone-number-input";
+import { getCountryCallingCode } from "libphonenumber-js";
 import ar from "react-phone-number-input/locale/ar.json";
 import en from "react-phone-number-input/locale/en.json";
-import { FALLBACK_COUNTRY, SUGGESTED_COUNTRIES, flagSrc, guessCountry, smartInternational } from "@/lib/phone";
+import {
+  FALLBACK_COUNTRY,
+  SUGGESTED_COUNTRIES,
+  flagSrc,
+  guessCountry,
+  smartInternational,
+} from "@/lib/phone";
 import { useMounted } from "@/lib/use-mounted";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-function Flag({ country, className }: { country?: Country; className?: string }) {
+function Flag({
+  country,
+  className,
+}: {
+  country?: Country;
+  className?: string;
+}) {
   return (
     <span
       aria-hidden
-      className={cn("inline-block h-3.5 w-5 shrink-0 overflow-hidden rounded-[3px] bg-muted ring-1 ring-foreground/10", className)}
+      className={cn(
+        "inline-block h-3.5 w-5 shrink-0 overflow-hidden rounded-[3px] bg-muted ring-1 ring-foreground/10",
+        className,
+      )}
     >
       {country && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={flagSrc(country)} alt="" width={20} height={14} loading="lazy" className="size-full object-cover" />
+        <img
+          src={flagSrc(country)}
+          alt=""
+          width={20}
+          height={14}
+          loading="lazy"
+          className="size-full object-cover"
+        />
       )}
     </span>
   );
@@ -43,11 +79,21 @@ type CountrySelectProps = {
 };
 
 /** Flag + dial code button that opens a searchable list of every country. */
-function CountrySelect({ value, onChange, options, disabled, readOnly, suggested, invalid }: CountrySelectProps) {
+function CountrySelect({
+  value,
+  onChange,
+  options,
+  disabled,
+  readOnly,
+  suggested,
+  invalid,
+}: CountrySelectProps) {
   const t = useTranslations("contact.phone");
   const locale = useLocale();
   const [open, setOpen] = useState(false);
-  const countries = options.filter((o): o is Option & { value: Country } => Boolean(o.value) && !o.divider);
+  const countries = options.filter(
+    (o): o is Option & { value: Country } => Boolean(o.value) && !o.divider,
+  );
   const top = suggested
     .map((c) => countries.find((o) => o.value === c))
     .filter((o): o is Option & { value: Country } => Boolean(o));
@@ -67,10 +113,18 @@ function CountrySelect({ value, onChange, options, disabled, readOnly, suggested
       >
         <Flag country={o.value} />
         <span className="min-w-0 flex-1 truncate">{o.label}</span>
-        <span dir="ltr" className="font-mono text-xs text-muted-foreground tabular-nums">
+        <span
+          dir="ltr"
+          className="font-mono text-xs text-muted-foreground tabular-nums"
+        >
           {code}
         </span>
-        <Check className={cn("size-4 text-brand", o.value === value ? "opacity-100" : "opacity-0")} />
+        <Check
+          className={cn(
+            "size-4 text-brand",
+            o.value === value ? "opacity-100" : "opacity-0",
+          )}
+        />
       </CommandItem>
     );
   };
@@ -90,11 +144,19 @@ function CountrySelect({ value, onChange, options, disabled, readOnly, suggested
           )}
         >
           <Flag country={value} />
-          {value && <span className="font-mono text-[13px] text-muted-foreground tabular-nums">+{getCountryCallingCode(value)}</span>}
+          {value && (
+            <span className="font-mono text-[13px] text-muted-foreground tabular-nums">
+              +{getCountryCallingCode(value)}
+            </span>
+          )}
           <ChevronDown className="size-3.5 text-muted-foreground" />
         </button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-80 p-0" dir={locale === "ar" ? "rtl" : "ltr"}>
+      <PopoverContent
+        align="start"
+        className="w-80 p-0"
+        dir={locale === "ar" ? "rtl" : "ltr"}
+      >
         <Command>
           <CommandInput placeholder={t("search")} />
           <CommandList className="max-h-72">
@@ -161,8 +223,9 @@ export function PhoneInput({
   const defaultCountry = mounted ? guessCountry() : FALLBACK_COUNTRY;
   const [country, setCountry] = useState<Country | undefined>();
   const current = country ?? defaultCountry;
-  const example = getExampleNumber(current, examples)?.formatNational();
-  const suggested = [...new Set<Country>([defaultCountry, ...SUGGESTED_COUNTRIES])];
+  const suggested = [
+    ...new Set<Country>([defaultCountry, ...SUGGESTED_COUNTRIES]),
+  ];
 
   return (
     <PhoneInputWithCountry
@@ -181,7 +244,6 @@ export function PhoneInput({
       // the plain input reads what NumberInput hands it, so the added "+" is never lost
       smartCaret={false}
       id={id}
-      placeholder={example}
       autoComplete="tel"
       aria-invalid={invalid || undefined}
       aria-describedby={describedBy}
