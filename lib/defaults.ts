@@ -386,6 +386,38 @@ export const defaultProjects: Seed<Project>[] = [
     liveUrl: "https://amirahrconsultancy.com/",
     order: 10,
   }),
+  project({
+    slug: "mahmoud-studio",
+    title: { en: "Mahmoud Studio", ar: "Mahmoud Studio" },
+    summary: {
+      en: "Bilingual portfolio for a graphic designer and video editor, with a dashboard that edits every part of the site, from the works and their videos to SEO.",
+      ar: "بورتفوليو ثنائي اللغة لمصمم جرافيك ومونتير فيديو، بلوحة تحكم تعدّل كل جزء في الموقع، من الأعمال وفيديوهاتها حتى إعدادات SEO.",
+    },
+    description: {
+      en: "Designed and built, on my own, the portfolio of a graphic designer and video editor, in Arabic (right-to-left) and English, with light and dark themes. The look follows a written design spec: a cinematic dark stage, glass surfaces and soft glows in the pink and blue taken from his portrait, with the saved theme applied before the first paint so it never flashes.\n\nThe site shows his work by category (designs and Reels) with image and video galleries, a wall of client logos, and a contact page with every channel. A brief form turns a visitor's request into a ready WhatsApp message, and the CV opens in an in-page PDF viewer or downloads with a clean file name.\n\nA dashboard edits every section: works and their media, categories, services, reviews, downloadable resources, stats, skills, contact channels, the hero, SEO, and a scheduled pop-up that promotes a service. Each section is a single definition that drives its table, its form (with Arabic and English fields side by side) and its server-side validation. Large videos upload straight from the browser to Vercel Blob through short-lived signed URLs, and every save refreshes the cached public pages.\n\nSEO is built from the content: canonical URLs, Arabic/English hreflang, Open Graph and X cards per page, a sitemap of every published work and service, and schema.org Person data. Deploys update the database schema and seed the content only when the database is empty, so dashboard edits are never overwritten.",
+      ar: "تصميم وبناء بورتفوليو مصمم جرافيك ومونتير فيديو بالكامل بمفردي، بالعربية (من اليمين لليسار) والإنجليزية، مع وضعين فاتح وداكن. يتبع الشكل مواصفات تصميم مكتوبة: مسرح داكن سينمائي، وأسطح زجاجية، وتوهّجات بالوردي والأزرق المأخوذين من صورته، مع تطبيق الوضع المحفوظ قبل أول رسم للصفحة فلا يحدث وميض.\n\nيعرض الموقع أعماله حسب التصنيف (التصاميم والريلز) بمعارض صور وفيديو، وجداراً لشعارات العملاء، وصفحة تواصل بكل القنوات. ونموذج الطلب يحوّل طلب الزائر إلى رسالة واتساب جاهزة، والسيرة الذاتية تُفتح في عارض PDF داخل الصفحة أو تُحمَّل باسم ملف واضح.\n\nوتعدّل لوحة التحكم كل الأقسام: الأعمال ووسائطها، والتصنيفات، والخدمات، والآراء، والملفات القابلة للتحميل، والأرقام، والمهارات، وقنوات التواصل، والواجهة، وإعدادات SEO، ونافذة منبثقة مجدولة تروّج لخدمة. وكل قسم تعريف واحد يولّد جدوله ونموذجه (بحقول العربية والإنجليزية جنباً إلى جنب) والتحقق منه على الخادم. وتُرفع الفيديوهات الكبيرة من المتصفح مباشرة إلى Vercel Blob بروابط موقّعة قصيرة العمر، وكل حفظ يحدّث صفحات الموقع المخزّنة مؤقتاً.\n\nويُبنى الـ SEO من المحتوى نفسه: روابط أساسية، وhreflang للعربية والإنجليزية، ووسوم Open Graph وبطاقات X لكل صفحة، وخريطة موقع لكل عمل وخدمة منشورة، وبيانات schema.org للشخص. وعند كل نشر تُحدَّث بنية قاعدة البيانات، ولا يُزرع المحتوى إلا إذا كانت القاعدة فارغة، فلا تضيع تعديلات لوحة التحكم أبداً.",
+    },
+    cover: "/images/projects/mahmoud-studio-cover.jpg",
+    gallery: [
+      "/images/projects/mahmoud-studio-overview.webp",
+      "/images/projects/mahmoud-studio-home.webp",
+      "/images/projects/mahmoud-studio-home-light.webp",
+      "/images/projects/mahmoud-studio-selected-works.webp",
+      "/images/projects/mahmoud-studio-clients.webp",
+      "/images/projects/mahmoud-studio-works.webp",
+      "/images/projects/mahmoud-studio-works-grid.webp",
+      "/images/projects/mahmoud-studio-design.webp",
+      "/images/projects/mahmoud-studio-design-grid.webp",
+      "/images/projects/mahmoud-studio-reels.webp",
+      "/images/projects/mahmoud-studio-reels-grid.webp",
+      "/images/projects/mahmoud-studio-contact.webp",
+    ],
+    tech: ["Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui", "Prisma", "PostgreSQL", "Vercel Blob", "Zustand"],
+    category: "other",
+    year: 2026,
+    liveUrl: "https://m-portfolio-taupe.vercel.app/",
+    order: 11,
+  }),
 ];
 
 export const defaultExperience: Seed<Experience>[] = [
