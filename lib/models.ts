@@ -43,7 +43,9 @@ const SettingsSchema = define(  {
     seoDescription: L,
     ogImage: String,
     sections: { type: Schema.Types.Mixed, default: {} },
-    texts: { type: Schema.Types.Mixed, default: {} },
+    // Legacy: texts changed before "Site texts" existed (see lib/site-texts.ts).
+    // Read until the next save of Site texts, which removes it.
+    texts: Schema.Types.Mixed,
   },
   opts,
 );
@@ -142,6 +144,15 @@ const ContactFormSchema = define(  {
   opts,
 );
 
+// Site texts changed in the dashboard (one document): [{ key: "hero.available", en, ar }].
+// An array rather than an object because the keys contain dots.
+const SiteTextSchema = define(  {
+    key: { type: String, default: "main", unique: true },
+    items: { type: Schema.Types.Mixed, default: [] },
+  },
+  opts,
+);
+
 const AdminSchema = define(  {
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     passwordHash: { type: String, required: true },
@@ -170,5 +181,6 @@ export const SkillModel = model("Skill", SkillSchema);
 export const ServiceModel = model("Service", ServiceSchema);
 export const MessageModel = model("Message", MessageSchema);
 export const ContactFormModel = model("ContactForm", ContactFormSchema);
+export const SiteTextModel = model("SiteText", SiteTextSchema);
 export const AdminModel = model("Admin", AdminSchema);
 export const RateLimitModel = model("RateLimit", RateLimitSchema);

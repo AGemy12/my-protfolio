@@ -2,14 +2,12 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { ServiceIcon } from "@/components/icons";
 import {
-  siteText,
   tr,
   trList,
   type Experience,
   type Project,
   type Service,
   type Settings,
-  type SiteTexts,
 } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./reveal";
@@ -37,8 +35,8 @@ export async function About({ settings: s }: { settings: Settings }) {
   return (
     <Section
       id="about"
-      eyebrow={siteText(s.texts, "aboutEyebrow", locale, t("eyebrow"))}
-      title={siteText(s.texts, "aboutTitle", locale, t("title"))}
+      eyebrow={t("eyebrow")}
+      title={t("title")}
     >
       <div className="grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
         <Reveal>
@@ -80,15 +78,15 @@ export async function About({ settings: s }: { settings: Settings }) {
 
 /* ── Experience ─────────────────────────────────────────────────────────── */
 
-export async function ExperienceSection({ items, texts }: { items: Experience[]; texts: SiteTexts }) {
+export async function ExperienceSection({ items }: { items: Experience[] }) {
   const locale = await getLocale();
   const t = await getTranslations("experience");
 
   return (
     <Section
       id="experience"
-      eyebrow={siteText(texts, "experienceEyebrow", locale, t("eyebrow"))}
-      title={siteText(texts, "experienceTitle", locale, t("title"))}
+      eyebrow={t("eyebrow")}
+      title={t("title")}
     >
       <ol className="border-b">
         {items.map((e, i) => {
@@ -136,7 +134,7 @@ export async function ExperienceSection({ items, texts }: { items: Experience[];
 
 /* ── Projects: a quiet gallery — the featured build wide, then pairs ──────── */
 
-export async function ProjectsSection({ projects, texts }: { projects: Project[]; texts: SiteTexts }) {
+export async function ProjectsSection({ projects }: { projects: Project[] }) {
   const locale = await getLocale();
   const t = await getTranslations("projects");
   const lead = projects.find((p) => p.featured) ?? projects[0];
@@ -148,8 +146,8 @@ export async function ProjectsSection({ projects, texts }: { projects: Project[]
   return (
     <Section
       id="projects"
-      eyebrow={siteText(texts, "projectsEyebrow", locale, t("eyebrow"))}
-      title={siteText(texts, "projectsTitle", locale, t("title"))}
+      eyebrow={t("eyebrow")}
+      title={t("title")}
       action={<SectionLink href="/projects">{t("viewAll")}</SectionLink>}
     >
       <div className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:gap-x-10 lg:gap-y-16">
@@ -177,14 +175,14 @@ export async function ProjectsSection({ projects, texts }: { projects: Project[]
 
 /* ── Services ───────────────────────────────────────────────────────────── */
 
-export async function ServicesSection({ services, texts }: { services: Service[]; texts: SiteTexts }) {
+export async function ServicesSection({ services }: { services: Service[] }) {
   const locale = await getLocale();
   const t = await getTranslations("services");
   return (
     <Section
       id="services"
-      eyebrow={siteText(texts, "servicesEyebrow", locale, t("eyebrow"))}
-      title={siteText(texts, "servicesTitle", locale, t("title"))}
+      eyebrow={t("eyebrow")}
+      title={t("title")}
     >
       <div className="grid sm:grid-cols-2">
         {services.map((s, i) => (
@@ -217,7 +215,7 @@ export async function ServicesSection({ services, texts }: { services: Service[]
 /* ── Contact ────────────────────────────────────────────────────────────── */
 
 export async function ContactSection({ settings: s }: { settings: Settings }) {
-  const [locale, t, form] = await Promise.all([getLocale(), getTranslations("contact"), getContactForm()]);
+  const [t, form] = await Promise.all([getTranslations("contact"), getContactForm()]);
   const targets = { whatsapp: waDigits(s.whatsapp) || waDigits(s.phone), email: s.email };
   // Only the ways to send that have somewhere to go; sending from the site always works as a fallback.
   const ready: Record<ContactChannel, boolean> = {
@@ -232,15 +230,15 @@ export async function ContactSection({ settings: s }: { settings: Settings }) {
     <section id="contact" aria-labelledby="contact-title" className="mx-auto max-w-6xl px-4 py-20 sm:px-6 md:py-24">
       <div className="grid gap-12 border-t border-foreground/20 pt-14 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-16">
         <Reveal>
-          <Eyebrow>{siteText(s.texts, "contactEyebrow", locale, t("eyebrow"))}</Eyebrow>
+          <Eyebrow>{t("eyebrow")}</Eyebrow>
           <h2
             id="contact-title"
             className="mt-4 text-4xl leading-[1.15] font-bold text-balance sm:text-5xl ltr:tracking-tight rtl:leading-[1.35]"
           >
-            {siteText(s.texts, "contactTitle", locale, t("title"))}
+            {t("title")}
           </h2>
           <p className="mt-5 max-w-md text-lg text-muted-foreground">
-            {siteText(s.texts, "contactLead", locale, t("lead"))}
+            {t("lead")}
           </p>
           {s.email && (
             <a

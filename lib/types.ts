@@ -6,22 +6,6 @@ export type LList = { en: string[]; ar: string[] };
 export const SECTION_KEYS = ["about", "skills", "experience", "projects", "services", "contact"] as const;
 export type SectionKey = (typeof SECTION_KEYS)[number];
 
-/**
- * Site wording that can be overridden from the dashboard. Empty means "use the
- * built-in text" (messages/*.json), so nothing has to be filled in.
- */
-export const TEXT_GROUPS = {
-  hero: ["heroPrimary", "heroSecondary"],
-  about: ["aboutEyebrow", "aboutTitle"],
-  experience: ["experienceEyebrow", "experienceTitle"],
-  projects: ["projectsEyebrow", "projectsTitle"],
-  services: ["servicesEyebrow", "servicesTitle"],
-  contact: ["contactEyebrow", "contactTitle", "contactLead"],
-} as const;
-export type TextKey = (typeof TEXT_GROUPS)[keyof typeof TEXT_GROUPS][number];
-export const TEXT_KEYS = Object.values(TEXT_GROUPS).flat() as TextKey[];
-export type SiteTexts = Partial<Record<TextKey, L>>;
-
 export type Settings = {
   name: L;
   role: L;
@@ -46,7 +30,6 @@ export type Settings = {
   seoDescription: L;
   ogImage: string;
   sections: Record<SectionKey, boolean>;
-  texts: SiteTexts;
 };
 
 /** A project category, managed from the dashboard. Projects point to it by `slug`. */
@@ -139,13 +122,6 @@ export function tr(value: L | undefined, locale: string) {
   if (!value) return "";
   const primary = locale === "ar" ? value.ar : value.en;
   return primary?.trim() ? primary : (locale === "ar" ? value.en : value.ar) || "";
-}
-
-/** A dashboard override for site wording, or `fallback` when it is empty in this language. */
-export function siteText(texts: SiteTexts | undefined, key: TextKey, locale: string, fallback: string) {
-  const value = texts?.[key];
-  const own = (locale === "ar" ? value?.ar : value?.en)?.trim();
-  return own || fallback;
 }
 
 export function trList(value: LList | undefined, locale: string) {

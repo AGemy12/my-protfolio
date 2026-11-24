@@ -13,10 +13,15 @@ import {
   ProjectModel,
   ServiceModel,
   SettingsModel,
+  SiteTextModel,
   SkillModel,
 } from "../models";
+import { flattenTexts } from "../site-texts";
+import en from "@/messages/en.json";
+import ar from "@/messages/ar.json";
 import {
   categorySchema,
+  siteTextsSchema,
   contactFormSchema,
   experienceSchema,
   projectSchema,
@@ -201,6 +206,30 @@ export async function importStarterContent(): Promise<ActionResult> {
     if (!(await SettingsModel.exists({ key: "main" }))) {
       await SettingsModel.create({ ...defaultSettings, key: "main" });
     }
+    refresh();
+    return { ok: true };
+  } catch (error) {
+    return fail(error);
+  }
+}
+
+/** Saves every changed site text at once (the full set: a text left out goes back to the built-in one). */
+export async function saveSiteTexts(data: unknown): Promise<ActionResult> {
+  try {
+    await requireAdmin();
+    const parsed = siteTextsSchema({ en: flattenTexts(en), ar: flattenTexts(ar) }).safeParse(data);
+    if (!parsed.success) {
+      return {
+        ok: false,
+        error: "validation",
+        issues: parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`),
+      };
+    }
+    await connectDB();
+    const items = Object.entries(parsed.data).map(([key, v]) => ({ key, en: v.en, ar: v.ar }));
+    await SiteTextModel.findOneAndUpdate({ key: "main" }, { key: "main", items }, { upsert: true });
+    // The texts saved under Settings before this page existed were loaded into it, so they now live here.
+    await SettingsModel.updateOne({ key: "main" }, { $unset: { texts: 1 } });
     refresh();
     return { ok: true };
   } catch (error) {

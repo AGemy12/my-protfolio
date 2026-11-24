@@ -83,7 +83,6 @@ export const defaultSettings: Settings = {
     services: true,
     contact: true,
   },
-  texts: {},
 };
 
 const project = (

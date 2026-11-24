@@ -11,8 +11,10 @@ import {
   ProjectModel,
   ServiceModel,
   SettingsModel,
+  SiteTextModel,
   SkillModel,
 } from "./models";
+import { legacyTexts, type TextOverrides } from "./site-texts";
 import {
   defaultCategories,
   defaultExperience,
@@ -51,14 +53,35 @@ export const getSettings = cache(() =>
       const doc = await SettingsModel.findOne({ key: "main" }).lean();
       if (!doc) return null;
       const s = serialize<Settings>(doc);
-      return {
-        ...defaultSettings,
-        ...s,
-        sections: { ...defaultSettings.sections, ...s.sections },
-        texts: { ...defaultSettings.texts, ...s.texts },
-      };
+      return { ...defaultSettings, ...s, sections: { ...defaultSettings.sections, ...s.sections } };
     },
     () => defaultSettings,
+  ),
+);
+
+/** Reads the stored site-text changes: [{ key, en, ar }] → { key: { en, ar } }. */
+export function parseTextItems(items: unknown): TextOverrides {
+  const out: TextOverrides = {};
+  if (!Array.isArray(items)) return out;
+  for (const item of items as { key?: unknown; en?: unknown; ar?: unknown }[]) {
+    if (typeof item?.key !== "string") continue;
+    out[item.key] = { en: typeof item.en === "string" ? item.en : "", ar: typeof item.ar === "string" ? item.ar : "" };
+  }
+  return out;
+}
+
+/** Site texts changed in the dashboard, laid over messages/*.json by i18n/request.ts. */
+export const getSiteTexts = cache(() =>
+  safely<TextOverrides>(
+    async () => {
+      await connectDB();
+      const [doc, settings] = await Promise.all([
+        SiteTextModel.findOne({ key: "main" }).lean<{ items?: unknown }>(),
+        SettingsModel.findOne({ key: "main" }, { texts: 1 }).lean<{ texts?: unknown }>(),
+      ]);
+      return { ...legacyTexts(settings?.texts), ...parseTextItems(doc?.items) };
+    },
+    () => ({}),
   ),
 );
 

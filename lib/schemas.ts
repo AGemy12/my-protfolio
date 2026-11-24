@@ -1,6 +1,7 @@
 // Zod schemas that validate everything the dashboard sends to the server.
 import { z } from "zod";
-import { EXPERIENCE_TYPES, SECTION_KEYS, SKILL_CATEGORIES, TEXT_KEYS } from "./types";
+import { EXPERIENCE_TYPES, SECTION_KEYS, SKILL_CATEGORIES } from "./types";
+import { textProblem } from "./site-texts-check";
 import {
   CONTACT_CHANNELS,
   CONTACT_FIELD_TYPES,
@@ -53,9 +54,6 @@ export const settingsSchema = z.object({
       z.ZodDefault<z.ZodBoolean>
     >,
   ),
-  texts: z
-    .object(Object.fromEntries(TEXT_KEYS.map((k) => [k, L(200).optional()])) as Record<string, z.ZodOptional<ReturnType<typeof L>>>)
-    .default({}),
 });
 
 const slug = (max: number) =>
@@ -122,6 +120,32 @@ export const serviceSchema = z.object({
   published: z.boolean().default(true),
   order,
 });
+
+/* ---------------- site texts ---------------- */
+
+/**
+ * Changed site texts, checked against the built-in ones (`defaults`, flattened
+ * per language): only known keys, valid messages, no placeholders the original
+ * lacks. Unchanged (empty) texts are dropped.
+ */
+export function siteTextsSchema(defaults: { en: Record<string, string>; ar: Record<string, string> }) {
+  return z
+    .record(z.string().max(120), L(2000))
+    .superRefine((texts, ctx) => {
+      for (const [key, value] of Object.entries(texts)) {
+        if (!(key in defaults.en)) {
+          ctx.addIssue({ code: "custom", path: [key], message: "Unknown text" });
+          continue;
+        }
+        for (const lang of ["en", "ar"] as const) {
+          // either language's original may name a placeholder, so both are allowed
+          const problem = value[lang] && textProblem(value[lang], `${defaults.en[key]} ${defaults.ar[key] ?? ""}`);
+          if (problem) ctx.addIssue({ code: "custom", path: [key, lang], message: problem });
+        }
+      }
+    })
+    .transform((texts) => Object.fromEntries(Object.entries(texts).filter(([, v]) => v.en || v.ar)));
+}
 
 /* ---------------- contact form (built in the dashboard) ---------------- */
 

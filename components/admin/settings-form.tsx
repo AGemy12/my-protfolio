@@ -5,7 +5,8 @@ import { useTranslations } from "next-intl";
 import { ExternalLink } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { saveSettings } from "@/lib/actions/content";
-import { SECTION_KEYS, TEXT_GROUPS, type L, type Settings, type TextKey } from "@/lib/types";
+import { Link } from "@/i18n/navigation";
+import { SECTION_KEYS, type L, type Settings } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CardSection, FieldLabel, PageHeader } from "./ui";
@@ -13,12 +14,9 @@ import { FileField, LocalizedField, SwitchField } from "./fields";
 import { useActionToast } from "./resource-form";
 import { SaveBar, useDirty, useFormGuard } from "./save-bar";
 
-const PARTS = ["identity", "hero", "about", "texts", "files", "contact", "social", "visibility", "seo"] as const;
+const PARTS = ["identity", "hero", "about", "files", "contact", "social", "visibility", "seo"] as const;
 
-/** "aboutEyebrow" → "eyebrow", "heroPrimary" → "heroPrimary" (label key in admin.texts). */
-const textLabelKey = (key: TextKey) => key.match(/(Eyebrow|Title|Lead)$/)?.[1].toLowerCase() ?? key;
-
-export function SettingsForm({ initial, textDefaults }: { initial: Settings; textDefaults: Record<TextKey, L> }) {
+export function SettingsForm({ initial }: { initial: Settings }) {
   const t = useTranslations("admin");
   const tNav = useTranslations("nav");
   const router = useRouter();
@@ -87,6 +85,13 @@ export function SettingsForm({ initial, textDefaults }: { initial: Settings; tex
             {t(`profile.${p}`)}
           </a>
         ))}
+        {/* section headings, buttons and every other fixed text moved to their own page */}
+        <Link
+          href="/admin/texts"
+          className="rounded-full border border-dashed px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-brand hover:text-foreground"
+        >
+          {t("nav.texts")}
+        </Link>
       </nav>
 
       <CardSection id="part-identity" title={t("profile.identity")}>
@@ -107,23 +112,6 @@ export function SettingsForm({ initial, textDefaults }: { initial: Settings; tex
 
       <CardSection id="part-about" title={t("profile.about")}>
         {loc("about", { multiline: true, rows: 10, hint: t("profile.aboutHint") })}
-      </CardSection>
-
-      <CardSection id="part-texts" title={t("profile.texts")} description={t("profile.textsHint")}>
-        {(Object.keys(TEXT_GROUPS) as (keyof typeof TEXT_GROUPS)[]).map((group) => (
-          <fieldset key={group} className="space-y-4 rounded-lg border p-4 sm:col-span-2">
-            <legend className="px-1 text-sm font-semibold">{tNav(group === "hero" ? "home" : group)}</legend>
-            {TEXT_GROUPS[group].map((key) => (
-              <LocalizedField
-                key={key}
-                label={t(`texts.${textLabelKey(key)}` as never)}
-                value={s.texts[key] ?? { en: "", ar: "" }}
-                placeholder={textDefaults[key]}
-                onChange={(v) => set("texts", { ...s.texts, [key]: v })}
-              />
-            ))}
-          </fieldset>
-        ))}
       </CardSection>
 
       <CardSection id="part-files" title={t("profile.files")}>

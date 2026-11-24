@@ -9,6 +9,7 @@ import {
   Image as ImageIcon,
   Inbox,
   KeyRound,
+  Languages,
   LayoutDashboard,
   ListChecks,
   LogOut,
@@ -33,6 +34,7 @@ import { Hint } from "./ui";
 const NAV = [
   { href: "/admin", key: "overview", icon: LayoutDashboard },
   { href: "/admin/profile", key: "profile", icon: User },
+  { href: "/admin/texts", key: "texts", icon: Languages },
   { href: "/admin/projects", key: "projects", icon: FolderKanban },
   { href: "/admin/categories", key: "categories", icon: Tags },
   { href: "/admin/experience", key: "experience", icon: Briefcase },

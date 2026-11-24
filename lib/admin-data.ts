@@ -10,9 +10,14 @@ import {
   ProjectModel,
   ServiceModel,
   SettingsModel,
+  SiteTextModel,
   SkillModel,
 } from "./models";
-import { parseContactForm, serialize } from "./data";
+import { parseContactForm, parseTextItems, serialize } from "./data";
+import { flattenTexts, legacyTexts, type BuiltInTexts, type TextOverrides } from "./site-texts";
+import { messageArgs } from "./site-texts-check";
+import en from "@/messages/en.json";
+import ar from "@/messages/ar.json";
 import { defaultCategories, defaultSettings } from "./defaults";
 import { defaultContactForm } from "./contact-form";
 import { resources, type RefOptions, type ResourceKey } from "./resources";
@@ -71,14 +76,30 @@ export async function adminSettings(): Promise<{ settings: Settings; saved: bool
   if (!doc) return { settings: defaultSettings, saved: false };
   const s = serialize<Settings>(doc);
   return {
-    settings: {
-      ...defaultSettings,
-      ...s,
-      sections: { ...defaultSettings.sections, ...s.sections },
-      texts: { ...defaultSettings.texts, ...s.texts },
-    },
+    settings: { ...defaultSettings, ...s, sections: { ...defaultSettings.sections, ...s.sections } },
     saved: true,
   };
+}
+
+/** The built-in texts and the changes saved over them (including ones saved under Settings before). */
+export async function adminSiteTexts(): Promise<{
+  builtIn: BuiltInTexts;
+  /** The {placeholders} each text uses, which a change has to keep. */
+  args: Record<string, string[]>;
+  values: TextOverrides;
+}> {
+  await connectDB();
+  const [doc, settings] = await Promise.all([
+    SiteTextModel.findOne({ key: "main" }).lean<{ items?: unknown }>(),
+    SettingsModel.findOne({ key: "main" }, { texts: 1 }).lean<{ texts?: unknown }>(),
+  ]);
+  const builtIn = { en: flattenTexts(en), ar: flattenTexts(ar) };
+  const args = Object.fromEntries(
+    Object.entries(builtIn.en)
+      .map(([key, text]): [string, string[]] => [key, [...messageArgs(text)]])
+      .filter(([, a]) => a.length),
+  );
+  return { builtIn, args, values: { ...legacyTexts(settings?.texts), ...parseTextItems(doc?.items) } };
 }
 
 export async function adminContactForm() {

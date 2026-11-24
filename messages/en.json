@@ -191,6 +191,7 @@
     "nav": {
       "overview": "Overview",
       "profile": "Profile & site",
+      "texts": "Site texts",
       "projects": "Projects",
       "categories": "Categories",
       "experience": "Experience",
@@ -252,12 +253,29 @@
       "discard": "Discard",
       "viewOnSite": "View on site"
     },
-    "texts": {
-      "eyebrow": "Small label above the title",
-      "title": "Title",
-      "lead": "Text under the title",
-      "heroPrimary": "Main button",
-      "heroSecondary": "Second button"
+    "siteTexts": {
+      "title": "Site texts",
+      "description": "Every fixed text on the site: menus, buttons, headings and messages. Leave a field empty to keep the built-in text shown in grey.",
+      "search": "Search texts…",
+      "changedOnly": "Changed only",
+      "changedCount": "{count} changed",
+      "noMatch": "No text matches your search.",
+      "keep": "Keep as written:",
+      "restore": "Restore built-in",
+      "groups": {
+        "nav": "Header & menu",
+        "hero": "Home: top section",
+        "about": "About",
+        "experience": "Experience",
+        "projects": "Projects",
+        "services": "Services",
+        "contact": "Contact form",
+        "footer": "Footer",
+        "notFound": "Page not found (404)",
+        "error": "Error page",
+        "email": "Email you receive",
+        "loader": "Loading"
+      }
     },
     "errors": {
       "validation": "Some fields are invalid",
@@ -292,8 +310,6 @@
       "seo": "SEO",
       "visibility": "Visible sections",
       "visibilityHint": "Turn sections of the home page on or off.",
-      "texts": "Section headings & buttons",
-      "textsHint": "Leave a field empty to keep the default text shown in grey.",
       "heroHint": "The first thing visitors see at the top of the home page.",
       "headlineHint": "Wrap a word in *stars* to show it in orange",
       "aboutHint": "Leave an empty line between paragraphs",

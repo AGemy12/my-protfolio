@@ -12,6 +12,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@formatjs/icu-messageformat-parser": "^3.5.23",
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.8.2",
     "@vercel/speed-insights": "^2.1.0",

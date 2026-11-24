@@ -3,7 +3,6 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowDownToLine, ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import {
-  siteText,
   tr,
   type Experience,
   type Settings,
@@ -97,7 +96,7 @@ export async function Hero({
                 className="group h-12 rounded-full px-7 text-base"
               >
                 <Link href="/#contact">
-                  {siteText(s.texts, "heroPrimary", locale, t("startProject"))}
+                  {t("startProject")}
                   <ArrowRight className="transition duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5" />
                 </Link>
               </Button>
@@ -108,7 +107,7 @@ export async function Hero({
                 className="h-12 rounded-full px-7 text-base"
               >
                 <Link href="/#projects">
-                  {siteText(s.texts, "heroSecondary", locale, t("viewWork"))}
+                  {t("viewWork")}
                 </Link>
               </Button>
               {cv && (
