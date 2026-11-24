@@ -41,7 +41,7 @@ export function ProjectDetails({
   const facts = [
     { label: t("role"), value: tr(p.role, locale) },
     { label: t("year"), value: p.year ? String(p.year) : "" },
-    { label: t("category"), value: t(`categories.${p.category}`) },
+    { label: t("category"), value: tr(p.categoryName, locale) },
   ].filter((f) => f.value);
 
   const titleClass = cn(
@@ -86,9 +86,11 @@ export function ProjectDetails({
       </div>
 
       <div className={inDialog ? "p-6 sm:p-8" : "pt-8 sm:pt-10"}>
-        <Badge variant="outline" className="mb-3 px-2.5 py-1">
-          {t(`categories.${p.category}`)}
-        </Badge>
+        {p.categoryName && (
+          <Badge variant="outline" className="mb-3 px-2.5 py-1">
+            {tr(p.categoryName, locale)}
+          </Badge>
+        )}
         {inDialog ? (
           <>
             <DialogTitle className={titleClass}>{title}</DialogTitle>

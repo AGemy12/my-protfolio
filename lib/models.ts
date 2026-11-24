@@ -1,6 +1,6 @@
 import "server-only";
 import mongoose, { Schema, type Model } from "mongoose";
-import { EXPERIENCE_TYPES, PROJECT_CATEGORIES, SKILL_CATEGORIES } from "./types";
+import { EXPERIENCE_TYPES, SKILL_CATEGORIES } from "./types";
 
 const L = { en: { type: String, default: "" }, ar: { type: String, default: "" } };
 const LList = { en: { type: [String], default: [] }, ar: { type: [String], default: [] } };
@@ -57,11 +57,21 @@ const ProjectSchema = define(  {
     cover: String,
     gallery: { type: [String], default: [] },
     tech: { type: [String], default: [] },
-    category: { type: String, enum: PROJECT_CATEGORIES, default: "other" },
+    // Slug of a Category document (not an enum: categories are managed in the dashboard).
+    category: { type: String, default: "other", index: true },
     year: Number,
     liveUrl: String,
     repoUrl: String,
     featured: { type: Boolean, default: false },
+    published: { type: Boolean, default: true },
+    order: { type: Number, default: 0 },
+  },
+  opts,
+);
+
+const CategorySchema = define(  {
+    slug: { type: String, required: true, unique: true, index: true },
+    name: L,
     published: { type: Boolean, default: true },
     order: { type: Number, default: 0 },
   },
@@ -154,6 +164,7 @@ const RateLimitSchema = define(  {
 
 export const SettingsModel = model("Settings", SettingsSchema);
 export const ProjectModel = model("Project", ProjectSchema);
+export const CategoryModel = model("Category", CategorySchema);
 export const ExperienceModel = model("Experience", ExperienceSchema);
 export const SkillModel = model("Skill", SkillSchema);
 export const ServiceModel = model("Service", ServiceSchema);

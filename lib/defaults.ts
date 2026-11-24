@@ -1,9 +1,28 @@
 // Starter content (from the CV). The public site falls back to this when the
 // database is empty or unreachable, and "Import starter content" in the
 // dashboard writes it to MongoDB so everything becomes editable.
-import type { Experience, Project, Service, Settings, Skill } from "./types";
+import type { Category, Experience, Project, Service, Settings, Skill } from "./types";
 
 type Seed<T> = Omit<T, "_id">;
+
+const category = (slug: string, en: string, ar: string, order: number): Seed<Category> => ({
+  slug,
+  name: { en, ar },
+  published: true,
+  order,
+});
+
+export const defaultCategories: Seed<Category>[] = [
+  category("platform", "Platforms", "منصات", 1),
+  category("dashboard", "Dashboards", "لوحات تحكم", 2),
+  category("education", "Education", "تعليمية", 3),
+  category("ecommerce", "E-commerce", "متاجر", 4),
+  category("corporate", "Corporate", "مواقع شركات", 5),
+  category("landing", "Landing Pages", "صفحات هبوط", 6),
+  category("portfolio", "Portfolios", "معارض أعمال", 7),
+  category("mobile", "Mobile Apps", "تطبيقات جوال", 8),
+  category("other", "Other", "أخرى", 9),
+];
 
 export const defaultSettings: Settings = {
   name: { en: "Ahmad Marzouk", ar: "أحمد مرزوق" },

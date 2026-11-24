@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ProjectsGrid } from "@/components/site/projects-grid";
 import { Eyebrow } from "@/components/site/section";
-import { getProjects } from "@/lib/data";
+import { getCategories, getProjects } from "@/lib/data";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -18,7 +18,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("projects");
-  const projects = await getProjects();
+  const [projects, categories] = await Promise.all([getProjects(), getCategories()]);
 
   return (
     <div className="relative">
@@ -29,7 +29,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("pageLead")}</p>
         <div className="mt-12">
-          <ProjectsGrid projects={projects} />
+          <ProjectsGrid projects={projects} categories={categories} />
         </div>
       </div>
     </div>

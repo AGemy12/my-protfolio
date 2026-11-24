@@ -3,6 +3,7 @@ import "server-only";
 import { isValidObjectId } from "mongoose";
 import { connectDB } from "./db";
 import {
+  CategoryModel,
   ContactFormModel,
   ExperienceModel,
   MessageModel,
@@ -12,13 +13,14 @@ import {
   SkillModel,
 } from "./models";
 import { parseContactForm, serialize } from "./data";
-import { defaultSettings } from "./defaults";
+import { defaultCategories, defaultSettings } from "./defaults";
 import { defaultContactForm } from "./contact-form";
-import type { ResourceKey } from "./resources";
-import type { Message, Settings } from "./types";
+import { resources, type RefOptions, type ResourceKey } from "./resources";
+import type { Category, Message, Settings } from "./types";
 
 const models = {
   projects: ProjectModel,
+  categories: CategoryModel,
   experience: ExperienceModel,
   skills: SkillModel,
   services: ServiceModel,
@@ -26,6 +28,12 @@ const models = {
 
 export async function adminList(resource: ResourceKey) {
   await connectDB();
+  // Projects already point to the starter category slugs, so the first visit to an
+  // empty Categories page saves them. Otherwise adding one category would replace
+  // all of them on the site and existing projects would lose their category names.
+  if (resource === "categories" && (await CategoryModel.estimatedDocumentCount()) === 0) {
+    await CategoryModel.insertMany(defaultCategories, { ordered: false }).catch(() => {});
+  }
   return serialize<Array<Record<string, unknown> & { _id: string }>>(
     await models[resource].find().sort({ order: 1, createdAt: -1 }).lean(),
   );
@@ -36,6 +44,25 @@ export async function adminGet(resource: ResourceKey, id: string) {
   await connectDB();
   const doc = await models[resource].findById(id).lean();
   return doc ? serialize<Record<string, unknown> & { _id: string }>(doc) : null;
+}
+
+/**
+ * The choices for every "ref" field of this resource's form (e.g. the categories
+ * for a project). Before any category is saved, the starter ones are offered so
+ * the form still works; they are written to the database by "Import".
+ */
+export async function adminRefOptions(resource: ResourceKey): Promise<RefOptions> {
+  const refs = [...new Set(resources[resource].fields.flatMap((f) => (f.type === "ref" ? [f.ref] : [])))];
+  if (!refs.length) return {};
+  await connectDB();
+  const entries = await Promise.all(
+    refs.map(async (ref) => {
+      const items = serialize<Category[]>(await models[ref].find().sort({ order: 1, createdAt: -1 }).lean());
+      const list = items.length ? items : defaultCategories;
+      return [ref, list.map((c) => ({ value: c.slug, label: c.name }))] as const;
+    }),
+  );
+  return Object.fromEntries(entries);
 }
 
 export async function adminSettings(): Promise<{ settings: Settings; saved: boolean }> {

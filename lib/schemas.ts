@@ -1,6 +1,6 @@
 // Zod schemas that validate everything the dashboard sends to the server.
 import { z } from "zod";
-import { EXPERIENCE_TYPES, PROJECT_CATEGORIES, SECTION_KEYS, SKILL_CATEGORIES, TEXT_KEYS } from "./types";
+import { EXPERIENCE_TYPES, SECTION_KEYS, SKILL_CATEGORIES, TEXT_KEYS } from "./types";
 import {
   CONTACT_CHANNELS,
   CONTACT_FIELD_TYPES,
@@ -58,13 +58,25 @@ export const settingsSchema = z.object({
     .default({}),
 });
 
-export const projectSchema = z.object({
-  slug: z
+const slug = (max: number) =>
+  z
     .string()
     .trim()
     .toLowerCase()
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers and dashes")
-    .max(80),
+    .max(max);
+
+export const categorySchema = z
+  .object({
+    slug: slug(60),
+    name: L(60),
+    published: z.boolean().default(true),
+    order,
+  })
+  .refine((c) => c.name.en || c.name.ar, { path: ["name"], message: "Add a name" });
+
+export const projectSchema = z.object({
+  slug: slug(80),
   title: L(120),
   summary: L(400),
   description: L(8000),
@@ -72,7 +84,7 @@ export const projectSchema = z.object({
   cover: url,
   gallery: z.array(url).max(20).default([]),
   tech: z.array(z.string().trim().min(1).max(40)).max(30).default([]),
-  category: z.enum(PROJECT_CATEGORIES).default("other"),
+  category: slug(60).default("other"),
   year: z.coerce.number().int().min(1990).max(2100).optional(),
   liveUrl: url,
   repoUrl: url,

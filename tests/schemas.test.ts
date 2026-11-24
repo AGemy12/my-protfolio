@@ -1,6 +1,24 @@
 import { describe, expect, it } from "vitest";
-import { contactFormSchema, contactSubmitSchema, projectSchema } from "@/lib/schemas";
+import { categorySchema, contactFormSchema, contactSubmitSchema, projectSchema } from "@/lib/schemas";
 import { defaultContactForm, newField } from "@/lib/contact-form";
+import { defaultCategories, defaultProjects } from "@/lib/defaults";
+
+describe("categorySchema", () => {
+  it("accepts every starter category", () => {
+    for (const c of defaultCategories) expect(categorySchema.safeParse(c).success, c.slug).toBe(true);
+  });
+
+  it("needs a name in at least one language and a kebab-case slug", () => {
+    expect(categorySchema.safeParse({ slug: "apps", name: { en: "", ar: "" } }).success).toBe(false);
+    expect(categorySchema.safeParse({ slug: "apps", name: { en: "", ar: "تطبيقات" } }).success).toBe(true);
+    expect(categorySchema.safeParse({ slug: "Mobile Apps", name: { en: "Apps", ar: "" } }).success).toBe(false);
+  });
+
+  it("covers the category of every starter project", () => {
+    const slugs = new Set(defaultCategories.map((c) => c.slug));
+    expect(defaultProjects.filter((p) => !slugs.has(p.category)).map((p) => p.slug)).toEqual([]);
+  });
+});
 
 describe("contactSubmitSchema", () => {
   const valid = { channel: "whatsapp", locale: "en", values: { name: "Ali", projectType: ["website"] } };
@@ -52,6 +70,11 @@ describe("projectSchema", () => {
   it("only accepts kebab-case slugs", () => {
     expect(projectSchema.safeParse({ ...base, slug: "My Project" }).success).toBe(false);
     expect(projectSchema.safeParse({ ...base, slug: "-bad-" }).success).toBe(false);
+  });
+
+  it("accepts any category slug, including ones added in the dashboard", () => {
+    expect(projectSchema.parse({ ...base, category: "saas-tools" }).category).toBe("saas-tools");
+    expect(projectSchema.safeParse({ ...base, category: "SaaS tools" }).success).toBe(false);
   });
 
   it("only accepts http(s) or site-relative links", () => {

@@ -1,10 +1,14 @@
 // Client-safe description of every editable collection. The dashboard builds
 // its list and form screens from this, so adding a field means adding one line here
 // (plus the model / zod schema).
-import { EXPERIENCE_TYPES, PROJECT_CATEGORIES, SKILL_CATEGORIES, tr, type L } from "./types";
+import { EXPERIENCE_TYPES, SKILL_CATEGORIES, tr, type L } from "./types";
 
-export const RESOURCE_KEYS = ["projects", "experience", "skills", "services"] as const;
+export const RESOURCE_KEYS = ["projects", "categories", "experience", "skills", "services"] as const;
 export type ResourceKey = (typeof RESOURCE_KEYS)[number];
+
+/** A choice for a "ref" field: the referenced item's slug and its name. */
+export type RefOption = { value: string; label: L };
+export type RefOptions = Partial<Record<ResourceKey, RefOption[]>>;
 
 export type Field =
   | {
@@ -16,10 +20,13 @@ export type Field =
       disabledWhen?: string;
       placeholder?: string;
     }
-  | { name: string; type: "slug"; from: string }
+  /** `prefix` is shown as a hint, e.g. "/projects/" → "/projects/my-project". */
+  | { name: string; type: "slug"; from: string; prefix?: string }
   | { name: string; type: "ltext" | "llist"; required?: boolean }
   | { name: string; type: "ltextarea"; rows?: number }
   | { name: string; type: "select"; options: readonly string[]; optionsKey: string; half?: boolean }
+  /** A choice among the items of another collection (stored by slug), e.g. a project's category. */
+  | { name: string; type: "ref"; ref: ResourceKey; half?: boolean }
   | { name: string; type: "switch" }
   | { name: string; type: "image" }
   | { name: string; type: "images" }
@@ -47,14 +54,14 @@ export const resources: Record<ResourceKey, ResourceConfig> = {
     featurable: true,
     fields: [
       { name: "title", type: "ltext", required: true },
-      { name: "slug", type: "slug", from: "title" },
+      { name: "slug", type: "slug", from: "title", prefix: "/projects/" },
       { name: "summary", type: "ltextarea", rows: 2 },
       { name: "description", type: "ltextarea", rows: 8 },
       { name: "role", type: "ltext" },
       { name: "cover", type: "image" },
       { name: "gallery", type: "images" },
       { name: "tech", type: "tags" },
-      { name: "category", type: "select", options: PROJECT_CATEGORIES, optionsKey: "categories", half: true },
+      { name: "category", type: "ref", ref: "categories", half: true },
       { name: "year", type: "number", half: true },
       { name: "liveUrl", type: "url", half: true },
       { name: "repoUrl", type: "url", half: true },
@@ -64,12 +71,24 @@ export const resources: Record<ResourceKey, ResourceConfig> = {
     ],
     empty: {
       title: l(), slug: "", summary: l(), description: l(), role: l(), cover: "", gallery: [], tech: [],
-      category: "platform", year: new Date().getFullYear(), liveUrl: "", repoUrl: "", featured: false,
+      category: "", year: new Date().getFullYear(), liveUrl: "", repoUrl: "", featured: false,
       published: true, order: 0,
     },
     title: (i, loc) => tr(i.title as L, loc),
     subtitle: (i) => [(i.tech as string[])?.slice(0, 4).join(" · "), i.year].filter(Boolean).join(" — "),
     thumb: (i) => i.cover as string,
+  },
+  categories: {
+    key: "categories",
+    fields: [
+      { name: "name", type: "ltext", required: true },
+      { name: "slug", type: "slug", from: "name" },
+      { name: "order", type: "number", half: true },
+      { name: "published", type: "switch" },
+    ],
+    empty: { name: l(), slug: "", published: true, order: 0 },
+    title: (i, loc) => tr(i.name as L, loc),
+    subtitle: (i) => i.slug as string,
   },
   experience: {
     key: "experience",

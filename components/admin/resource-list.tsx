@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { EmptyState, Hint, PageHeader } from "./ui";
 import { useActionToast } from "./resource-form";
+import { ImportButton } from "./import-button";
 
 type Item = Record<string, unknown> & { _id: string };
 
@@ -107,7 +108,12 @@ export function ResourceList({ resource, items: initial, title }: { resource: Re
       )}
 
       {items.length === 0 ? (
-        <EmptyState>{t("empty")}</EmptyState>
+        <EmptyState className="gap-4">
+          <p>{t("empty")}</p>
+          {/* fills only the collections that are still empty, so it never overwrites anything */}
+          <p>{t("emptyImport")}</p>
+          <ImportButton />
+        </EmptyState>
       ) : (
         <Card className="gap-0 divide-y overflow-hidden py-0">
           {shown.map((item) => {

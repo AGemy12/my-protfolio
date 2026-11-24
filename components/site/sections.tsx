@@ -160,14 +160,14 @@ export async function ProjectsSection({ projects, texts }: { projects: Project[]
             lead
             priority
             labels={{
-              category: t(`categories.${lead.category}`),
+              category: tr(lead.categoryName, locale),
               featured: lead.featured ? t("featured") : undefined,
             }}
           />
         </Reveal>
         {rest.map((p, i) => (
           <Reveal key={p._id} delay={(i % 2) * 0.08}>
-            <ShowcaseCard project={p} locale={locale} labels={{ category: t(`categories.${p.category}`) }} />
+            <ShowcaseCard project={p} locale={locale} labels={{ category: tr(p.categoryName, locale) }} />
           </Reveal>
         ))}
       </div>

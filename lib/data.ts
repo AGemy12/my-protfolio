@@ -4,11 +4,26 @@
 import "server-only";
 import { cache } from "react";
 import { connectDB, hasDatabase } from "./db";
-import { ContactFormModel, ExperienceModel, ProjectModel, ServiceModel, SettingsModel, SkillModel } from "./models";
-import { defaultExperience, defaultProjects, defaultServices, defaultSettings, defaultSkills } from "./defaults";
+import {
+  CategoryModel,
+  ContactFormModel,
+  ExperienceModel,
+  ProjectModel,
+  ServiceModel,
+  SettingsModel,
+  SkillModel,
+} from "./models";
+import {
+  defaultCategories,
+  defaultExperience,
+  defaultProjects,
+  defaultServices,
+  defaultSettings,
+  defaultSkills,
+} from "./defaults";
 import { defaultContactForm, type ContactFormConfig } from "./contact-form";
 import { contactFormSchema } from "./schemas";
-import type { Experience, Project, Service, Settings, Skill } from "./types";
+import type { Category, Experience, Project, Service, Settings, Skill } from "./types";
 
 /** Converts Mongo documents to plain JSON-safe objects (ObjectId/Date → string). */
 export function serialize<T>(doc: unknown): T {
@@ -59,7 +74,19 @@ async function list<T>(model: typeof ProjectModel, filter: object, seed: Omit<T,
   );
 }
 
-export const getProjects = cache(() => list<Project>(ProjectModel, { published: true }, defaultProjects, "project"));
+/** Every category, hidden ones included: they still name their projects. */
+export const getCategories = cache(() => list<Category>(CategoryModel, {}, defaultCategories, "category"));
+
+/** Published projects, each with its category's name attached (`categoryName`). */
+export const getProjects = cache(async () => {
+  const [projects, categories] = await Promise.all([
+    list<Project>(ProjectModel, { published: true }, defaultProjects, "project"),
+    getCategories(),
+  ]);
+  const names = new Map(categories.map((c) => [c.slug, c.name]));
+  // A project whose category was removed falls back to showing the slug.
+  return projects.map((p) => ({ ...p, categoryName: names.get(p.category) ?? { en: p.category, ar: p.category } }));
+});
 export const getExperience = cache(() =>
   list<Experience>(ExperienceModel, { published: true }, defaultExperience, "exp"),
 );

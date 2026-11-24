@@ -49,18 +49,15 @@ export type Settings = {
   texts: SiteTexts;
 };
 
-export const PROJECT_CATEGORIES = [
-  "platform",
-  "dashboard",
-  "education",
-  "ecommerce",
-  "corporate",
-  "landing",
-  "portfolio",
-  "mobile",
-  "other",
-] as const;
-export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
+/** A project category, managed from the dashboard. Projects point to it by `slug`. */
+export type Category = {
+  _id: string;
+  slug: string;
+  name: L;
+  /** Hidden categories still label their projects but get no filter on /projects. */
+  published: boolean;
+  order: number;
+};
 
 export type Project = {
   _id: string;
@@ -72,7 +69,10 @@ export type Project = {
   cover: string;
   gallery: string[];
   tech: string[];
-  category: ProjectCategory;
+  /** Slug of a Category. */
+  category: string;
+  /** The category's name, filled in when projects are read for the site (not stored). */
+  categoryName?: L;
   year: number;
   liveUrl: string;
   repoUrl: string;

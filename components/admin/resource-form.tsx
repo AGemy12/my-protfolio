@@ -1,13 +1,13 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { ArrowLeft, ExternalLink, Trash } from "lucide-react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { deleteItem, saveItem, type ActionResult } from "@/lib/actions/content";
-import { resources, type Field, type ResourceKey } from "@/lib/resources";
-import type { L, LList } from "@/lib/types";
+import { resources, type Field, type RefOptions, type ResourceKey } from "@/lib/resources";
+import { tr, type L, type LList } from "@/lib/types";
 import { slugify } from "@/lib/utils";
 import { useConfirmDelete } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,6 @@ import { SaveBar, useDirty, useFormGuard } from "./save-bar";
 type Data = Record<string, unknown>;
 
 const OPTION_NAMESPACES: Record<string, string> = {
-  categories: "projects.categories",
   skillCategories: "skills.categories",
   experienceTypes: "experience.types",
 };
@@ -50,6 +49,7 @@ export function useActionToast() {
 /** Where an item shows up on the public site, for the "View on site" link. */
 function publicHref(resource: ResourceKey, data: Data) {
   if (resource === "projects") return data.slug ? `/projects/${data.slug}` : "/projects";
+  if (resource === "categories") return "/projects";
   return `/#${resource}`;
 }
 
@@ -57,19 +57,30 @@ export function ResourceForm({
   resource,
   initial,
   title,
+  refs = {},
 }: {
   resource: ResourceKey;
   initial: (Data & { _id?: string }) | null;
   title: string;
+  /** Choices for the form's "ref" fields, loaded on the server. */
+  refs?: RefOptions;
 }) {
   const t = useTranslations("admin");
   const tRoot = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const notify = useActionToast();
   const confirmDelete = useConfirmDelete();
   const config = resources[resource];
   const formRef = useRef<HTMLFormElement>(null);
-  const [data, setData] = useState<Data>(() => ({ ...config.empty, ...(initial ?? {}) }));
+  const [data, setData] = useState<Data>(() => {
+    const start: Data = { ...config.empty, ...(initial ?? {}) };
+    // a new item starts on the first choice of each "ref" field (e.g. the first category)
+    for (const f of config.fields) {
+      if (f.type === "ref" && !start[f.name]) start[f.name] = refs[f.ref]?.[0]?.value ?? "";
+    }
+    return start;
+  });
   const [slugTouched, setSlugTouched] = useState(Boolean(initial));
   // bumping this remounts fields that keep their own draft text (lists) after Discard
   const [version, setVersion] = useState(0);
@@ -190,10 +201,44 @@ export function ResourceForm({
             </Select>
           </div>
         );
+      case "ref": {
+        const options = refs[field.ref] ?? [];
+        const current = (value as string) || "";
+        return (
+          <div key={field.name} className={field.half ? undefined : "sm:col-span-2"}>
+            <FieldLabel htmlFor={field.name}>{label(field.name)}</FieldLabel>
+            <Select value={current || undefined} onValueChange={(v) => set(field.name, v)}>
+              <SelectTrigger id={field.name} className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {/* a value whose item was renamed or removed elsewhere stays visible until changed */}
+                {current && !options.some((o) => o.value === current) && (
+                  <SelectItem value={current}>{current}</SelectItem>
+                )}
+                {options.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>
+                    {tr(o.label, locale) || o.value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Link
+              href={`/admin/${field.ref}`}
+              className="mt-1.5 inline-block text-xs text-muted-foreground transition-colors hover:text-brand"
+            >
+              {t("common.manage", { name: t(`nav.${field.ref}`) })}
+            </Link>
+          </div>
+        );
+      }
       case "slug":
         return (
           <div key={field.name} className="sm:col-span-2">
-            <FieldLabel htmlFor={field.name} hint={`/projects/${(value as string) || "…"}`}>
+            <FieldLabel
+              htmlFor={field.name}
+              hint={field.prefix ? `${field.prefix}${(value as string) || "…"}` : undefined}
+            >
               {label(field.name)}
             </FieldLabel>
             <Input

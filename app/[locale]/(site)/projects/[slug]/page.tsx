@@ -115,7 +115,7 @@ export default async function ProjectPage({ params }: Props) {
                 key={p._id}
                 project={p}
                 locale={locale}
-                labels={{ category: t(`categories.${p.category}`), private: t("private"), details: t("details") }}
+                labels={{ category: tr(p.categoryName, locale), private: t("private"), details: t("details") }}
               />
             ))}
           </div>

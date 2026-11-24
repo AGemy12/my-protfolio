@@ -93,18 +93,7 @@
     "previous": "Previous",
     "next": "Next",
     "close": "Close",
-    "openOriginal": "Open original image",
-    "categories": {
-      "platform": "Platforms",
-      "dashboard": "Dashboards",
-      "education": "Education",
-      "ecommerce": "E-commerce",
-      "corporate": "Corporate",
-      "landing": "Landing Pages",
-      "portfolio": "Portfolios",
-      "mobile": "Mobile Apps",
-      "other": "Other"
-    }
+    "openOriginal": "Open original image"
   },
   "services": {
     "eyebrow": "Services",
@@ -203,6 +192,7 @@
       "overview": "Overview",
       "profile": "Profile & site",
       "projects": "Projects",
+      "categories": "Categories",
       "experience": "Experience",
       "skills": "Skills",
       "services": "Services",
@@ -239,6 +229,8 @@
       "hidden": "Hidden",
       "featured": "Featured",
       "empty": "Nothing here yet.",
+      "emptyImport": "Start from the ready-made items and edit them, or add your own with \"Add new\".",
+      "manage": "Manage {name}",
       "upload": "Upload",
       "uploading": "Uploading…",
       "uploadFailed": "Upload failed",
@@ -269,7 +261,8 @@
     },
     "errors": {
       "validation": "Some fields are invalid",
-      "slugTaken": "This slug is already used by another project",
+      "slugTaken": "This slug is already used by another item",
+      "categoryInUse": "Projects still use this category. Move them to another category first, or hide it instead of deleting it.",
       "unauthorized": "Your session expired. Please log in again.",
       "server": "Server error. Please try again.",
       "notFound": "Item not found",

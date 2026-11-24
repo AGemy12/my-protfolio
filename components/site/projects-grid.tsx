@@ -4,16 +4,20 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import type { Project } from "@/lib/types";
+import { tr, type Category, type Project } from "@/lib/types";
 import { ProjectCard } from "./project-card";
 import { projectPath } from "./project-dialog";
 
-export function ProjectsGrid({ projects }: { projects: Project[] }) {
+export function ProjectsGrid({ projects, categories: all }: { projects: Project[]; categories: Category[] }) {
   const t = useTranslations("projects");
   const locale = useLocale();
   const [filter, setFilter] = useState<string>("all");
 
-  const categories = useMemo(() => [...new Set(projects.map((p) => p.category))], [projects]);
+  // One filter per visible category that has projects, in the dashboard's order.
+  const categories = useMemo(
+    () => all.filter((c) => c.published && projects.some((p) => p.category === c.slug)),
+    [all, projects],
+  );
   const shown = filter === "all" ? projects : projects.filter((p) => p.category === filter);
 
   // Links shared before projects had their own pages look like /projects#slug:
@@ -36,18 +40,20 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
         aria-label={t("all")}
         className="mb-10 flex-wrap"
       >
-        {["all", ...categories].map((c) => (
-          <ToggleGroupItem
-            key={c}
-            value={c}
-            className="h-9 rounded-full bg-card px-4 text-muted-foreground hover:border-brand hover:bg-card hover:text-foreground data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-          >
-            {c === "all" ? t("all") : t(`categories.${c}`)}
-            <span className="font-mono text-xs opacity-60">
-              {c === "all" ? projects.length : projects.filter((p) => p.category === c).length}
-            </span>
-          </ToggleGroupItem>
-        ))}
+        {[{ value: "all", label: t("all") }, ...categories.map((c) => ({ value: c.slug, label: tr(c.name, locale) }))].map(
+          (c) => (
+            <ToggleGroupItem
+              key={c.value}
+              value={c.value}
+              className="h-9 rounded-full bg-card px-4 text-muted-foreground hover:border-brand hover:bg-card hover:text-foreground data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+            >
+              {c.label}
+              <span className="font-mono text-xs opacity-60">
+                {c.value === "all" ? projects.length : projects.filter((p) => p.category === c.value).length}
+              </span>
+            </ToggleGroupItem>
+          ),
+        )}
       </ToggleGroup>
 
       {shown.length === 0 ? (
@@ -69,7 +75,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                   project={p}
                   locale={locale}
                   priority={i < 3}
-                  labels={{ category: t(`categories.${p.category}`), private: t("private"), details: t("details") }}
+                  labels={{ category: tr(p.categoryName, locale), private: t("private"), details: t("details") }}
                 />
               </motion.div>
             ))}

@@ -14,6 +14,7 @@ import {
   LogOut,
   Menu,
   Sparkles,
+  Tags,
   User,
   Wrench,
 } from "lucide-react";
@@ -33,6 +34,7 @@ const NAV = [
   { href: "/admin", key: "overview", icon: LayoutDashboard },
   { href: "/admin/profile", key: "profile", icon: User },
   { href: "/admin/projects", key: "projects", icon: FolderKanban },
+  { href: "/admin/categories", key: "categories", icon: Tags },
   { href: "/admin/experience", key: "experience", icon: Briefcase },
   { href: "/admin/skills", key: "skills", icon: Wrench },
   { href: "/admin/services", key: "services", icon: Sparkles },

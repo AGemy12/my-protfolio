@@ -6,6 +6,7 @@ import { del } from "@vercel/blob";
 import { connectDB } from "../db";
 import { requireAdmin } from "../auth";
 import {
+  CategoryModel,
   ContactFormModel,
   ExperienceModel,
   MessageModel,
@@ -15,6 +16,7 @@ import {
   SkillModel,
 } from "../models";
 import {
+  categorySchema,
   contactFormSchema,
   experienceSchema,
   projectSchema,
@@ -22,13 +24,21 @@ import {
   settingsSchema,
   skillSchema,
 } from "../schemas";
-import { defaultExperience, defaultProjects, defaultServices, defaultSettings, defaultSkills } from "../defaults";
+import {
+  defaultCategories,
+  defaultExperience,
+  defaultProjects,
+  defaultServices,
+  defaultSettings,
+  defaultSkills,
+} from "../defaults";
 import type { ResourceKey } from "../resources";
 
 export type ActionResult = { ok: true; id?: string } | { ok: false; error: string; issues?: string[] };
 
 const registry = {
   projects: { model: ProjectModel, schema: projectSchema },
+  categories: { model: CategoryModel, schema: categorySchema },
   experience: { model: ExperienceModel, schema: experienceSchema },
   skills: { model: SkillModel, schema: skillSchema },
   services: { model: ServiceModel, schema: serviceSchema },
@@ -76,8 +86,14 @@ export async function saveItem(resource: ResourceKey, id: string | null, data: u
     await connectDB();
     let savedId = id;
     if (id) {
+      // Returns the document as it was before the update.
       const updated = await model.findByIdAndUpdate(id, parsed.data, { runValidators: true });
       if (!updated) return { ok: false, error: "notFound" };
+      // Projects point to their category by slug, so a renamed slug moves them along.
+      const newSlug = (parsed.data as { slug?: string }).slug;
+      if (resource === "categories" && updated.slug !== newSlug) {
+        await ProjectModel.updateMany({ category: updated.slug }, { category: newSlug });
+      }
     } else {
       const created = await model.create(parsed.data);
       savedId = String(created._id);
@@ -93,6 +109,12 @@ export async function deleteItem(resource: ResourceKey, id: string): Promise<Act
   try {
     await requireAdmin();
     await connectDB();
+    if (resource === "categories") {
+      const category = await CategoryModel.findById(id).lean<{ slug: string }>();
+      if (category && (await ProjectModel.exists({ category: category.slug }))) {
+        return { ok: false, error: "categoryInUse" };
+      }
+    }
     const removed = await registry[resource].model.findByIdAndDelete(id).lean<Record<string, unknown>>();
     refresh();
     if (removed && resource === "projects") {
@@ -168,6 +190,7 @@ export async function importStarterContent(): Promise<ActionResult> {
     await connectDB();
     const pairs = [
       [ProjectModel, defaultProjects],
+      [CategoryModel, defaultCategories],
       [ExperienceModel, defaultExperience],
       [SkillModel, defaultSkills],
       [ServiceModel, defaultServices],
