@@ -6,9 +6,8 @@ import { ArrowUp } from "lucide-react";
 import {
   AnimatePresence,
   motion,
-  useMotionValueEvent,
+  useMotionValue,
   useReducedMotion,
-  useScroll,
   useSpring,
 } from "motion/react";
 
@@ -23,16 +22,38 @@ const threshold = () => Math.min(600, window.innerHeight * 0.8);
 export function ScrollTop() {
   const t = useTranslations("nav");
   const reduce = useReducedMotion();
-  const { scrollY, scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 30, restDelta: 0.001 });
+  const scrollProgress = useMotionValue(0);
+  const progress = useSpring(scrollProgress, { stiffness: 200, damping: 30, restDelta: 0.001 });
   const [visible, setVisible] = useState(false);
 
-  // Covers a reload mid-page, before any scroll event fires.
+  // Measured by hand rather than with motion's useScroll, which only updates on scroll
+  // events: a reload mid-page restores the position without one, leaving the ring empty.
+  // Also re-measured when the page grows or shrinks (images, fonts, expanding sections).
   useEffect(() => {
-    const frame = requestAnimationFrame(() => setVisible(window.scrollY > threshold()));
-    return () => cancelAnimationFrame(frame);
-  }, []);
-  useMotionValueEvent(scrollY, "change", (y) => setVisible(y > threshold()));
+    let frame = 0;
+    const measure = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        scrollProgress.set(max > 0 ? Math.min(1, y / max) : 0);
+        setVisible(y > threshold());
+      });
+    };
+    measure();
+    const resize = new ResizeObserver(measure);
+    resize.observe(document.body);
+    window.addEventListener("scroll", measure, { passive: true });
+    window.addEventListener("resize", measure);
+    window.addEventListener("load", measure);
+    return () => {
+      cancelAnimationFrame(frame);
+      resize.disconnect();
+      window.removeEventListener("scroll", measure);
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("load", measure);
+    };
+  }, [scrollProgress]);
 
   return (
     <AnimatePresence>

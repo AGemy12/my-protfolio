@@ -159,7 +159,10 @@ export function ContactForm({
   // The "sent" note stays 5 seconds: it fades over the last half second, then goes.
   useEffect(() => {
     if (!sent) return;
-    const fade = window.setTimeout(() => setFading(true), SENT_VISIBLE_MS - SENT_FADE_MS);
+    const fade = window.setTimeout(
+      () => setFading(true),
+      SENT_VISIBLE_MS - SENT_FADE_MS,
+    );
     const hide = window.setTimeout(() => {
       setSent(null);
       setFading(false);
@@ -581,11 +584,12 @@ export function ContactForm({
             )}
           </div>
 
-          <div className="border-t pt-6">
+          <div className="border-t pt-6 flex items-center justify-center">
             {channels.length === 1 ? (
               <LoadingButton
                 type="submit"
                 size="lg"
+                variant="ember"
                 loading={pending}
                 icon={CHANNEL_ICONS[channels[0]]}
                 className="h-12 w-full rounded-full px-7 sm:w-auto"
@@ -602,6 +606,7 @@ export function ContactForm({
                   <LoadingButton
                     type="button"
                     size="lg"
+                    variant="ember"
                     loading={pending}
                     icon={<Send className="rtl:-scale-x-100" />}
                     className="group h-12 w-full rounded-full ps-6 pe-5 sm:w-auto"

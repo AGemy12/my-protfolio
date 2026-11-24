@@ -93,18 +93,19 @@ export async function Hero({
               <Button
                 asChild
                 size="lg"
-                className="group h-12 rounded-lg bg-brand px-6 text-base text-brand-foreground hover:bg-brand/90"
+                variant="ember"
+                className="group h-12 rounded-full px-7 text-base"
               >
                 <Link href="/#contact">
                   {siteText(s.texts, "heroPrimary", locale, t("startProject"))}
-                  <ArrowRight className="transition group-hover:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5" />
+                  <ArrowRight className="transition duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5" />
                 </Link>
               </Button>
               <Button
                 asChild
                 size="lg"
-                variant="outline"
-                className="h-12 rounded-lg bg-transparent px-6 text-base hover:border-brand hover:bg-transparent hover:text-brand dark:bg-transparent"
+                variant="ember-outline"
+                className="h-12 rounded-full px-7 text-base"
               >
                 <Link href="/#projects">
                   {siteText(s.texts, "heroSecondary", locale, t("viewWork"))}

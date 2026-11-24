@@ -6,6 +6,7 @@ import { Direction } from "radix-ui";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { EmberSparks } from "@/components/ember-sparks";
 
 function ThemedToaster({ dir }: { dir: "ltr" | "rtl" }) {
   const { resolvedTheme } = useTheme();
@@ -39,6 +40,7 @@ export function Providers({
         <TooltipProvider delayDuration={300}>
           <MotionConfig reducedMotion="user">{children}</MotionConfig>
           <ConfirmDialog />
+          <EmberSparks />
           <ThemedToaster dir={dir} />
         </TooltipProvider>
       </Direction.Provider>

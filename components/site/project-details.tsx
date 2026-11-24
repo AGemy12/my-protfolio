@@ -103,14 +103,14 @@ export function ProjectDetails({
 
         <div className="mt-6 flex flex-wrap gap-3">
           {p.liveUrl && (
-            <Button asChild className="h-10 rounded-full px-5">
+            <Button asChild variant="ember" className="h-10 rounded-full px-5">
               <a href={p.liveUrl} target="_blank" rel="noopener noreferrer">
                 {t("live")} <ArrowUpRight className="rtl:-scale-x-100" />
               </a>
             </Button>
           )}
           {p.repoUrl && (
-            <Button asChild variant="outline" className="h-10 rounded-full px-5 hover:border-brand">
+            <Button asChild variant="ember-outline" className="h-10 rounded-full px-5">
               <a href={p.repoUrl} target="_blank" rel="noopener noreferrer">
                 <SiGithub /> {t("code")}
               </a>

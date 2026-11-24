@@ -11,6 +11,10 @@ const buttonVariants = cva(
         // site signature: solid ink that turns brand-coloured on hover
         default: "bg-primary text-primary-foreground hover:bg-brand hover:text-brand-foreground",
         brand: "bg-brand text-brand-foreground hover:bg-brand/90",
+        // public-site CTAs: glowing ember gradient; components/ember-sparks.tsx adds the sparks
+        ember: "btn-ember",
+        // its partner: raised surface that lights an ember dot on hover
+        "ember-outline": "btn-ember-outline",
         "ghost-destructive": "text-destructive hover:bg-destructive/10 hover:text-destructive",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40",

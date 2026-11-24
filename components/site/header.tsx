@@ -250,7 +250,8 @@ export function Header({
             <Button
               asChild
               size="sm"
-              className="ms-1 hidden h-10 rounded-lg bg-brand px-5 text-xs font-bold tracking-[0.12em] text-brand-foreground uppercase shadow-[0_6px_20px_-6px_var(--brand)] hover:bg-brand/90 sm:inline-flex"
+              variant="ember"
+              className="ms-1 hidden h-10 rounded-full px-5 text-xs font-bold tracking-[0.12em] uppercase sm:inline-flex"
             >
               <Link href="/#contact">{t("cta")}</Link>
             </Button>
