@@ -22,6 +22,8 @@ export async function POST(request: Request) {
     });
     return NextResponse.json(result);
   } catch (error) {
+    // The browser only sees "Failed to retrieve the client token", so keep the real reason in the server logs.
+    console.error("[upload]", (error as Error).message);
     return NextResponse.json({ error: (error as Error).message }, { status: 400 });
   }
 }
