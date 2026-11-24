@@ -100,6 +100,9 @@
       "education": "تعليمية",
       "ecommerce": "متاجر",
       "corporate": "مواقع شركات",
+      "landing": "صفحات هبوط",
+      "portfolio": "معارض أعمال",
+      "mobile": "تطبيقات جوال",
       "other": "أخرى"
     }
   },

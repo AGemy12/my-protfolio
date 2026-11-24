@@ -49,7 +49,17 @@ export type Settings = {
   texts: SiteTexts;
 };
 
-export const PROJECT_CATEGORIES = ["platform", "dashboard", "education", "ecommerce", "corporate", "other"] as const;
+export const PROJECT_CATEGORIES = [
+  "platform",
+  "dashboard",
+  "education",
+  "ecommerce",
+  "corporate",
+  "landing",
+  "portfolio",
+  "mobile",
+  "other",
+] as const;
 export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
 
 export type Project = {
