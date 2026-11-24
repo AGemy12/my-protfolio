@@ -27,7 +27,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     email: settings.email ? `mailto:${settings.email}` : undefined,
     url: `${siteUrl()}/${locale}`,
     image: settings.avatar ? new URL(settings.avatar, siteUrl()).toString() : undefined,
-    sameAs: [settings.github, settings.linkedin, settings.x].filter(Boolean),
+    sameAs: settings.socials.map((l) => l.url),
     knowsAbout: skills.map((s) => s.name),
   };
 

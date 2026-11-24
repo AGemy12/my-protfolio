@@ -61,7 +61,32 @@ import {
   SiI18Next,
   SiCypress,
   SiGooglecloud,
+  SiBehance,
+  SiCalendly,
+  SiDevdotto,
+  SiDiscord,
+  SiDribbble,
+  SiFacebook,
+  SiFiverr,
+  SiGitlab,
+  SiHashnode,
+  SiInstagram,
+  SiKaggle,
+  SiLeetcode,
+  SiMedium,
+  SiPinterest,
+  SiReddit,
+  SiSnapchat,
+  SiStackoverflow,
+  SiTelegram,
+  SiThreads,
+  SiTiktok,
+  SiUpwork,
+  SiX,
+  SiYoutube,
 } from "react-icons/si";
+import { FaLinkedinIn } from "react-icons/fa6";
+import type { SocialPlatform } from "@/lib/socials";
 import {
   Bot,
   Boxes,
@@ -73,6 +98,8 @@ import {
   GitBranch,
   Globe,
   Layers,
+  Link as LinkIcon,
+  Briefcase,
   LayoutDashboard,
   Palette,
   Puzzle,
@@ -182,6 +209,45 @@ export const serviceIcons: Record<string, LucideIcon> = {
   cart: ShoppingCart,
   terminal: Terminal,
 };
+
+/** One icon per social platform. Mostaql and Khamsat have no brand icon, so they get a generic one. */
+export const socialIcons: Record<SocialPlatform, IconType | LucideIcon> = {
+  github: SiGithub,
+  gitlab: SiGitlab,
+  linkedin: FaLinkedinIn,
+  x: SiX,
+  facebook: SiFacebook,
+  instagram: SiInstagram,
+  threads: SiThreads,
+  tiktok: SiTiktok,
+  youtube: SiYoutube,
+  snapchat: SiSnapchat,
+  pinterest: SiPinterest,
+  reddit: SiReddit,
+  telegram: SiTelegram,
+  discord: SiDiscord,
+  behance: SiBehance,
+  dribbble: SiDribbble,
+  figma: SiFigma,
+  medium: SiMedium,
+  devto: SiDevdotto,
+  hashnode: SiHashnode,
+  stackoverflow: SiStackoverflow,
+  leetcode: SiLeetcode,
+  kaggle: SiKaggle,
+  upwork: SiUpwork,
+  fiverr: SiFiverr,
+  mostaql: Briefcase,
+  khamsat: Briefcase,
+  calendly: SiCalendly,
+  website: Globe,
+  other: LinkIcon,
+};
+
+export function SocialIcon({ platform, className }: { platform: string; className?: string }) {
+  const Icon = socialIcons[platform as SocialPlatform] ?? LinkIcon;
+  return <Icon className={className} aria-hidden />;
+}
 
 export function SkillIcon({
   name,

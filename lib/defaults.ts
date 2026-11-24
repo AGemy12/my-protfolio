@@ -60,9 +60,10 @@ export const defaultSettings: Settings = {
   avatar: "/images/avatar.png",
   cvEn: "/files/cv.pdf",
   cvAr: "",
-  github: "https://github.com/AGemy12",
-  linkedin: "https://www.linkedin.com/in/ahmad-marzouk-9430b1233/",
-  x: "",
+  socials: [
+    { platform: "github", url: "https://github.com/AGemy12", label: "" },
+    { platform: "linkedin", url: "https://www.linkedin.com/in/ahmad-marzouk-9430b1233/", label: "" },
+  ],
   available: true,
   yearsExperience: 3,
   projectsDone: 10,

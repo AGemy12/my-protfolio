@@ -15,6 +15,7 @@ import {
   SkillModel,
 } from "./models";
 import { legacyTexts, type TextOverrides } from "./site-texts";
+import { legacySocials } from "./socials";
 import {
   defaultCategories,
   defaultExperience,
@@ -46,14 +47,24 @@ async function safely<T>(load: () => Promise<T | null>, fallback: () => T): Prom
   }
 }
 
+/** A stored Settings document as complete Settings (defaults for anything missing). */
+export function settingsFromDoc(doc: unknown): Settings {
+  const s = serialize<Settings & { github?: string; linkedin?: string; x?: string }>(doc);
+  return {
+    ...defaultSettings,
+    ...s,
+    sections: { ...defaultSettings.sections, ...s.sections },
+    // saved before links became a list → build it from the old fixed fields
+    socials: Array.isArray(s.socials) ? s.socials : legacySocials(s),
+  };
+}
+
 export const getSettings = cache(() =>
   safely<Settings>(
     async () => {
       await connectDB();
       const doc = await SettingsModel.findOne({ key: "main" }).lean();
-      if (!doc) return null;
-      const s = serialize<Settings>(doc);
-      return { ...defaultSettings, ...s, sections: { ...defaultSettings.sections, ...s.sections } };
+      return doc ? settingsFromDoc(doc) : null;
     },
     () => defaultSettings,
   ),

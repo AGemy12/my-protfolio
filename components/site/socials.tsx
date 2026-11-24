@@ -1,23 +1,29 @@
 import { Mail } from "lucide-react";
-import { FaLinkedinIn } from "react-icons/fa6";
-import { SiGithub, SiWhatsapp, SiX } from "react-icons/si";
+import { SiWhatsapp } from "react-icons/si";
+import { SocialIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { socialName } from "@/lib/socials";
 import type { Settings } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 export function Socials({ settings, className }: { settings: Settings; className?: string }) {
   const links = [
-    { href: settings.github, label: "GitHub", Icon: SiGithub },
-    { href: settings.linkedin, label: "LinkedIn", Icon: FaLinkedinIn },
-    { href: settings.x, label: "X", Icon: SiX },
-    { href: settings.whatsapp, label: "WhatsApp", Icon: SiWhatsapp },
-    { href: settings.email ? `mailto:${settings.email}` : "", label: "Email", Icon: Mail },
+    // the dashboard's list, in its order
+    ...settings.socials.map((l) => ({
+      key: `${l.platform}-${l.url}`,
+      href: l.url,
+      label: socialName(l),
+      icon: <SocialIcon platform={l.platform} />,
+    })),
+    // then the contact details from the profile
+    { key: "whatsapp", href: settings.whatsapp, label: "WhatsApp", icon: <SiWhatsapp /> },
+    { key: "email", href: settings.email ? `mailto:${settings.email}` : "", label: "Email", icon: <Mail /> },
   ].filter((l) => l.href);
 
   return (
     <ul className={cn("flex flex-wrap items-center gap-2", className)}>
-      {links.map(({ href, label, Icon }) => (
-        <li key={label}>
+      {links.map(({ key, href, label, icon }) => (
+        <li key={key}>
           <Button
             asChild
             variant="outline"
@@ -31,7 +37,7 @@ export function Socials({ settings, className }: { settings: Settings; className
               aria-label={label}
               title={label}
             >
-              <Icon />
+              {icon}
             </a>
           </Button>
         </li>

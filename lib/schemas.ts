@@ -2,6 +2,7 @@
 import { z } from "zod";
 import { EXPERIENCE_TYPES, SECTION_KEYS, SKILL_CATEGORIES } from "./types";
 import { textProblem } from "./site-texts-check";
+import { SOCIAL_KEYS } from "./socials";
 import {
   CONTACT_CHANNELS,
   CONTACT_FIELD_TYPES,
@@ -39,9 +40,16 @@ export const settingsSchema = z.object({
   avatar: url,
   cvEn: url,
   cvAr: url,
-  github: url,
-  linkedin: url,
-  x: url,
+  socials: z
+    .array(
+      z.object({
+        platform: z.enum(SOCIAL_KEYS),
+        url: url.refine((v) => v !== "", "Add the link"),
+        label: str(40),
+      }),
+    )
+    .max(20)
+    .default([]),
   available: z.boolean().default(true),
   yearsExperience: z.coerce.number().int().min(0).max(80).default(0),
   projectsDone: z.coerce.number().int().min(0).max(100000).default(0),

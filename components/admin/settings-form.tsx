@@ -13,6 +13,7 @@ import { CardSection, FieldLabel, PageHeader } from "./ui";
 import { FileField, LocalizedField, SwitchField } from "./fields";
 import { useActionToast } from "./resource-form";
 import { SaveBar, useDirty, useFormGuard } from "./save-bar";
+import { SocialLinksField } from "./social-links-field";
 
 const PARTS = ["identity", "hero", "about", "files", "contact", "social", "visibility", "seo"] as const;
 
@@ -126,10 +127,8 @@ export function SettingsForm({ initial }: { initial: Settings }) {
         {text("whatsapp", "url", false, "https://wa.me/201000000000")}
       </CardSection>
 
-      <CardSection id="part-social" title={t("profile.social")}>
-        {text("github", "url", true, "https://github.com/…")}
-        {text("linkedin", "url", true, "https://www.linkedin.com/in/…")}
-        {text("x", "url", true, "https://x.com/…")}
+      <CardSection id="part-social" title={t("profile.social")} description={t("socials.hint")}>
+        <SocialLinksField value={s.socials} onChange={(v) => set("socials", v)} />
       </CardSection>
 
       <CardSection id="part-visibility" title={t("profile.visibility")} description={t("profile.visibilityHint")}>

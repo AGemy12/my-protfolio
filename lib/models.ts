@@ -33,6 +33,9 @@ const SettingsSchema = define(  {
     avatar: String,
     cvEn: String,
     cvAr: String,
+    // [{ platform, url, label }], validated with settingsSchema.
+    socials: Schema.Types.Mixed,
+    // Legacy: the fixed links before `socials`; read only while `socials` is unset.
     github: String,
     linkedin: String,
     x: String,

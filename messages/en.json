@@ -316,6 +316,19 @@
       "seoHint": "How the site appears in Google results and when the link is shared.",
       "jump": "Jump to"
     },
+    "socials": {
+      "hint": "Shown as icons in the contact section and the footer, in this order. WhatsApp and email are added from your contact details.",
+      "add": "Add link",
+      "empty": "No links yet.",
+      "platform": "Platform",
+      "url": "Link",
+      "label": "Name",
+      "labelHint": "Name on hover (optional), e.g. My blog",
+      "platforms": {
+        "website": "Website",
+        "other": "Other link"
+      }
+    },
     "fields": {
       "name": "Name",
       "role": "Role / title",
@@ -330,9 +343,6 @@
       "avatar": "Profile photo",
       "cvEn": "CV (English)",
       "cvAr": "CV (Arabic)",
-      "github": "GitHub",
-      "linkedin": "LinkedIn",
-      "x": "X / Twitter",
       "available": "Available for work",
       "yearsExperience": "Years of experience",
       "projectsDone": "Projects delivered",

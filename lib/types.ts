@@ -1,4 +1,5 @@
 // Shared, client-safe content types.
+import type { SocialLink } from "./socials";
 
 export type L = { en: string; ar: string };
 export type LList = { en: string[]; ar: string[] };
@@ -20,9 +21,8 @@ export type Settings = {
   avatar: string;
   cvEn: string;
   cvAr: string;
-  github: string;
-  linkedin: string;
-  x: string;
+  /** Social links in display order (contact section and footer). */
+  socials: SocialLink[];
   available: boolean;
   yearsExperience: number;
   projectsDone: number;

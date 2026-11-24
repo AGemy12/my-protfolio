@@ -13,7 +13,7 @@ import {
   SiteTextModel,
   SkillModel,
 } from "./models";
-import { parseContactForm, parseTextItems, serialize } from "./data";
+import { parseContactForm, parseTextItems, serialize, settingsFromDoc } from "./data";
 import { flattenTexts, legacyTexts, type BuiltInTexts, type TextOverrides } from "./site-texts";
 import { messageArgs } from "./site-texts-check";
 import en from "@/messages/en.json";
@@ -74,11 +74,7 @@ export async function adminSettings(): Promise<{ settings: Settings; saved: bool
   await connectDB();
   const doc = await SettingsModel.findOne({ key: "main" }).lean();
   if (!doc) return { settings: defaultSettings, saved: false };
-  const s = serialize<Settings>(doc);
-  return {
-    settings: { ...defaultSettings, ...s, sections: { ...defaultSettings.sections, ...s.sections } },
-    saved: true,
-  };
+  return { settings: settingsFromDoc(doc), saved: true };
 }
 
 /** The built-in texts and the changes saved over them (including ones saved under Settings before). */
