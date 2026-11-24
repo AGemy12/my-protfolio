@@ -10,6 +10,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const metadata: Metadata = { title: "Dashboard", robots: { index: false, follow: false } };
 
+// Every dashboard page depends on the signed-in admin and live data. Said up front
+// so `next build` never tries to prerender one: without a database (as in CI) a
+// page's query would fail before the cookie read below marks the route dynamic.
+export const dynamic = "force-dynamic";
+
 export default async function PanelLayout({
   children,
   params,
