@@ -55,6 +55,15 @@ export function ScrollTop() {
     };
   }, [scrollProgress]);
 
+  // When the button appears, start its ring at the real progress instead of relying on the
+  // spring. After a reload far down the page the spring misses the first progress value and
+  // eases back to empty, so the ring stayed blank until the visitor scrolled again.
+  useEffect(() => {
+    if (!visible) return;
+    const id = requestAnimationFrame(() => progress.jump(scrollProgress.get()));
+    return () => cancelAnimationFrame(id);
+  }, [visible, progress, scrollProgress]);
+
   return (
     <AnimatePresence>
       {visible && (
